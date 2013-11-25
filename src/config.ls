@@ -21,7 +21,7 @@ module.exports =
 
     if config?.projects?
       project = config.projects[name]
-      if project.path
+      if project?.path?
         project.path = path.normalize project.path
 
     project
