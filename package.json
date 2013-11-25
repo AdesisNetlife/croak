@@ -1,0 +1,48 @@
+{
+  "name": "croak",
+  "version": "0.0.1",
+  "description": "Grunt automation made easy for large Web applications",
+  "preferGlobal": true,
+  "homepage": "http://github.com/h2non/croak",
+  "bugs": "https://github.com/h2non/croak/issues",
+  "author": {
+    "name": "Tomas Aparicio",
+    "email": "tomas@aparicio.me"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/h2non/croak.git"
+  },
+  "licenses": "MIT",
+  "main": "lib/croak",
+  "directories": {
+    "lib": "./lib"
+  },
+  "bin": {
+    "croak": "./bin/croak"
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test",
+    "release": "grunt publish"
+  },
+  "dependencies": {
+    "grunt": "~0.4.2",
+    "commander": "~2.0.0",
+    "colors": "~0.6.2",
+    "async": "~0.2.9",
+    "prelude-ls": "~1.0.3",
+    "LiveScript": "~1.2.0"
+  },
+  "devDependencies": {
+    "grunt-mocha-cli": "~1.0.3",
+    "grunt-contrib-watch": "~0.5.0",
+    "grunt-contrib-clean": "~0.5.0",
+    "matchdep": "~0.1.2",
+    "chai": "~1.8.1",
+    "grunt-release": "~0.6.0",
+    "grunt-livescript": "~0.5.1"
+  }
+}
