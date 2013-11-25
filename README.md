@@ -2,6 +2,8 @@
 
 > Grunt automation made easy for large Web projects
 
+`alpha version, project under active design process`
+
 ### Why croak?
 
 Grunt is an awesome utility to easy automate all the stuff in your project
