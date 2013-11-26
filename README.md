@@ -1,8 +1,8 @@
 # croak
 
-> Grunt automation made easy for large Web projects
+<img align="right" height="280" src="http://oi44.tinypic.com/f3azc7.jpg" style="float: right" />
 
-<img align="right" height="300" src="http://oi44.tinypic.com/f3azc7.jpg" />
+> Grunt automation made easy for large Web projects
 
 `alpha version, project under active design process`
 
