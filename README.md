@@ -2,6 +2,8 @@
 
 > Grunt automation made easy for large Web projects
 
+<img align="right" height="300" src="http://oi44.tinypic.com/f3azc7.jpg" />
+
 `alpha version, project under active design process`
 
 ### Why croak?

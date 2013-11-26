@@ -1,6 +1,6 @@
 {
   "name": "croak",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Grunt automation made easy for large Web applications",
   "preferGlobal": true,
   "homepage": "http://github.com/h2non/croak",
