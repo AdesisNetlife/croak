@@ -31,10 +31,8 @@
   "dependencies": {
     "grunt": "~0.4.2",
     "commander": "~2.1.0",
-    "colors": "~0.6.2",
     "async": "~0.2.9",
-    "prelude-ls": "~1.0.3",
-    "LiveScript": "~1.2.0"
+    "prelude-ls": "~1.0.3"
   },
   "devDependencies": {
     "grunt-mocha-cli": "~1.0.3",
@@ -43,6 +41,7 @@
     "matchdep": "~0.1.2",
     "chai": "~1.8.1",
     "grunt-release": "~0.6.0",
-    "grunt-livescript": "~0.5.1"
+    "grunt-livescript": "~0.5.1",
+    "LiveScript": "~1.2.0"
   }
 }
