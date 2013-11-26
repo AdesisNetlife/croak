@@ -9,10 +9,10 @@ module.exports =
     config-path! or path.join home, '.croakrc'
 
   read: ->
-    return no unless fs.existsSync @file
+    return no unless fs.exists-sync @file
     
     try
-      config = JSON.parse fs.readFileSync @file
+      config = JSON.parse fs.read-file-sync @file
     catch { message }
       console.error 'Cannot parse .croakrc as JSON:', message
       return no
