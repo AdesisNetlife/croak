@@ -1,10 +1,8 @@
-# croak
+# Croak
 
 <img align="right" height="280" src="http://oi44.tinypic.com/f3azc7.jpg" style="float: right" />
 
 > Grunt automation made easy for large Web projects
-
-`alpha version, project under active design process`
 
 ### Why croak?
 
