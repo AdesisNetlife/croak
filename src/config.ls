@@ -1,9 +1,12 @@
 fs = require 'fs'
 path = require 'path'
-{ home } = require './common'
+{ CONF-VAR } = require './constants'
+{ home, file-exist, env } = require './common'
 
 module.exports =
-  file: path.join home, '.croakrc'
+
+  file: do ->
+    config-path! or path.join home, '.croakrc'
 
   read: ->
     return no unless fs.existsSync @file
@@ -16,7 +19,7 @@ module.exports =
 
     config
 
-  getProject: (name) ->
+  get-project: (name) ->
     config = @read()
 
     if config?.projects?
@@ -25,3 +28,8 @@ module.exports =
         project.path = path.normalize project.path
 
     project
+
+config-path = ->
+  if config = env[CONF-VAR]
+    if file-exist config = path.normalize config
+      config
