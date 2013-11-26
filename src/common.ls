@@ -13,9 +13,12 @@ module.exports = class Common
   @file-exists = (filepath, filename = '') ->
     fs.existsSync path.join filepath, filename
 
-  @grunt-file-exists = (filepath) ->
+  @grunt-file-exists = (filepath) ~>
     if /Gruntfile.(js|coffee)$/i.test filepath
       @file-exists filepath
     else
       @file-exists filepath, 'Gruntfile.js' or @file-exists filepath, 'Gruntfile.coffee'
+
+  @echo = ->
+    console.log ...
  

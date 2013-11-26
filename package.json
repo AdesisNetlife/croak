@@ -3,15 +3,15 @@
   "version": "0.1.0",
   "description": "Grunt automation made easy for large Web applications",
   "preferGlobal": true,
-  "homepage": "http://github.com/h2non/croak",
-  "bugs": "https://github.com/h2non/croak/issues",
+  "homepage": "http://github.com/adesisnetlife/croak",
+  "bugs": "https://github.com/adesisnetlife/croak/issues",
   "author": {
     "name": "Tomas Aparicio",
     "email": "tomas@aparicio.me"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/h2non/croak.git"
+    "url": "https://github.com/adesisnetlife/croak.git"
   },
   "licenses": "MIT",
   "main": "lib/croak",
