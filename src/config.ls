@@ -1,23 +1,35 @@
 fs = require 'fs'
 path = require 'path'
-{ CONF-VAR } = require './constants'
+ini = require 'ini'
+{ extend } = require 'lodash'
+{ CONF-VAR, FILENAME } = require './constants'
 { home, file-exist, env } = require './common'
 
-module.exports =
+module.exports = class Config
 
-  file: do ->
-    config-path! or path.join home, '.croakrc'
+  config: {}
 
-  read: ->
-    return no unless fs.exists-sync @file
+  (file = Config.globalFile) ->
+    @file = file
+
+  exists: ->
+    fs.exists-sync @file
+
+  read: (filepath = @file) ->
+    return null unless fs.exists-sync filepath
     
     try
-      config = JSON.parse fs.read-file-sync @file
+      config = ini.parse fs.read-file-sync filepath
     catch { message }
-      console.error 'Cannot parse .croakrc as JSON:', message
-      return no
+      console.error "Cannot parse #{FILENAME} as valid ini:", message
+      return null
 
     config
+
+  load: ->
+    [ Config.globalFile, Config.localFile ]forEach (file) ~>
+      if confData = @read file
+        extend @config, confData
 
   get-project: (name) ->
     config = @read()
@@ -29,7 +41,12 @@ module.exports =
 
     project
 
-config-path = ->
-  if config = env[CONF-VAR]
-    if file-exist config = path.normalize config
-      config
+  @globalFile = do ->
+    config-path = do ->
+      if config = env[CONF-VAR]
+        if file-exist config = path.normalize config
+          config
+
+    config-path or path.join home, FILENAME
+
+  @localFile = path.join process.cwd(), FILENAME

@@ -1,9 +1,74 @@
 path = require 'path'
+program = require 'commander'
+require require('resolve').sync 'colors', { basedir: __dirname + '/../node_modules/grunt/node_modules/colors' }
+
 config = require './config'
-{ gruntFileExists } = require './common'
+{ grunt-file-exists, echo } = require './common'
+{ version }:pkg = require '../package.json'
+
 cwd = process.cwd()
 
-exports.parse = ->
+exports.parse = (args) -> program.parse args
+
+program
+  .version(version)
+
+program.on 'implementation', ->
+  echo 'node'
+
+program.on '--help', ->
+  echo '''
+      Usage examples:
+    
+        $ croak create --path /home/user/
+        $ croak add
+
+      Command specific help:
+
+        $ croak <command> --help
+
+  '''
+
+program
+  .command('config <action> [project] [key] [value]')
+  .description('\n  Read/write croak config files'.cyan)
+  .usage('[create|list|delete|set|get]'.cyan)
+  .option('-g, --global', 'Edit the global file located in user $HOME'.cyan)
+  .on('--help', ->
+    echo '''
+          Usage examples:
+
+            $ croak config list
+            $ croak config delete myProject
+            $ croak config set my-project path /home/user/projects/my-project
+            $ croak config get my-project path
+        
+    '''
+  )
+  .action (action, project, key, value, options) ->
+    console.log arguments
+    exit 0
+
+program
+  .command('run <task>')
+  .description('\n  Read files'.cyan)
+  .usage('[list|delete|set|get]'.cyan)
+  .option('-p, --project', 'Specifies the project to run'.cyan)
+  .on('--help', ->
+    echo '''
+          Usage examples:
+
+            $ croak run server
+            $ croak run test -p myProject
+        
+    '''
+  )
+  .action (task, options) ->
+    console.log task
+    exit 0
+
+test = ->
+
   projectId = process.argv[2]
   process.argv.splice 2, 1
 

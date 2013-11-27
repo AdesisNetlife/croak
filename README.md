@@ -14,15 +14,11 @@ Grunt is an awesome utility to easy automate all the stuff in your project
 $ npm install -g croak
 ```
 
-Create `.croakrc` in $HOME directory
+Create a well-formed ini file called `.croakrc` in your `$HOME` or `%USERPROFILE%` directory
+
 ```
-{
-  "projects": {
-    "myProject": {
-      "path": "/home/me/projects/myProject/grunt-project"
-    }
-  }
-}
+[project myProject]
+path = /home/me/projects/myProject/grunt-project
 ```
 
 ### How to use
