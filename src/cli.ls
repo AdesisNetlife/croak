@@ -1,6 +1,5 @@
 path = require 'path'
 program = require 'commander'
-require require('resolve').sync 'colors', { basedir: __dirname + '/../node_modules/grunt/node_modules/colors' }
 
 config = require './config'
 { grunt-file-exists, echo } = require './common'

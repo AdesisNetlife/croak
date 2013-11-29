@@ -41,7 +41,7 @@ module.exports = class Config
 
     project
 
-  @globalFile = do ->
+  @global-file = do ->
     config-path = do ->
       if config = env[CONF-VAR]
         if file-exist config = path.normalize config
