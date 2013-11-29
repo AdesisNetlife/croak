@@ -12,6 +12,10 @@
 
 Croak is a wrapper for Grunt, allowing your to extend or override Grunt configuration in distributed projects...
 
+### Grunt support
+
+Croak only supports Grunt 0.4.x
+
 ## Installation
 
 You should use the Croak CLI, so the best way is installing the package globally
@@ -26,10 +30,6 @@ $ croak config -g create
 ```
 
 Create a well-formed ini file called `.croakrc` in your `$HOME` or `%USERPROFILE%` directory
-```
-[project myProject]
-path = /home/me/projects/myProject/grunt-project
-```
 
 ## Configuration file
 
@@ -40,16 +40,32 @@ Croak supports two configuration files:
 
 The Croak configuration file must called `.croakrc`
 
-## Available configuration options
+### Available configuration options
 
-- project
+#### Global 
 
+```
+[global]
+allow_register_tasks = false
+
+[project super-project]
+path = /home/me/projects/super-project/grunt-project
+allow_register_tasks = true
+```
+
+- allow_register_tasks `boolean` Enable/disable register new Grunt tasks from local config
+
+#### Local
+
+- `project` Croak project alias
+ 
 ## Croakfile
 
 Like Grunt, Croak has its own specific configuration file
 
 ```coffee
-module.exports = 
+module.exports = (croak) ->
+
   registerTasks: (croak, grunt) ->
     grunt.registerTask 'js-minification', ['clean', 'uglify'] if croak.taskSupported 'uglify'
 
@@ -63,7 +79,6 @@ module.exports =
           src: ['**/*.js']
           dest: '<% croak.cwd %>/test'
     }
-
 
 ```
 
