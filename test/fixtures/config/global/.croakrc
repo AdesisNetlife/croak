@@ -1,0 +1,7 @@
+[global-project]
+grunt_path = ${HOME}/projects/global
+grunt_base = ${HOME}/projects/global/base
+override = true
+extend = true
+verbose = false
+

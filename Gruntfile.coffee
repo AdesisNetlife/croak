@@ -12,22 +12,17 @@ module.exports = (grunt) ->
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json')
 
-    clean: ['lib', 'test/**/*.js', 'test/tmp/**/*']
+    clean: ['lib', 'test/**/*.js', 'test/fixtures/temp/**']
 
     livescript:
       options:
         bare: true
+        prelude: true
       src:
         expand: true
         cwd: 'src/'
         src: ['**/*.ls']
         dest: 'lib/'
-        ext: '.js'
-      test:
-        expand: true
-        cwd: 'test/'
-        src: ['**/*.ls']
-        dest: 'test/'
         ext: '.js'
 
     mochacli:

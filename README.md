@@ -1,30 +1,84 @@
 # Croak
 
+[![Build Status](https://secure.travis-ci.org/adesisnetlife/croak.png?branch=master)](http://travis-ci.org/adesisnetlife/croak)
+[![Dependency Status](https://gemnasium.com/adesisnetlife/croak.png)](https://gemnasium.com/adesisnetlife/croak)
+
 <img align="right" height="280" src="http://oi44.tinypic.com/f3azc7.jpg" style="float: right" />
 
 > Grunt automation made easy for large Web projects
 
-### Why croak?
+## Why Croak?
 
-[Grunt][1] is an awesome utility well community adopted to automate stuff and simplify common tasks in Node.js related projects
+[Grunt][1] is an awesome utility well community adopted to automate common tasks and simplify your life in Node.js related projects
 
-## How it works
+Croak is simple, but featured wrapper for Grunt, that aims to help you to manage and orquestate 
+Grunt tasks configuration across large and distributed projects, 
+always thinking about saving time and reducing changes impact
 
-Croak is a wrapper for Grunt, allowing your to extend or override Grunt configuration in distributed projects...
+Croak borns from the need to create an specific solution to abstract all the automation 
+configuration stuff, allowing you to delegate responsabilities in a proper way and sense
+in your projects
+so let me introduce you a bit about the needs
 
-### Grunt support
+### How it works
 
-Croak only supports Grunt 0.4.x
+In a few words, Croak allows you to have a multiple `Gruntfile.js` in a global locations
+
+Croak provides allowing your to extend or override Grunt configuration in distributed projects...
+
+### Example scenario
+
+A representative scenario will be, for example, if your project have a relevant 
+number of repositories. Each repository need its automation configuration 
+for development, testing or building stuff.
+The Node-related software design is local focused, 
+Usually, this configuration tends to be complex when your project uses different technologies
+
+when you are in large project scenarios, and you have a lot of repositories
+
+### I do really need Croak?
+
+Abstraction is not always the best choice and some people can hate it.
+Basically, an abstraction, in software development, tries to reduce notably complexity 
+hiding underlying details.
+
+With Croak you can provide an ideal level of abstraction to developers and at the same time,
+you can offer the possibility to pass part of the abstraction, providing more responsability to 
+the developer
+
+#### Stage
+
+Croak is a initial version ready to use, however is under active (re-)designing process 
+and important changes can be applied in a few future
+
+#### Grunt support
+
+Croak supports Grunt 0.4.x
+
+## Features
+
+- Centralize your project build tasks configuration
+- Independent, synchronized and shared build task configuration across different repositories
+- Support for configuration overriding in global configuration
+- Support same Grunt API and CLI
+- Keep clean your repository without Grunt node packages (in front end projects cases)
+
+### Design principles
+
+- If the abstraction provides missing features well done, is welcome
+- Save
 
 ## Installation
 
-You should use the Croak CLI, so the best way is installing the package globally
+It is recommended to install it as global packages (assuming it will be via `$PATH` accesible)
 
 ```shell
 $ npm install -g croak
 ```
 
-Then, create the global config file for your projects
+## Getting started
+
+After you install it, create the global config file for your projects
 ```
 $ croak config -g create
 ```
@@ -98,8 +152,48 @@ radically to Croak, you can use the `grunt-croak` task to make a less impact wit
 ```
 $ npm install grunt-croak --save-dev
 ```
-
 For more information, see the [grunt-croak][2] documentation
+
+## Contributing
+
+Croak is completely written in LiveScript language.
+Take a look to the language [documentation][4] if you are new with it
+
+Please, follow the LiveScript language conventions and [coding style][4]
+
+### Development
+
+Only Node.js is reguired for development
+
+1. Clone/fork this repository
+```
+$ git clone git@github.com:adesisnetlife/croak.git && cd croak
+```
+
+2. Install package dependencies
+```
+$ npm install 
+```
+
+3. Run tests
+```
+$ npm test
+```
+
+4. Make a pull request
+
+## Authors
+
+- [Tomás Aparicio](https://github.com/h2non)
+
+## License
+
+Copyright (c) 2013 Adesis Netlife S.L
+
+Released under the [MIT][5] license
 
 [1]: http://gruntjs.com
 [2]: https://github.com/h2non/grunt-croak
+[3]: http://livescript.net
+[4]: https://github.com/gkz/LiveScript-style-guide
+[5]: https://github.com/adesisnetlive/croak/blob/master/LICENSE

@@ -1,52 +1,136 @@
-fs = require 'fs'
-path = require 'path'
-ini = require 'ini'
-{ extend } = require 'lodash'
+require! <[ path ini ]>
+require! _: 'prelude-ls'
+require! defaults: './config-defaults'
 { CONF-VAR, FILENAME } = require './constants'
-{ home, file-exist, env } = require './common'
+{ file-exists, file-read, file-write, file-delete, env, extend, clone, is-directory }:common = require './common'
 
-module.exports = class Config
+module.exports =
 
   config: {}
+  global: null
+  local: null
 
-  (file = Config.globalFile) ->
-    @file = file
+  read: ->
+    return null unless file-exists it
+    ini.parse file-read it
 
-  exists: ->
-    fs.exists-sync @file
+  clean: ->
+    @global = null
+    @local = null
+    @config = {}
 
-  read: (filepath = @file) ->
-    return null unless fs.exists-sync filepath
-    
-    try
-      config = ini.parse fs.read-file-sync filepath
-    catch { message }
-      console.error "Cannot parse #{FILENAME} as valid ini:", message
-      return null
-
-    config
+  apply: ->
+    @config 
+    |> extend _, @global
+    |> extend _, @local
 
   load: ->
-    [ Config.globalFile, Config.localFile ]forEach (file) ~>
-      if confData = @read file
-        extend @config, confData
+    if global = config-transform @read @global-file!
+      @global = global if has-data global
+    if local = config-transform @read @local-file it
+      @local = local if has-data local
+    @apply!
 
-  get-project: (name) ->
-    config = @read()
+  write: ->
+    if has-data @global
+      file-write @global-file!, encode-config @global
+    if has-data @local
+      file-write @local-file(it), encode-config @local
 
-    if config?.projects?
-      project = config.projects[name]
-      if project?.path?
-        project.path = path.normalize project.path
+  save: ->
+    @write ...
+
+  remove: ->
+    @global?[it] &&= null
+    @local?[it] &&= null
+    console.log @global
+    @apply!
+    console.log 'CONFIGGGGG! \n', @config
+    !@config[it]?
+
+  project: (project, data, local = false) ->
+    if project and has-data data
+      context = if local then 'local' else 'global'
+      @[context] ?= {}
+      @[context][project] = config-transform data
+      @apply!
+
+    if project := @config[project]
+      if project.grunt_path?
+        project.grunt_path = path.normalize project.grunt_path
+    else
+      project = null
 
     project
 
-  @global-file = do ->
-    config-path = do ->
-      if config = env[CONF-VAR]
-        if file-exist config = path.normalize config
-          config
+  update: (project, data, local = false) ->
+    if @config[project] and has-data data
+      context = if local then 'local' else 'global'
+      @[context] ?= {}
+      data := extend @[context][project], config-transform data
+      @apply!
+    data
 
-    config-path or path.join home, FILENAME
+  section: ->
+    @project ...
 
-  @localFile = path.join process.cwd(), FILENAME
+  global-file: ->
+    if config-path = it or env CONF-VAR
+      config-path = path.normalize config-path
+      if is-directory config-path
+        config-path = path.join config-path, FILENAME
+      return config-path
+    
+    path.join common.home, FILENAME
+
+  local-file: (filepath = process.cwd!) ->
+    path.join filepath, FILENAME
+
+
+apply-defaults = ->
+  extend clone(defaults), it
+
+replace-vars = ->
+  if typeof it is 'string'
+    it = it.replace /\$\{(.*)\}/g, ->
+      return env &1?.toUpperCase! or ''
+  it
+
+config-transform = ->
+  return it unless _.is-type 'Object', it
+  
+  for own key, value of it
+    if _.is-type 'Object', value
+      it[key] = apply-defaults config-transform value
+    else
+      it["_#{key}"] = value
+      it[key] = replace-vars value
+  it
+
+config-write-transform = ->
+  data = {}
+
+  is-not-template = ->
+    /^\_/ isnt it
+
+  has-variables = (value, orig-value) -> 
+    _.is-type 'String', value and /\$\{.*\}/ is orig-value
+
+  for own project, config of it when config?
+    project = data[project] = {}
+    for own key, value of config when isNotTemplate key
+      orig-value = config["_#{key}"]
+      if has-variables value, orig-value
+        value = orig-value
+      project[key] = value
+  
+  data
+
+encode-config = ->
+  ini.stringify config-write-transform it
+
+has-data = ->
+  if it?
+    Object.keys(it)length >= 1
+  else
+    no

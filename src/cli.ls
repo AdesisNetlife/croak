@@ -92,18 +92,17 @@ test = ->
     process.exit 99
 
   # change current working directory
-  process.chdir(project.path)
+  process.chdir project.path
 
   # mixin grunt object with croak
   grunt.croak = 
-    base: path.normalize(process.cwd())
-    cwd: path.normalize(cwd)
+    base: path.normalize process.cwd!
+    cwd: path.normalize cwd
 
   # add specific options avaliable from config
-  grunt.config.set('croak', {
-    base: path.normalize(process.cwd()),
-    cwd: path.normalize(cwd)
-  })
+  grunt.config.set 'croak', do
+    base: path.normalize process.cwd! 
+    cwd: path.normalize cwd
 
   # init grunt
   grunt.cli()

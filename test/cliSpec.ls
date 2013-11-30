@@ -1,6 +1,6 @@
 { expect } = require 'chai'
 
-describe 'CLI', ->
+describe 'CLI', (_) ->
 
   it 'should return the expected value', ->
     expect ''
