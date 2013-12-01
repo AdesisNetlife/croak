@@ -21,8 +21,8 @@ program.on '--help', ->
   echo '''
       Usage examples:
     
-        $ croak create --config /home/user/conf/.croakrc
-        $ croak add
+        $ croak config create -g /home/user/conf/.croakrc
+        $ croak run test -p my-project
 
       Command specific help:
 

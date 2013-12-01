@@ -1,7 +1,6 @@
 [global-project]
-gruntfile = ${HOME}/projects/global
-base = ${HOME}/projects/global/base
 override = true
-extend = true
+base = ${HOME}/projects/global/base
+gruntfile = ${HOME}/projects/global
 verbose = false
-
+extend = true

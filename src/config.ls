@@ -5,7 +5,7 @@ require! {
   defaults: './config-defaults'
 }
 { CONF-VAR, FILENAME } = require './constants'
-{ file, env, extend, clone }:common = require './common'
+{ file, env, extend, clone, is-win32 }:common = require './common'
 
 module.exports =
 
@@ -135,10 +135,14 @@ apply-defaults = ->
 
 replace-vars = ->
   if typeof it is 'string'
-    it = it.replace /\$\{(.*)\}/g, ->
-      if &1 is 'HOME' and process.platform is 'win32'
-        &1 = 'USERPROFILE'
-      return env &1?.toUpperCase! or ''
+    it = it.replace /\$\{(.*)\}/g, (_, matched) ->
+      if is-win32
+        matched = 'USERPROFILE' if matched is 'HOME'
+        matched = 'CD' if matched is 'PWD'
+        matched = 'HOMEDRIVE' if matched is 'ROOT' or matched is 'DRIVE'
+      else
+        matched = '/' if matched is 'HOMEDRIVE' or matched is 'ROOT' 
+      env(matched?.toUpperCase!) or ''
   it
 
 config-transform = ->
@@ -146,7 +150,7 @@ config-transform = ->
   
   for own key, value of it
     if is-type 'Object', value
-      it[key] = apply-defaults config-transform value
+      it[key] = value |> config-transform |> apply-defaults 
     else
       it["_#{key}"] = value
       it[key] = replace-vars value
@@ -163,12 +167,12 @@ config-write-transform = ->
 
   for own project, config of it when config?
     project = data[project] = {}
-    for own key, value of config when isNotTemplate key
+    for own key, value of config when is-not-template key
       orig-value = config["_#{key}"]
       if has-variables value, orig-value
         value = orig-value
-      project[key] = value
-  
+      if config.hasOwnProperty "_#{key}" and (value isnt false or value is orig-value)
+        project[key] = value
   data
 
 encode-config = ->

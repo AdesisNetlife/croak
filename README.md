@@ -102,13 +102,14 @@ gruntfile = /home/me/projects/super-project/grunt-project
 allow_register_tasks = true
 ```
 
-##### All supported options
+##### Supported options per project
 
 ```ini
+[my-project]
 override = true
 register_tasks = true
-package = my-project-build
-; grunt-specific
+;package = build-package
+;; grunt-specific
 gruntfile = ${HOME}/projects/my-project/Gruntfile.coffee
 base = ${HOME}/projects/my-project/data/
 no_color = false

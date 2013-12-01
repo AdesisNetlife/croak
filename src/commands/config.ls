@@ -48,7 +48,7 @@ command =
       exit 1, "Project #{project} already exists"
 
     data = {}
-    prompt "Gruntfile path (e.g: ${HOME}/project/Gruntfile.js ):", validator: ->, ->
+    prompt "Gruntfile path (e.g: project/Gruntfile.js ):", validator: ->, ->
       data.gruntfile = it
       console.log it
 

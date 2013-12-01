@@ -21,4 +21,4 @@ describe 'CLI', ->
   describe 'run command', (_) ->
 
     it 'should return the expected value', ->
-      expect ''
+      
