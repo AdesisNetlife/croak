@@ -96,35 +96,36 @@ module.exports =
 
   global-file: ->
     if config-path = it or env CONF-VAR
-      config-path = config-path |> path.normalize 
+      config-path = path.normalize replace-vars config-path
       if file.is-directory config-path
-        return path.join config-path, FILENAME
+        config-path = path.join config-path, FILENAME
+      return config-path
     
     path.join common.home, FILENAME
 
   local-file: (filepath = process.cwd!) ->
-    local-file = null
-    global-file = @global-file!
+    exists = false
 
     if filepath.indexOf(FILENAME) isnt -1
-      filepath := path.dirname filepath
- 
+      filepath = path.dirname filepath
+
     [1 to 4]reduce ->
-      unless local-file
+      unless exists
         if file.exists exists-file = path.join it, FILENAME
-          if exists-file isnt global-file
-            local-file := exists-file
+          filepath := exists-file
+          exists := true
       path.join it, '../'
     , filepath
 
-    local-file
+    filepath = path.join filepath, FILENAME unless exists
+    filepath
 
 
 apply-defaults = ->
   extend clone(defaults), it
 
 replace-vars = ->
-  if is-type 'String', it
+  if typeof it is 'string'
     it = it.replace /\$\{(.*)\}/g, ->
       if &1 is 'HOME' and process.platform is 'win32'
         &1 = 'USERPROFILE'
