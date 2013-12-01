@@ -103,8 +103,26 @@ The Croak configuration file must called `.croakrc`
 allow_register_tasks = false
 
 [project super-project]
-path = /home/me/projects/super-project/grunt-project
+gruntfile = /home/me/projects/super-project/grunt-project
 allow_register_tasks = true
+```
+
+##### All supported options
+
+```ini
+override = true
+register_tasks = true
+; grunt-specific
+gruntfile = ${HOME}/projects/my-project/Gruntfile.coffee
+base = ${HOME}/projects/my-project/data/
+no_color = false
+no_write = false
+debug = false
+verbose = false
+force = false
+stack = false
+tasks = ../custom-tasks/
+npm = ../npm-tasks/
 ```
 
 - allow_register_tasks `boolean` Enable/disable register new Grunt tasks from local config
@@ -121,7 +139,7 @@ Like Grunt, Croak has its own specific configuration file
 module.exports = (croak) ->
 
   registerTasks: (croak, grunt) ->
-    grunt.registerTask 'js-minification', ['clean', 'uglify'] if croak.taskSupported 'uglify'
+    croak.registerTask 'js-minification', ['clean', 'uglify'] if croak.taskSupported 'uglify'
 
   config: (croak, grunt) ->
     croak.set 'uglify', {
@@ -154,13 +172,6 @@ $ npm install grunt-croak --save-dev
 ```
 For more information, see the [grunt-croak][2] documentation
 
-## Contributing
-
-Croak is completely written in LiveScript language.
-Take a look to the language [documentation][4] if you are new with it
-
-Please, follow the LiveScript language conventions and [coding style][4]
-
 ### Development
 
 Only Node.js is reguired for development
@@ -180,7 +191,14 @@ $ npm install
 $ npm test
 ```
 
-4. Make a pull request
+## Contributing
+
+Croak is completely written in LiveScript language.
+Take a look to the language [documentation][4] if you are new with it.
+Please, follow the LiveScript language conventions and [coding style][4]
+
+You must add new test cases for any feature or refactor you do, 
+also take in mind follow the same design/code patterns already existing
 
 ## Authors
 

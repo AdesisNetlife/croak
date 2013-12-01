@@ -1,8 +1,11 @@
-require! <[ path ini ]>
-require! _: 'prelude-ls'
-require! defaults: './config-defaults'
+require! {
+  path 
+  ini
+  _: 'prelude-ls'
+  defaults: './config-defaults'
+}
 { CONF-VAR, FILENAME } = require './constants'
-{ file-exists, file-read, file-write, file-delete, env, extend, clone, is-directory }:common = require './common'
+{ file, env, extend, clone }:common = require './common'
 
 module.exports =
 
@@ -11,8 +14,8 @@ module.exports =
   local: null
 
   read: ->
-    return null unless file-exists it
-    ini.parse file-read it
+    return null unless file.exists it
+    ini.parse file.read it
 
   clean: ->
     @global = null
@@ -31,11 +34,17 @@ module.exports =
       @local = local if has-data local
     @apply!
 
+  raw: ->
+    config = {}
+    [ 'global', 'local' ]forEach ~>
+      data = config[it] = {}
+      data.path = @["#{it}File"]!
+      data.data = file.read data.path if file.exists data.path
+    config
+
   write: ->
-    if has-data @global
-      file-write @global-file!, encode-config @global
-    if has-data @local
-      file-write @local-file(it), encode-config @local
+    file.write @global-file!, encode-config @global
+    file.write @local-file(it), encode-config @local
 
   save: ->
     @write ...
@@ -43,10 +52,11 @@ module.exports =
   remove: ->
     @global?[it] &&= null
     @local?[it] &&= null
-    console.log @global
     @apply!
-    console.log 'CONFIGGGGG! \n', @config
     !@config[it]?
+
+  delete: ->
+    @remove ...
 
   project: (project, data, local = false) ->
     if project and has-data data
@@ -71,13 +81,23 @@ module.exports =
       @apply!
     data
 
+  get: (project, option) ->
+    if project := @config[project]
+      if key
+        project[option]
+      else
+        project
+
+  exists: ->
+    (@get ...)?
+
   section: ->
     @project ...
 
   global-file: ->
     if config-path = it or env CONF-VAR
-      config-path = path.normalize config-path
-      if is-directory config-path
+      config-path = path.normalize replace-vars config-path
+      if file.is-directory config-path
         config-path = path.join config-path, FILENAME
       return config-path
     
@@ -93,6 +113,8 @@ apply-defaults = ->
 replace-vars = ->
   if typeof it is 'string'
     it = it.replace /\$\{(.*)\}/g, ->
+      if &1 is 'HOME' and process.platform is 'win32'
+        &1 = 'USERPROFILE'
       return env &1?.toUpperCase! or ''
   it
 

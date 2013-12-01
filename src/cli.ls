@@ -1,25 +1,27 @@
-path = require 'path'
-program = require 'commander'
-
-config = require './config'
-{ grunt-file-exists, echo } = require './common'
-{ version }:pkg = require '../package.json'
-
-cwd = process.cwd()
+require! {
+  path
+  grunt
+  program: commander
+  pkg: '../package.json'
+  echo: './common'.echo
+}
 
 exports.parse = (args) -> program.parse args
 
 program
-  .version(version)
+  .version "Croak: #{pkg.version}\nGrunt: #{grunt.version}"
+    ..option '-g, --global', 'Use the global config file'.cyan
+    ..option '-c, --config', 'Use a custom .croakrc file path'.cyan
+    ..option '-f, --force', 'Force command execution. Also will be passed to Grunt'.cyan
 
-program.on 'implementation', ->
-  echo 'node'
+program.on 'grunt', ->
+  grunt.cli!
 
 program.on '--help', ->
   echo '''
       Usage examples:
     
-        $ croak create --path /home/user/
+        $ croak create --config /home/user/conf/.croakrc
         $ croak add
 
       Command specific help:
@@ -28,43 +30,8 @@ program.on '--help', ->
 
   '''
 
-program
-  .command('config <action> [project] [key] [value]')
-  .description('\n  Read/write croak config files'.cyan)
-  .usage('[create|list|delete|set|get]'.cyan)
-  .option('-g, --global', 'Edit the global file located in user $HOME'.cyan)
-  .on('--help', ->
-    echo '''
-          Usage examples:
-
-            $ croak config list
-            $ croak config delete myProject
-            $ croak config set my-project path /home/user/projects/my-project
-            $ croak config get my-project path
-        
-    '''
-  )
-  .action (action, project, key, value, options) ->
-    console.log arguments
-    exit 0
-
-program
-  .command('run <task>')
-  .description('\n  Read files'.cyan)
-  .usage('[list|delete|set|get]'.cyan)
-  .option('-p, --project', 'Specifies the project to run'.cyan)
-  .on('--help', ->
-    echo '''
-          Usage examples:
-
-            $ croak run server
-            $ croak run test -p myProject
-        
-    '''
-  )
-  .action (task, options) ->
-    console.log task
-    exit 0
+module <- <[ config run ]>forEach
+require "./commands/#{module}"
 
 test = ->
 
@@ -105,4 +72,4 @@ test = ->
     cwd: path.normalize cwd
 
   # init grunt
-  grunt.cli()
+  grunt.cli!

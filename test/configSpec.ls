@@ -111,7 +111,7 @@ describe 'Config', ->
 
       it 'should add config options to global config', ->
         global-project = 
-          grunt_path: "${HOME}/grunt/global-project/Gruntfile.js"
+          gruntfile: "${HOME}/grunt/global-project/Gruntfile.js"
           register_tasks: false
 
         expect(config.project 'global-project', global-project).to.deep.equal global-project
@@ -134,7 +134,7 @@ describe 'Config', ->
 
       it 'should add config options to local config', ->
         local-project = 
-          grunt_path: "${HOME}/grunt/local-project/Gruntfile.js"
+          gruntfile: "${HOME}/grunt/local-project/Gruntfile.js"
           register_tasks: false
 
         expect(config.project 'local-project', local-project, true).to.deep.equal local-project
@@ -163,7 +163,7 @@ describe 'Config', ->
 
     before ->
       project = 
-        grunt_path: "${HOME}/project/Gruntfile.js"
+        gruntfile: "${HOME}/project/Gruntfile.js"
         register_tasks: false
 
       config.project 'project', project
@@ -171,12 +171,12 @@ describe 'Config', ->
 
     describe 'existent project', (_) -> 
 
-      it 'should update grunt_path option', ->
+      it 'should update gruntfile option', ->
         project-data = 
-          grunt_path: "${HOME}/new-project/Gruntfile.js"
+          gruntfile: "${HOME}/new-project/Gruntfile.js"
 
         expect config.update 'project', project-data
-          ..to.have.property 'grunt_path'
+          ..to.have.property 'gruntfile'
           ..that.match /new-project/
 
       it 'should update register_tasks option', ->
@@ -187,7 +187,7 @@ describe 'Config', ->
           ..to.have.property 'register_tasks'
           ..that.be.equal true
 
-      it 'it should write and load changes from disk', ->
+      it 'should write and load changes from disk', ->
         config.write!
         config.clean!
         config.load!
@@ -197,7 +197,7 @@ describe 'Config', ->
 
       it 'project should have the expected options', -> 
         expect config.project 'project'
-          ..to.have.property 'grunt_path'
+          ..to.have.property 'gruntfile'
           ..that.match /new-project/
         expect config.project 'project'
           ..to.have.property 'register_tasks'
@@ -205,12 +205,12 @@ describe 'Config', ->
 
     describe 'non-existent project', (_) -> 
 
-      it 'should update grunt_path option', ->
+      it 'should update gruntfile option', ->
         project-data = 
-          grunt_path: "${HOME}/new-project/Gruntfile.js"
+          gruntfile: "${HOME}/new-project/Gruntfile.js"
 
         expect config.update 'new-project', project-data
-          ..to.have.property 'grunt_path'
+          ..to.have.property 'gruntfile'
           ..that.match /new-project/
 
       it 'should update register_tasks option', ->
@@ -221,7 +221,7 @@ describe 'Config', ->
           ..to.have.property 'register_tasks'
           ..that.be.equal true
 
-      it 'it should write and load changes from disk', ->
+      it 'should write and load changes from disk', ->
         config.write!
         config.clean!
         config.load!
@@ -240,7 +240,7 @@ describe 'Config', ->
 
     before ->
       project = 
-        grunt_path: "${HOME}/project/Gruntfile.js"
+        gruntfile: "${HOME}/project/Gruntfile.js"
         register_tasks: false
 
       config.project 'project', project
@@ -253,5 +253,14 @@ describe 'Config', ->
     it 'should remove non-existent project', ->
       expect config.remove 'non-existent'
         ..to.be.equal true
+
+    it 'should write and load changes from disk', ->
+      config.write!
+      config.clean!
+      config.load!
+
+    it 'should projects removed properly', ->
+      expect config.project 'project'
+        ..to.be.null
 
 
