@@ -31,6 +31,14 @@ $ npm install -g croak
 No, Croak will do it for you. 
 `grunt-cli` will be replaced by Croak CLI
 
+**Can I use the Grunt CLI**
+
+Of course, it will be avaiable using the `grunt` command
+
+```
+$ croak grunt --help
+```
+
 ### Configure it
 
 After you install it properly, you should configure croak
