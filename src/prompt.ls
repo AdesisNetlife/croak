@@ -1,7 +1,4 @@
-require! {
-  promptly
-  async: './import'.async
-}
+require! promptly
 
 module.exports = (message, callback, list, type, options) ->
   # simple input arguments normalizer based on its type
