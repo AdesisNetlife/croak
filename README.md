@@ -15,13 +15,31 @@ always thinking about saving time and reducing changes impact
 Croak borns from the need to create an specific solution to abstract all the automation 
 configuration stuff, allowing you to delegate responsabilities in a proper way and sense
 in your projects
-so let me introduce you a bit about the needs
+
+## Installation
+
+It is recommended to install it as global packages (assuming it will be via `$PATH` accesible)
+
+```shell
+$ npm install -g croak
+```
+
+### Getting started
+
+After you install it, create the global config file for your projects
+```
+$ croak config -g create
+```
+
+Create a well-formed ini file called `.croakrc` in your `$HOME` or `%USERPROFILE%` directory
 
 ### How it works
 
-In a few words, Croak allows you to have a multiple `Gruntfile.js` in a global locations
+In a few words, Croak allows you to have a multiple `Gruntfile.js` in a global locations, and running them 
+using a simple alias
 
-Croak provides allowing your to extend or override Grunt configuration in distributed projects...
+Croak allows your to extend or override Grunt configuration in distributed projects, this feature is useful
+when you think the developers are not evil guys, delegating some responsability and liberty to them
 
 ### Example scenario
 
@@ -62,25 +80,8 @@ Croak supports Grunt 0.4.x
 
 ### Design principles
 
-- If the abstraction provides missing features well done, is welcome
-- Save
-
-## Installation
-
-It is recommended to install it as global packages (assuming it will be via `$PATH` accesible)
-
-```shell
-$ npm install -g croak
-```
-
-## Getting started
-
-After you install it, create the global config file for your projects
-```
-$ croak config -g create
-```
-
-Create a well-formed ini file called `.croakrc` in your `$HOME` or `%USERPROFILE%` directory
+- If the abstraction provides missing features, and them are well done, its welcome
+- Keep Grunt API and similar use
 
 ## Configuration file
 
@@ -96,10 +97,7 @@ The Croak configuration file must called `.croakrc`
 #### Global 
 
 ```
-[global]
-allow_register_tasks = false
-
-[project super-project]
+[super-project]
 gruntfile = /home/me/projects/super-project/grunt-project
 allow_register_tasks = true
 ```
@@ -109,6 +107,7 @@ allow_register_tasks = true
 ```ini
 override = true
 register_tasks = true
+package = my-project-build
 ; grunt-specific
 gruntfile = ${HOME}/projects/my-project/Gruntfile.coffee
 base = ${HOME}/projects/my-project/data/
@@ -119,7 +118,7 @@ verbose = false
 force = false
 stack = false
 tasks = ../custom-tasks/
-npm = ../npm-tasks/
+npm = mytask
 ```
 
 - allow_register_tasks `boolean` Enable/disable register new Grunt tasks from local config

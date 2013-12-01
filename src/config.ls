@@ -1,7 +1,7 @@
 require! {
   path 
   ini
-  _: 'prelude-ls'
+  is-type: 'prelude-ls'.is-type
   defaults: './config-defaults'
 }
 { CONF-VAR, FILENAME } = require './constants'
@@ -96,22 +96,35 @@ module.exports =
 
   global-file: ->
     if config-path = it or env CONF-VAR
-      config-path = path.normalize replace-vars config-path
+      config-path = config-path |> path.normalize 
       if file.is-directory config-path
-        config-path = path.join config-path, FILENAME
-      return config-path
+        return path.join config-path, FILENAME
     
     path.join common.home, FILENAME
 
   local-file: (filepath = process.cwd!) ->
-    path.join filepath, FILENAME
+    local-file = null
+    global-file = @global-file!
+
+    if filepath.indexOf(FILENAME) isnt -1
+      filepath := path.dirname filepath
+ 
+    [1 to 4]reduce ->
+      unless local-file
+        if file.exists exists-file = path.join it, FILENAME
+          if exists-file isnt global-file
+            local-file := exists-file
+      path.join it, '../'
+    , filepath
+
+    local-file
 
 
 apply-defaults = ->
   extend clone(defaults), it
 
 replace-vars = ->
-  if typeof it is 'string'
+  if is-type 'String', it
     it = it.replace /\$\{(.*)\}/g, ->
       if &1 is 'HOME' and process.platform is 'win32'
         &1 = 'USERPROFILE'
@@ -119,10 +132,10 @@ replace-vars = ->
   it
 
 config-transform = ->
-  return it unless _.is-type 'Object', it
+  return it unless is-type 'Object', it
   
   for own key, value of it
-    if _.is-type 'Object', value
+    if is-type 'Object', value
       it[key] = apply-defaults config-transform value
     else
       it["_#{key}"] = value
@@ -136,7 +149,7 @@ config-write-transform = ->
     /^\_/ isnt it
 
   has-variables = (value, orig-value) -> 
-    _.is-type 'String', value and /\$\{.*\}/ is orig-value
+    is-type 'String', value and /\$\{.*\}/ is orig-value
 
   for own project, config of it when config?
     project = data[project] = {}

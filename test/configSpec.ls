@@ -18,11 +18,12 @@ describe 'Config', ->
 
   describe 'file location', (_) ->
 
-    it 'should be expect config global path', ->
+    it 'should expect config global path', ->
       expect(config.global-file!).to.be.equal join common.home, FILENAME
 
-    it 'should be expect config local path', ->
-      expect(config.local-file!).to.be.equal join process.cwd!, FILENAME
+    it 'should expect config local path', ->
+      expect config.local-file "#{__dirname}/fixtures/config/local"
+        ..to.be.equal join "#{__dirname}/fixtures/config/local", FILENAME
 
     describe 'custom environment variable path', (_) ->
 

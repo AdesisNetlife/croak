@@ -1,5 +1,6 @@
 require! <[ fs path grunt ]>
 require! _: 'prelude-ls'
+
 env = process.env
 
 module.exports = class Common
@@ -7,7 +8,9 @@ module.exports = class Common
   @env = (key) ->
     env[key] or null
 
-  @home = path.normalize env[(if process.platform is 'win32' then 'USERPROFILE' else 'HOME')] or ''
+  @is-win32 = process.platform is 'win32'
+
+  @home = path.normalize env[(if Common.is-win32 then 'USERPROFILE' else 'HOME')] or ''
 
   @grunt-file-exists = (filepath) ~>
     if /Gruntfile.(js|coffee)$/i.test filepath

@@ -15,7 +15,7 @@ program
 
             $ croak config list
             $ croak config create
-            $ croak config delete myProject
+            $ croak config remove myProject
             $ croak config set my-project path /home/user/projects/my-project
             $ croak config get my-project path
         
@@ -52,7 +52,7 @@ command =
       data.gruntfile = it
       console.log it
 
-  delete: (project, key, value, options) ->
+  remove: (project, key, value, options) ->
     try 
       if config.delete project
         config.write!
