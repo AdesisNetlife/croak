@@ -1,13 +1,10 @@
-# Croak
-
-[![Build Status](https://secure.travis-ci.org/adesisnetlife/croak.png?branch=master)](http://travis-ci.org/adesisnetlife/croak)
-[![Dependency Status](https://gemnasium.com/adesisnetlife/croak.png)](https://gemnasium.com/adesisnetlife/croak)
-
-<img align="right" height="280" src="http://oi44.tinypic.com/f3azc7.jpg" style="float: right" />
+# Croak [![Build Status](https://secure.travis-ci.org/adesisnetlife/croak.png?branch=master)](http://travis-ci.org/adesisnetlife/croak) [![Dependency Status](https://gemnasium.com/adesisnetlife/croak.png)](https://gemnasium.com/adesisnetlife/croak)
 
 > Grunt automation made easy for large Web projects
 
 ## Why Croak?
+
+<img align="right" height="280" src="http://oi44.tinypic.com/f3azc7.jpg" style="float: right" />
 
 [Grunt][1] is an awesome utility well community adopted to automate common tasks and simplify your life in Node.js related projects
 
