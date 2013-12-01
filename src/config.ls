@@ -105,6 +105,10 @@ module.exports =
 
   local-file: (filepath = process.cwd!) ->
     exists = false
+    global-file = @global-file!
+
+    is-global-file = ->
+      it is global-file
 
     if filepath.indexOf(FILENAME) isnt -1
       filepath = path.dirname filepath
@@ -112,12 +116,17 @@ module.exports =
     [1 to 4]reduce ->
       unless exists
         if file.exists exists-file = path.join it, FILENAME
-          filepath := exists-file
-          exists := true
+          unless is-global-file exists-file
+            filepath := exists-file
+            exists := true
       path.join it, '../'
     , filepath
 
-    filepath = path.join process.cwd!, FILENAME unless exists
+    unless exists
+      filepath = path.join process.cwd!, FILENAME 
+    if is-global-file filepath
+      filepath = path.join path.dirname(filepath), 'croak', FILENAME 
+    
     filepath
 
 
