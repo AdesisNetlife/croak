@@ -117,7 +117,7 @@ module.exports =
       path.join it, '../'
     , filepath
 
-    filepath = path.join filepath, FILENAME unless exists
+    filepath = path.join process.cwd!, FILENAME unless exists
     filepath
 
 

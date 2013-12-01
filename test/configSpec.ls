@@ -92,9 +92,14 @@ describe 'Config', ->
 
     describe 'discovering local file', (_) ->
 
-      it 'should discover local file', ->
+      it 'should discover the file', ->
         expect config.local-file "#{__dirname}/fixtures/config/local/folder/sub-folder"
           ..to.be.equal "#{__dirname}/fixtures/config/local/#{FILENAME}"
+
+      it 'should not discover the file', ->
+        folder = "#{__dirname}/fixtures/config/local/folder/sub-folder/nested-folder/sub-nested-folder"
+        expect config.local-file folder
+          ..to.be.equal join process.cwd!, FILENAME
 
   describe 'write', (_) ->
 
