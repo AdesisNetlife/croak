@@ -10,8 +10,7 @@ exports.parse = (args) -> program.parse args
 
 program
   .version "Croak: #{pkg.version}\nGrunt: #{grunt.version}"
-    ..option '-g, --global', 'Use the global config file'.cyan
-    ..option '-c, --config', 'Use a custom .croakrc file path'.cyan
+    ..option '-g, --global <path>', 'Use the global config file'.cyan
     ..option '-f, --force', 'Force command execution. Also will be passed to Grunt'.cyan
 
 program.on 'grunt', ->

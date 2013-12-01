@@ -2,36 +2,45 @@
 
 > Grunt automation made easy for large projects
 
+`WORK IN PROCESS!`
+
 ## Why Croak?
 
 <img align="right" height="280" src="http://oi44.tinypic.com/f3azc7.jpg" style="float: right" />
 
-[Grunt][1] is an awesome utility well community adopted to automate common tasks and simplify your life in Node.js related projects
+[Grunt][1] is an awesome utility well community adopted to automate tasks and simplify development life time under node.js based projects
 
-Croak is simple, but featured wrapper for Grunt, that aims to help you to manage and orquestate 
-Grunt tasks configuration across large and distributed projects, 
+Croak is just a simple, but featured wrapper for Grunt, that aims to help you to manage and orquestate 
+Grunt tasks and configuration across large and distributed projects, 
 always thinking about saving time and reducing changes impact
 
 Croak borns from the need to create an specific solution to abstract all the automation 
 configuration stuff, allowing you to delegate responsabilities in a proper way and sense
-in your projects
+in your project and developers
 
 ## Installation
 
-It is recommended to install it as global packages (assuming it will be via `$PATH` accesible)
+It's recommended you to install Croak as global package
 
 ```shell
 $ npm install -g croak
 ```
 
-### Getting started
+** I need to have Grunt already installed? **
 
-After you install it, create the global config file for your projects
+No, Croak will do it for you. 
+`grunt-cli` will be replaced by Croak CLI
+
+### Configure it
+
+After you install it properly, you should configure croak
 ```
 $ croak config -g create
 ```
 
-Create a well-formed ini file called `.croakrc` in your `$HOME` or `%USERPROFILE%` directory
+The process above will create a ini file named `.croakrc` in your `$HOME` or `%USERPROFILE%` directory
+
+See the [configuration file](#configuration-file) section for more details
 
 ### How it works
 
@@ -39,7 +48,7 @@ In a few words, Croak allows you to have a multiple `Gruntfile.js` in a global l
 using a simple alias
 
 Croak allows your to extend or override Grunt configuration in distributed projects, this feature is useful
-when you think the developers are not evil guys, delegating some responsability and liberty to them
+when you think the developers are not evil guys, providing a way to extend or override tasks
 
 ### Example scenario
 
@@ -73,17 +82,15 @@ Croak supports Grunt 0.4.x
 ## Features
 
 - Centralize your project build tasks configuration
-- Independent, synchronized and shared build task configuration across different repositories
-- Support for configuration overriding in global configuration
-- Support same Grunt API and CLI
+- Orquestate different tasks configuration
+- Extend or override Grunt global tasks configuration from local
+- Provides the same Grunt API and CLI
+- Customize Grunt run mode from the config file (future `.gruntrc`)
 - Keep clean your repository without Grunt node packages (in front end projects cases)
 
-### Design principles
+## Using Croak
 
-- If the abstraction provides missing features, and them are well done, its welcome
-- Keep Grunt API and similar use
-
-## Configuration file
+### Configuration file
 
 Croak supports two configuration files: 
 
@@ -123,12 +130,8 @@ npm = mytask
 ```
 
 - allow_register_tasks `boolean` Enable/disable register new Grunt tasks from local config
-
-#### Local
-
-- `project` Croak project alias
  
-## Croakfile
+### Croakfile
 
 Like Grunt, Croak has its own specific configuration file
 
@@ -151,15 +154,20 @@ module.exports = (croak) ->
 
 ```
 
-## Croak CLI
+### Gruntfile configuration
+
+Croak will automatically create a specific task, called `croak` which will be avaiable from Grunt config object.
+That's really useful for templating and configure absolute paths for your local projects
+
+### Croak CLI
  
 `TODO`
 
-## Croak API
+### Croak API
 
 `TODO`
 
-## Use Croak from existent Gruntfile.js
+### Use Croak from existent Gruntfile.js
 
 If you already have `Gruntfile.js` in each local repository of your project and you do not want to switch
 radically to Croak, you can use the `grunt-croak` task to make a less impact with the same result
@@ -167,9 +175,10 @@ radically to Croak, you can use the `grunt-croak` task to make a less impact wit
 ```
 $ npm install grunt-croak --save-dev
 ```
+
 For more information, see the [grunt-croak][2] documentation
 
-### Development
+## Development
 
 Only Node.js is reguired for development
 

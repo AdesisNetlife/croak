@@ -106,6 +106,9 @@ module.exports =
   local-file: (filepath = process.cwd!) ->
     exists = false
     global-file = @global-file!
+    filepath := path.normalize replace-vars filepath
+
+    console.log 'LOCAL FILE!'
 
     is-global-file = ->
       it is global-file
@@ -127,6 +130,7 @@ module.exports =
     if is-global-file filepath
       filepath = path.join path.dirname(filepath), 'croak', FILENAME 
     
+    console.log 'FINAL PATH->', filepath
     filepath
 
 
@@ -145,6 +149,17 @@ replace-vars = ->
       env(matched?.toUpperCase!) or ''
   it
 
+translate-paths = ->
+  # todo: get path from local file path location
+  unless file.is-absolute it
+    it = path.join process.cwd!, it
+  it
+
+process-value = (key, value) ->
+  if <[ gruntfile npm tasks base ]>indexOf(key) isnt -1
+    value = value |> translate-paths
+  value |> replace-vars
+
 config-transform = ->
   return it unless is-type 'Object', it
   
@@ -153,7 +168,7 @@ config-transform = ->
       it[key] = value |> config-transform |> apply-defaults 
     else
       it["_#{key}"] = value
-      it[key] = replace-vars value
+      it[key] = process-value key, value
   it
 
 config-write-transform = ->

@@ -251,7 +251,7 @@ describe 'Config', ->
         register_tasks: false
 
       config.project 'project', project
-      config.write!  
+      config.write!
 
     it 'should remove existent project', ->
       expect config.remove 'project'

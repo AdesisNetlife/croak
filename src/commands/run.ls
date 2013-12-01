@@ -5,23 +5,26 @@ require! {
 { echo, exit } = require '../common'
 
 program
-  .command('run <project> <task>')
-  .description('\n  Run Grunt tasks'.cyan)
-  .usage('my-project test'.cyan)
-  .option('-p, --project', 'Specifies the project to run'.cyan)
-  .option('-x, --grunt', 'Specifies the Gruntfile path'.cyan)
-  .on('--help', ->
-    echo '''
-          Usage examples:
+  .command 'run <task>'
+    ..description '\n  Run Grunt tasks'.cyan
+    ..usage 'my-project test'.cyan
+    ..option '-p, --project', 'Specifies the project to run'.cyan
+    ..option '-c, --croakrc <path>', 'Use a custom .croakrc file path'.cyan
+    ..option '-x, --grunt', 'Specifies the Gruntfile path'.cyan
+    ..on '--help', ->
+      echo '''
+            Usage examples:
 
-            $ croak run build
-            $ croak run test -p my-project
-            $ croak run test -x /path/to/Gruntfile.js
-        
-    '''
-  )
-  .action -> run ...
+              $ croak run build
+              $ croak run test -p my-project
+              $ croak run test -x /path/to/Gruntfile.js
+          
+      '''
+    ..action -> run ...
     
+run = (task, options) ->
+  { croakrc } = options
 
-run = (project, task, options) ->
-  console.log project, task
+  config.load croakrc
+  
+

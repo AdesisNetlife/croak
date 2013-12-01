@@ -5,20 +5,33 @@ require! {
   version: '../package.json'.version
 }
 
-node-binary = "#{process.execPath}"
-croak-binary = [ "#{__dirname}/../bin/croak" ]
+cwd = process.cwd!
+node = process.execPath
+croak = [ "#{__dirname}/../bin/croak" ]
 
 describe 'CLI', ->
 
   describe 'flags', (_) ->
 
     it 'should return the expected version', (done) ->
-      spawn node-binary, croak-binary ++ ['--version']
+      spawn node, croak ++ ['--version']
         ..stdout.on 'data', ->
           expect(it.to-string 'utf-8').to.match new RegExp "#{version}"
           done!
 
-  describe 'run command', (_) ->
+  describe 'command', ->
 
-    it 'should return the expected value', ->
-      
+    describe 'run', (_) ->
+
+      before ->
+        process.chdir "#{__dirname}/fixtures/project/grunt/src/"
+
+      after ->
+        process.chdir cwd
+
+      it 'should load the default config', (done) ->
+        spawn node, croak ++ ['run', 'server']
+          ..stdout.on 'data', ->
+            expect(it.to-string 'utf-8').to.match new RegExp "#{version}"
+            done!
+

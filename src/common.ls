@@ -35,14 +35,20 @@ module.exports = class Common
     process.exit it or 0
 
   @file =
-    exists: (filepath = '', filename = '') ->
-      fs.exists-sync path.join filepath, filename
+    exists: (filepath, filename = '') ->
+      if filepath?
+        fs.exists-sync path.join filepath, filename
+      else
+        no
 
     is-directory: ->
       fs.lstat-sync(it).isDirectory!
 
     read: -> 
-      fs.read-file-sync it, 'utf8'
+      if @exists it and not @is-directory it
+        fs.read-file-sync it, 'utf8'
+      else
+        ''
 
     delete: ->
       fs.unlink-sync it
