@@ -28,20 +28,16 @@ describe 'Config', ->
     describe 'custom environment variable path', (_) ->
 
       before ->
-        process.env[CONF-VAR] = "#{__dirname}/fixtures/config/global/.croakrc"
+        process.env[CONF-VAR] = "#{__dirname}/fixtures/config/global/#{FILENAME}"
 
       after ->
         process.env[CONF-VAR] = ''
   
       it 'should have the expeted path', ->
-        expect(config.global-file!).to.be.equal "#{__dirname}/fixtures/config/global/.croakrc"
+        expect(config.global-file!).to.be.equal "#{__dirname}/fixtures/config/global/#{FILENAME}"
 
 
   describe 'read', ->
-
-    describe 'bad formed or missing config files', (_) ->
-
-      it 'bad formed ini file', ->
 
     describe 'global config', (_) ->
     
@@ -94,6 +90,11 @@ describe 'Config', ->
         expect(config.project 'global-project').to.be.an 'object'
         expect(config.project 'local-project').to.be.an 'object'
 
+    describe 'discovering local file', (_) ->
+
+      it 'should discover local file', ->
+        expect config.local-file "#{__dirname}/fixtures/config/local/folder/sub-folder"
+          ..to.be.equal "#{__dirname}/fixtures/config/local/#{FILENAME}"
 
   describe 'write', (_) ->
 
