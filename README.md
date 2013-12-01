@@ -26,7 +26,7 @@ It's recommended you to install Croak as global package
 $ npm install -g croak
 ```
 
-** I need to have Grunt already installed? **
+**I need to have Grunt already installed?**
 
 No, Croak will do it for you. 
 `grunt-cli` will be replaced by Croak CLI
