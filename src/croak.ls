@@ -16,8 +16,7 @@ module.exports =
     grunt.croak = _.defaults croak, { options.base, options.tasks, options.npm }
     # clean croak args
     grunt.cli.tasks.splice 0, 1
-    # remove croak-specific arguments
-    # init grunt
+    # init grunt with inherited options
     grunt.cli options
 
 # todo: define API and use paths from config file

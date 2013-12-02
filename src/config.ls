@@ -130,6 +130,7 @@ module.exports = config =
     if has-filename!
       filepath := path.dirname filepath
 
+    # tries to discover .croakrc in cwd and fall back to higher directories
     [1 to 4]reduce ->
       unless exists
         if file.exists new-filepath = croak-path it 
@@ -140,7 +141,7 @@ module.exports = config =
 
     unless exists
       filepath = croak-path process.cwd! 
-    # be sure the resolve process do not find the global file
+    # prevent the local file discovery process do not resolve the global file
     if is-global-file filepath
       filepath = path.join path.dirname(filepath), croak-path 'croak' 
     
@@ -177,6 +178,7 @@ process-value = (key, value) ->
     value = value |> translate-paths
   value
 
+# process config values and create new config with defaults per project
 config-transform = ->
   return it unless _.is-object it
   
@@ -186,7 +188,9 @@ config-transform = ->
       it[key] = value |> config-transform |> apply-defaults 
     else
       if is-not-template-value key
-        it["_#{key}"] = value
+        # support for global config options
+        if key isnt 'default'
+          it["_#{key}"] = value
         it[key] = process-value key, value
   it
 

@@ -318,6 +318,7 @@ also keep in mind to follow the same design/code patterns that already exist
 - Support for extending/overriding Grunt configuration
 - Support for multiple Gruntfile in the same project?
 - Grunt croak task to configure it from local Gruntfile
+- Use the same exit codes of Grunt
 
 ## Authors
 
