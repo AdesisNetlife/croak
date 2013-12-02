@@ -7,8 +7,8 @@ require! {
 
 program
   .command 'config <action> [project] [key] [value]'
-    ..description '\n  Read/write/update/delete croak config'.cyan
-    ..usage '[create|list|delete|set|get]'.cyan
+    ..description '\n  Read/write/update/remove croak config'.cyan
+    ..usage '[create|list|remove|set|get]'.cyan
     ..on '--help', ->
       echo '''
             Usage examples:
