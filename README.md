@@ -42,7 +42,7 @@ No, Croak will do it for you.
 
 **Can I use the Grunt CLI**
 
-Of course, it will be avaliable using the `grunt` command
+Of course, it is avaliable using the `grunt` command
 
 ```
 $ croak grunt --help
