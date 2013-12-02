@@ -90,9 +90,7 @@ module.exports = config =
 
   get: (project, key) ->
     if @config.hasOwnProperty project
-      console.log 'Found!!!!'
       project := @config[project]
-      console.log project
       if key
         project[key]
       else
