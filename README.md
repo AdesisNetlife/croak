@@ -4,7 +4,7 @@
 
 `WORK IN PROCESS!`
 
-## Why Croak?
+## About
 
 <img align="right" height="280" src="http://oi44.tinypic.com/f3azc7.jpg" style="float: right" />
 
