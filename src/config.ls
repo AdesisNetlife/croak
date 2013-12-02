@@ -88,12 +88,17 @@ module.exports = config =
       @apply!
     data
 
-  get: (project, option) ->
-    if project := @config[project]
+  get: (project, key) ->
+    if @config.hasOwnProperty project
+      console.log 'Found!!!!'
+      project := @config[project]
+      console.log project
       if key
-        project[option]
+        project[key]
       else
         project
+    else
+      null
 
   exists: ->
     (@get ...)?

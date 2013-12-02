@@ -10,7 +10,7 @@ program
   .command 'run <task>'
     ..description '\n  Run Grunt tasks'.cyan
     ..usage 'my-project test'.cyan
-    ..option '-p, --project', 'Specifies the project to run'.cyan
+    ..option '-p, --project <path>', 'Specifies the project to run'.cyan
     ..option '-c, --croakrc <path>', 'Use a custom .croakrc file path'.cyan
     ..option '-x, --gruntfile <path>', 'Specifies the Gruntfile path'.cyan
     ..option '-b, --base <path>', 'Specify an alternate base path. By default, all file paths are relative to the Gruntfile'.cyan
