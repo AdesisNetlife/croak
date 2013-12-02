@@ -142,23 +142,33 @@ npm = mytask
  
 ### Croakfile
 
-Like Grunt, Croak has its own specific configuration file
+Like Grunt, Croak has its own specific configuration file.
+
+`Currently under design...`
 
 ```coffee
 module.exports = (croak) ->
-
-  registerTasks: (croak, grunt) ->
-    croak.registerTask 'js-minification', ['clean', 'uglify'] if croak.taskSupported 'uglify'
+  
+  if croak.taskSupported 'uglify'
+    croak.registerTask 'js-minification', [ 'clean', 'uglify' ] 
 
   config: (croak, grunt) ->
-    croak.set 'uglify', {
+    croak.extend 'uglify', {
       options: 
         sourceMaps: true
-
       minify: 
         files: 
           src: ['**/*.js']
-          dest: '<% croak.cwd %>/test'
+          dest: '<%= croak.cwd %>/test'
+    }
+
+    croak.set 'jshint', {
+      options: 
+        node: true
+      sources: 
+        files: 
+          src: ['**/*.js']
+          dest: '<%= croak.cwd %>/test'
     }
 
 ```
@@ -168,9 +178,35 @@ module.exports = (croak) ->
 Croak will automatically create a specific task, called `croak` which will be available from Grunt config object.
 That's really useful for templating and configuring absolute paths for your local projects
 
-### Croak CLI
+### Command-line interface
  
-`TODO`
+```
+Usage: croak [options] [command]
+
+Commands:
+
+  config <action> [project] [key] [value] 
+    Read/write/update/delete croak config
+  run [options] <task>   
+    Run Grunt tasks
+
+Options:
+
+  -h, --help           output usage information
+  -V, --version        output the version number
+  -g, --global <path>  Use the global config file
+  -f, --force          Force command execution. Also will be passed to Grunt
+
+Usage examples:
+
+  $ croak config create -g /home/user/conf/.croakrc
+  $ croak run test -p my-project
+
+Command specific help:
+
+  $ croak <command> --help
+
+```
 
 ### Croak API
 
