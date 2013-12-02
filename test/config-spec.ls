@@ -8,9 +8,11 @@ require! {
 }
 { FILENAME, CONF-VAR } = require '../lib/constants'
 
-describe 'Config', ->
 
-  home-var = if process.platform is 'win32' then 'USERPROFILE' else 'HOME'
+home-var = if process.platform is 'win32' then 'USERPROFILE' else 'HOME'
+cwd = process.cwd!  
+
+describe 'Config', ->
 
   before ->
     mkdirp.sync "#{__dirname}/fixtures/temp/config/global"
@@ -40,19 +42,26 @@ describe 'Config', ->
   describe 'read', ->
 
     describe 'global config', (_) ->
-    
+      home = process.env[home-var]
+
       before ->
         common.home = "#{__dirname}/fixtures/config/global"
+        process.chdir "#{__dirname}/fixtures/config"
 
       before ->
         config.load!
 
       after ->
-        common.home = home-var
+        common.home = home
+        process.chdir cwd
 
-      it 'should read the config properly', ->
+      it 'should exist the global config', ->
         expect config.global .to.be.an 'object'
+
+      it 'should not exists a local config', ->
         expect config.local .to.be.null
+
+      it 'should exist the configured global project', ->
         expect config.project 'global-project' .to.be.an 'object'
         
     describe 'local config', (_) ->

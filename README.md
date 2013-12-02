@@ -92,7 +92,7 @@ and important changes can be applied in a near future
 
 **Grunt support**
 
-Croak supports Grunt 0.4.x
+Croak supports Grunt `~0.4.0`
 
 ## Using Croak
 

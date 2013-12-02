@@ -84,7 +84,7 @@ module.exports = config =
     if @config[project] and has-data data
       context = if local then 'local' else 'global'
       @[context] ?= {}
-      data := extend @[context][project], config-transform data
+      data := extend @[context][project], data |> config-transform 
       @apply!
     data
 
@@ -103,9 +103,9 @@ module.exports = config =
 
   global-file: ->
     if config-path = it or env CONF-VAR
-      config-path = path.normalize replace-vars config-path
+      config-path := config-path |> replace-vars |> path.normalize  
       if file.is-directory config-path
-        config-path = path.join config-path, FILENAME
+        config-path := path.join config-path, FILENAME
       return config-path
     
     path.join common.home, FILENAME
@@ -113,7 +113,7 @@ module.exports = config =
   local-file: (filepath = process.cwd!) ->
     exists = false
     global-file = @global-file!
-    filepath := path.normalize replace-vars filepath
+    filepath := filepath |> replace-vars |> path.normalize
 
     is-global-file = ->
       it is global-file
@@ -121,28 +121,34 @@ module.exports = config =
     has-filename = ->
       filepath.index-of(FILENAME) isnt -1
 
+    croak-path = ->
+      path.join it, FILENAME
+
     if has-filename!
-      filepath = path.dirname filepath
+      filepath := path.dirname filepath
 
     [1 to 4]reduce ->
       unless exists
-        if file.exists exists-file = path.join it, FILENAME
-          unless is-global-file exists-file
-            filepath := exists-file
-            exists := true
+        if file.exists new-filepath = croak-path it 
+          filepath := new-filepath
+          exists := true
       path.join it, '../'
     , filepath
 
     unless exists
-      filepath = path.join process.cwd!, FILENAME 
+      filepath = croak-path process.cwd! 
+    # be sure the resolve process do not find the global file
     if is-global-file filepath
-      filepath = path.join path.dirname(filepath), 'croak', FILENAME 
+      filepath = path.join path.dirname(filepath), croak-path 'croak' 
     
     filepath
 
 
 apply-defaults = ->
   extend clone(defaults), it
+
+is-not-template-value = ->
+  /^\_/ isnt it and /^\$/ isnt it
 
 replace-vars = ->
   if typeof it is 'string'
@@ -159,7 +165,6 @@ replace-vars = ->
 translate-paths = ->
   # todo: obtain relative path from .croakrc location
   unless file.is-absolute it
-    #unless /^\./ is it
     it = path.join process.cwd!, it
   it
 
@@ -177,22 +182,20 @@ config-transform = ->
       value['$name'] = key unless value['$name']
       it[key] = value |> config-transform |> apply-defaults 
     else
-      it["_#{key}"] = value
-      it[key] = process-value key, value
+      if is-not-template-value key
+        it["_#{key}"] = value
+        it[key] = process-value key, value
   it
 
 config-write-transform = ->
   data = {}
-
-  is-not-template = ->
-    /^\_/ isnt it or /^\$/ isnt it
 
   has-variables = (value, orig-value) -> 
     _.is-string value and /\$\{.*\}/ is orig-value
 
   for own project, config of it when config?
     project = data[project] = {}
-    for own key, value of config when is-not-template key
+    for own key, value of config when is-not-template-value key
       orig-value = config["_#{key}"]
       if has-variables value, orig-value
         value = orig-value

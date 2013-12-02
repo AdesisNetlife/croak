@@ -21,7 +21,7 @@ program
           
     '''
     ..action ->
-      unless command[it]
+      unless commands[it]
         exit 1, "#{it} command not supported. Use --help to see the available commands"
       
       commands[it]apply null, (Array::slice.call &)slice 1
