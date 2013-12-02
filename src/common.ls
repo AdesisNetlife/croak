@@ -51,7 +51,7 @@ module.exports = class Common
 
     read: ->
       if @exists it and not @is-directory it
-        fs.read-file-sync it, 'utf8'
+        fs.read-file-sync it
       else
         ''
 
@@ -60,6 +60,7 @@ module.exports = class Common
 
     write: (filepath, data) -> 
       if @is-directory path.dirname filepath
-        fs.write-file-sync filepath, data, encoding: 'utf8'
+        fs.write-file-sync filepath, data
 
     is-absolute: grunt.file.is-path-absolute
+
