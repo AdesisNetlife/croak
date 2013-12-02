@@ -51,7 +51,7 @@ module.exports = class Common
 
     read: ->
       if @exists it and not @is-directory it
-        fs.read-file-sync it
+        fs.read-file-sync it, if is-node8 then 'utf8' else encoding: 'utf8'
       else
         ''
 
@@ -60,7 +60,9 @@ module.exports = class Common
 
     write: (filepath, data) -> 
       if @is-directory path.dirname filepath
-        fs.write-file-sync filepath, data
+        fs.write-file-sync filepath, data, if is-node8 then 'utf8' else encoding: 'utf8'
 
     is-absolute: grunt.file.is-path-absolute
 
+is-node8 = ->
+  /^0\.8\./.test process.versions.node
