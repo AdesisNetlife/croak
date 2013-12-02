@@ -20,10 +20,11 @@ in your project and developers
 ### Features
 
 - Centralizes your project build tasks configuration
-- Orchestrates different tasks configuration
+- Easily manage and orchestrates different configuration for multiple projects
+- Abstract and provides more more control of your project automation tasks
 - Extends or overrides Grunt global tasks configuration from local
 - Provides the same Grunt API and CLI
-- Customizes Grunt run mode from the config file (future `.gruntrc`)
+- Customizes Grunt options run mode from the config file (future `.gruntrc`)
 - Keeps clean your repository without Grunt node packages (in front end projects cases)
 
 ## Installation
@@ -257,6 +258,7 @@ also keep in mind to follow the same design/code patterns that already exist
 - Support for extending/overriding Grunt configuration
 - Features c
 - Support for multiple Gruntfile in the same project?
+- Grunt croak task to configure it from local Gruntfile
 
 ## Authors
 
