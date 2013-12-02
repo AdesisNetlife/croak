@@ -138,14 +138,12 @@ stack = false
 tasks = ../custom-tasks/
 npm = mytask
 ```
-
-- allow_register_tasks `boolean` Enable/disable register new Grunt tasks from local config
  
 ### Croakfile
 
 Like Grunt, Croak has its own specific configuration file.
 
-`Currently under design...`
+`Currently under designing process...`
 
 ```coffee
 module.exports = (croak) ->
@@ -207,6 +205,34 @@ Command specific help:
 
   $ croak <command> --help
 
+```
+
+#### Running Grunt tasks
+
+```
+$ croak run task -p my-project
+```
+You need to pass the `-p` flag if there not exist a `.croakrc` local config file
+
+You can configure the default project to use from a local config file, like this:
+```ini
+project = my-project
+```
+Then you can simply run:
+```
+$ croak run task
+```
+
+#### Configuring Croak from CLI
+
+Show the current existent config
+```
+$ croak config list
+```
+
+Create a config file (add `-g` flag to create it globally)
+```
+$ croak config create
 ```
 
 ### Croak API

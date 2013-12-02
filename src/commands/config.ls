@@ -32,11 +32,11 @@ commands =
     { global, local } = config.raw!
 
     echo """
-      ; Global #{global.path}
+      ; global #{global.path}
       #{global.data}
     """ if global.data?
     echo """
-      ; Local #{local.path}
+      ; local #{local.path}
       #{local.data}
     """ if local.data?
 
