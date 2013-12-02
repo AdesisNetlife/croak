@@ -47,7 +47,7 @@ omit-options = ->
     no-write
     verbose
   ]>
-  #_.pick.apply null, [ it ] ++ grunt-args
+
   for own key, value of it 
     when grunt-args.index-of(key) isnt -1 and value isnt false and value?
       options[key] = value
