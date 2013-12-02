@@ -216,7 +216,7 @@ You need to pass the `-p` flag if there not exist a `.croakrc` local config file
 
 You can configure the default project to use from a local config file, like this:
 ```ini
-project = my-project
+default = my-project
 ```
 Then you can simply run:
 ```
