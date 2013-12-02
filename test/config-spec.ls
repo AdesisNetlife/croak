@@ -19,7 +19,7 @@ describe 'Config', ->
   describe 'file location', (_) ->
 
     it 'should expect config global path', ->
-      expect(config.global-file!).to.be.equal join common.home, FILENAME
+      expect config.global-file! .to.be.equal join common.home, FILENAME
 
     it 'should expect config local path', ->
       expect config.local-file "#{__dirname}/fixtures/config/local"
@@ -34,7 +34,7 @@ describe 'Config', ->
         process.env[CONF-VAR] = ''
   
       it 'should have the expeted path', ->
-        expect(config.global-file!).to.be.equal "#{__dirname}/fixtures/config/global/#{FILENAME}"
+        expect config.global-file! .to.be.equal "#{__dirname}/fixtures/config/global/#{FILENAME}"
 
 
   describe 'read', ->
@@ -51,9 +51,9 @@ describe 'Config', ->
         common.home = home-var
 
       it 'should read the config properly', ->
-        expect(config.global).to.be.an 'object'
-        expect(config.local).to.be.null
-        expect(config.project 'global-project').to.be.an 'object'
+        expect config.global .to.be.an 'object'
+        expect config.local .to.be.null
+        expect config.project 'global-project' .to.be.an 'object'
         
     describe 'local config', (_) ->
 
@@ -65,13 +65,13 @@ describe 'Config', ->
         config.load "#{__dirname}/fixtures/config/local"
 
       it 'should not exist global config', ->
-        expect(config.global).to.be.null
+        expect config.global .to.be.null
 
       it 'should get the local config', ->
-        expect(config.local).to.be.an 'object'
+        expect config.local .to.be.an 'object'
       
       it 'should get the local project config data', ->
-        expect(config.project 'local-project').to.be.an 'object'
+        expect config.project 'local-project' .to.be.an 'object'
 
     describe 'global and local config', (_) ->
 
@@ -85,10 +85,10 @@ describe 'Config', ->
         process.env[CONF-VAR] = ''
 
       it 'should load the config properly', ->
-        expect(config.global).to.be.an 'object'
-        expect(config.local).to.be.an 'object'
-        expect(config.project 'global-project').to.be.an 'object'
-        expect(config.project 'local-project').to.be.an 'object'
+        expect config.global .to.be.an 'object'
+        expect config.local .to.be.an 'object'
+        expect config.project 'global-project' .to.be.an 'object'
+        expect config.project 'local-project' .to.be.an 'object'
 
     describe 'discovering local file', (_) ->
 
@@ -111,8 +111,8 @@ describe 'Config', ->
       config.clean!
 
     it 'should read non-existent files', ->
-      expect(config.global).to.be.null
-      expect(config.local).to.be.null
+      expect config.global .to.be.null
+      expect config.local .to.be.null
 
     describe 'global file', (_) ->
 
@@ -121,18 +121,18 @@ describe 'Config', ->
           gruntfile: "${HOME}/grunt/global-project/Gruntfile.js"
           register_tasks: false
 
-        expect(config.project 'global-project', global-project).to.deep.equal global-project
+        expect config.project 'global-project', global-project .to.deep.equal global-project
 
       it 'should write global config', ->
         config.write!
-        expect(fs.existsSync "#{process.env[CONF-VAR]}/#{FILENAME}").to.be.true
+        expect fs.existsSync "#{process.env[CONF-VAR]}/#{FILENAME}" .to.be.true
       
       it 'should clean and read config from disk', ->
         config.clean!
         config.load!
 
       it 'should read the config data from disk', ->
-        expect(config.project 'global-project').to.be.an 'object'
+        expect config.project 'global-project' .to.be.an 'object'
         expect config.project 'global-project'
           ..to.have.property 'register_tasks'
           ..that.is.a 'boolean'
@@ -144,18 +144,18 @@ describe 'Config', ->
           gruntfile: "${HOME}/grunt/local-project/Gruntfile.js"
           register_tasks: false
 
-        expect(config.project 'local-project', local-project, true).to.deep.equal local-project
+        expect config.project 'local-project', local-project, true .to.deep.equal local-project
 
       it 'should write local config', ->
         config.write!
-        expect(fs.existsSync "#{__dirname}/fixtures/temp/config/local/#{FILENAME}").to.be.true
+        expect fs.existsSync "#{__dirname}/fixtures/temp/config/local/#{FILENAME}" .to.be.true
       
       it 'should clean and read config from disk', ->
         config.clean!
         config.load!
 
       it 'should read the config data from disk', ->
-        expect(config.project 'local-project').to.be.an 'object'
+        expect config.project 'local-project' .to.be.an 'object'
         expect config.project 'local-project' 
           ..to.have.property 'register_tasks'
           ..that.is.a 'boolean'
@@ -190,7 +190,7 @@ describe 'Config', ->
         project-data = 
           register_tasks: true
 
-        expect(config.update 'project', project-data)
+        expect config.update 'project', project-data
           ..to.have.property 'register_tasks'
           ..that.be.equal true
 
@@ -200,7 +200,7 @@ describe 'Config', ->
         config.load!
 
       it 'should project exists', -> 
-        expect(config.project 'project').to.be.an 'object'
+        expect config.project 'project' .to.be.an 'object'
 
       it 'project should have the expected options', -> 
         expect config.project 'project'
@@ -234,7 +234,7 @@ describe 'Config', ->
         config.load!
 
       it 'should project exists', -> 
-        expect(config.project 'project').to.be.an 'object'
+        expect config.project 'project' .to.be.an 'object'
 
 
   describe 'remove', (_) ->
