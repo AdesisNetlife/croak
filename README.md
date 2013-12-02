@@ -235,6 +235,11 @@ Create a config file (add `-g` flag to create it globally)
 $ croak config create
 ```
 
+You can CRUD config values easily from CLI
+```
+$ croak config [set|get|remove] <key> [value] [-g, -p project]
+```
+
 ### Croak API
 
 `TODO`
@@ -282,7 +287,6 @@ also keep in mind to follow the same design/code patterns that already exist
 
 - More test cases scenarios and destructive/evil testing
 - Support for extending/overriding Grunt configuration
-- Features c
 - Support for multiple Gruntfile in the same project?
 - Grunt croak task to configure it from local Gruntfile
 

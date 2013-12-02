@@ -15,9 +15,9 @@ program
 
               $ croak config list
               $ croak config create
-              $ croak config remove myProject
-              $ croak config set my-project path /home/user/projects/my-project
-              $ croak config get my-project path
+              $ croak config remove project
+              $ croak config set path /home/user/projects/my-project
+              $ croak config get path -p project -g
           
     '''
     ..action ->
@@ -62,7 +62,8 @@ commands =
       exit 1
 
   set: (project, key, value, options) ->
-    
-  get: (project, key, value, options) ->
+    # todo
 
+  get: (project, key, value, options) ->
+    # todo
 
