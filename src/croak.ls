@@ -1,30 +1,34 @@
 require! {
   path
   grunt
+  version: '../package.json'.version
   _: './import'.lodash
 }
 
-module.exports = croak = 
+module.exports = 
 
   init: (project, options) ->
     # extend options, temporary!
     options := _.extend {}, project, options |> omit-options 
     # wrap grunt.initConfig method
     grunt.init-config = init-config!
+    # extend croak API to Grunt (todo)
+    grunt.croak = _.defaults croak, { options.base, options.tasks, options.npm }
     # clean croak args
     grunt.cli.tasks.splice 0, 1
     # remove croak-specific arguments
     # init grunt
     grunt.cli options
 
-options = 
+# todo: define API and use paths from config file
+croak = 
   base: path.normalize process.cwd!
   cwd: path.normalize process.cwd!
-  $name: 'croak'
+  version: version
 
 set-croak-config = ->
   # add specific options avaliable from config
-  grunt.config.set 'croak', options unless grunt.config.get 'croak'
+  grunt.config.set 'croak', croak unless grunt.config.get 'croak'
 
 init-config = ->
   { init-config } = grunt
