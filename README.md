@@ -1,4 +1,4 @@
-# Croak [![Build Status](https://secure.travis-ci.org/AdesisNetlife/croak.png?branch=master)](http://travis-ci.org/adesisnetlife/croak) [![Dependency Status](https://gemnasium.com/adesisnetlife/croak.png)](https://gemnasium.com/adesisnetlife/croak)
+# Croak [![Build Status](https://secure.travis-ci.org/AdesisNetlife/croak.png?branch=master)](http://travis-ci.org/AdesisNetlife/croak) [![Dependency Status](https://gemnasium.com/adesisnetlife/croak.png)](https://gemnasium.com/adesisnetlife/croak)
 
 > Grunt automation made easy for large projects
 
