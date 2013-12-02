@@ -139,6 +139,34 @@ tasks = ../custom-tasks/
 npm = mytask
 ```
  
+### Adapt your existent Gruntfile
+
+```js
+module.exports = function (grunt) {
+  
+  grunt.initConfig({
+    clean: {
+      options: {
+        force: true
+      },
+      views: '<%= croak.cwd %>/tmpl/'
+      tmp: '<%= croak.cwd %>/.tmp/'
+    },
+    jshint: {
+      options: {
+        jshintrc: '.jshintrc'
+      },
+      all: [
+        '<%= croak.cwd %>/src/scripts/{,*/}*.js'
+        '<%= croak.cwd %>/demo/{,*/}*.js'
+        '!<%= croak.cwd %>/src/scripts/vendor/*.js'
+      ] 
+    }
+  });
+
+};
+```
+
 ### Croakfile
 
 Like Grunt, Croak has its own specific configuration file.
