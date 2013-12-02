@@ -1,6 +1,7 @@
 module.exports = 
 
   # croak-specific
+  extend: false
   override: false
   register_taks: false
   node_package: false

@@ -122,9 +122,9 @@ Example project configuration
 
 ```ini
 [my-project]
+extend = true
 override = true
 register_tasks = true
-;package = build-package
 ;; grunt-specific
 gruntfile = ${HOME}/projects/my-project/Gruntfile.coffee
 base = ${HOME}/projects/my-project/data/
