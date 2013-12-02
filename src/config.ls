@@ -204,7 +204,7 @@ encode-config = ->
   ini.stringify config-write-transform it
 
 has-data = ->
-  if _.is-object it then Object.keys(it)length >= 1 else no
+  if _.is-object it then Object.keys it .length >= 1 else no
 
 get-first-project = ->
   if it? and has-data it
