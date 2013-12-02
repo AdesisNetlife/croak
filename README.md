@@ -286,6 +286,7 @@ also keep in mind to follow the same design/code patterns that already exist
 ## TODO list
 
 - More test cases scenarios and destructive/evil testing
+- More deep CLI test cases
 - Support for extending/overriding Grunt configuration
 - Support for multiple Gruntfile in the same project?
 - Grunt croak task to configure it from local Gruntfile
