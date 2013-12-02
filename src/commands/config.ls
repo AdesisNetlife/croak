@@ -6,28 +6,27 @@ require! {
 { echo, exit } = require '../common'
 
 program
-  .command('config <action> [project] [key] [value]')
-  .description('\n  Read/write/update/delete croak config'.cyan)
-  .usage('[create|list|delete|set|get]'.cyan)
-  .on('--help', ->
-    echo '''
-          Usage examples:
+  .command 'config <action> [project] [key] [value]'
+    ..description '\n  Read/write/update/delete croak config'.cyan
+    ..usage '[create|list|delete|set|get]'.cyan
+    ..on '--help', ->
+      echo '''
+            Usage examples:
 
-            $ croak config list
-            $ croak config create
-            $ croak config remove myProject
-            $ croak config set my-project path /home/user/projects/my-project
-            $ croak config get my-project path
-        
+              $ croak config list
+              $ croak config create
+              $ croak config remove myProject
+              $ croak config set my-project path /home/user/projects/my-project
+              $ croak config get my-project path
+          
     '''
-  )
-  .action ->
-    unless command[it]
-      exit 1, "#{it} command not supported. Use --help to see the available commands"
-    
-    command[it]apply null, (Array::slice.call &)slice 1
-    
-command = 
+    ..action ->
+      unless command[it]
+        exit 1, "#{it} command not supported. Use --help to see the available commands"
+      
+      commands[it]apply null, (Array::slice.call &)slice 1
+
+commands = 
 
   list: ->
     { global, local } = config.raw!
@@ -50,7 +49,6 @@ command =
     data = {}
     prompt "Gruntfile path (e.g: project/Gruntfile.js ):", validator: ->, ->
       data.gruntfile = it
-      console.log it
 
   remove: (project, key, value, options) ->
     try 
@@ -64,7 +62,7 @@ command =
       exit 1
 
   set: (project, key, value, options) ->
-
+    
   get: (project, key, value, options) ->
 
 

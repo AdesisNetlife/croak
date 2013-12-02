@@ -12,7 +12,7 @@ module.exports = (grunt) ->
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json')
 
-    clean: ['lib', 'test/**/*.js', 'test/fixtures/temp/**']
+    clean: ['lib', 'test/*.js', 'test/fixtures/temp/**']
 
     livescript:
       options:
@@ -51,7 +51,6 @@ module.exports = (grunt) ->
   grunt.event.on 'watch', (action, files, target)->
     grunt.log.writeln "#{target}: #{files} has #{action}"
 
-    # coffee
     lsData = grunt.config ['livescript', target]
     files = [files] if _.isString files
     files = files.map (file)-> path.relative lsData.cwd, file

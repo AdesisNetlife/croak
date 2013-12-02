@@ -8,32 +8,40 @@
 
 <img align="right" height="280" src="http://oi44.tinypic.com/f3azc7.jpg" style="float: right" />
 
-[Grunt][1] is an awesome utility well community adopted to automate tasks and simplify development life time under node.js based projects
+[Grunt][1] is a fantastic utility largely adopted by the community made to automate tasks and simplify development time under node.js based projects
 
-Croak is just a simple, but featured wrapper for Grunt, that aims to help you to manage and orquestate 
-Grunt tasks and configuration across large and distributed projects, 
-always thinking about saving time and reducing changes impact
+Croak is just a simple, but featured wrapper for Grunt that aims to help you to manage and orchestrate Grunt tasks and configuration across large and distributed projects, 
+always saving time and reducing changes impact
 
-Croak borns from the need to create an specific solution to abstract all the automation 
-configuration stuff, allowing you to delegate responsabilities in a proper way and sense
+Croak arises from the need to create an specific solution to abstract all the automation 
+configuration stuff and allowing you to delegate responsibilities in a proper way and sense
 in your project and developers
+
+### Features
+
+- Centralizes your project build tasks configuration
+- Orchestrates different tasks configuration
+- Extends or overrides Grunt global tasks configuration from local
+- Provides the same Grunt API and CLI
+- Customizes Grunt run mode from the config file (future `.gruntrc`)
+- Keeps clean your repository without Grunt node packages (in front end projects cases)
 
 ## Installation
 
-It's recommended you to install Croak as global package
+Installation of Croak as global package is recommended
 
 ```shell
 $ npm install -g croak
 ```
 
-**I need to have Grunt already installed?**
+**Do I need to have Grunt already installed?**
 
 No, Croak will do it for you. 
 `grunt-cli` will be replaced by Croak CLI
 
 **Can I use the Grunt CLI**
 
-Of course, it will be avaiable using the `grunt` command
+Of course, it will be avaliable using the `grunt` command
 
 ```
 $ croak grunt --help
@@ -52,72 +60,65 @@ See the [configuration file](#configuration-file) section for more details
 
 ### How it works
 
-In a few words, Croak allows you to have a multiple `Gruntfile.js` in a global locations, and running them 
-using a simple alias
+In a few words, Croak allows you to have a multiple `Gruntfile.js` in global locations, and running them using a simple project identifier, also allowing you to define a pre-configured options to pass to Grunt from a ini configuration file
 
-Croak allows your to extend or override Grunt configuration in distributed projects, this feature is useful
-when you think the developers are not evil guys, providing a way to extend or override tasks
+Croak also allows your to extend or override Gruntfile configurations. This feature is useful when you think that your developers are not bad people, so you can provide a way to extend or override tasks
 
 ### Example scenario
 
-A representative scenario will be, for example, if your project have a relevant 
-number of repositories. Each repository need its automation configuration 
+A representative scenario could be, for example, that your project has a relevant 
+number of repositories. Each repository needs its automation configuration 
 for development, testing or building stuff.
-The Node-related software design is local focused, 
-Usually, this configuration tends to be complex when your project uses different technologies
 
-when you are in large project scenarios, and you have a lot of repositories
+Usually, this configuration tends to grow when your repository has an amount of different tasks and this configuration also tends to be very similar or redundant 
+across different repositories in your project
 
-### I do really need Croak?
+Continuous changing and improvement is a constant in any software project, so using Croak you can reduce dramatically your project automation configuration changing time by centralizing it
 
-Abstraction is not always the best choice and some people can hate it.
-Basically, an abstraction, in software development, tries to reduce notably complexity 
-hiding underlying details.
+### Do I really need Croak?
 
-With Croak you can provide an ideal level of abstraction to developers and at the same time,
-you can offer the possibility to pass part of the abstraction, providing more responsability to 
+Abstraction is not always the best choice and some people hate it.
+Basically, an abstraction in software development tries to reduce notably the complexity  underlying details.
+
+With Croak you can provide an ideal level of abstraction for developers and, at the same time,
+you can offer the possibility to pass part of the abstraction, providing more responsibility to 
 the developer
 
 #### Stage
 
-Croak is a initial version ready to use, however is under active (re-)designing process 
-and important changes can be applied in a few future
+Croak is an initial version ready to use, however is under active (re-)designing process 
+and important changes can be applied in a near future
 
-#### Grunt support
+**Grunt support**
 
 Croak supports Grunt 0.4.x
-
-## Features
-
-- Centralize your project build tasks configuration
-- Orquestate different tasks configuration
-- Extend or override Grunt global tasks configuration from local
-- Provides the same Grunt API and CLI
-- Customize Grunt run mode from the config file (future `.gruntrc`)
-- Keep clean your repository without Grunt node packages (in front end projects cases)
 
 ## Using Croak
 
 ### Configuration file
 
-Croak supports two configuration files: 
-
-- Global configuration localted in `$HOME` or `%USERPROFILE%`
-- Local configuration located in your project root directory
-
+Croak uses disk files to persistent store the configuration
 The Croak configuration file must called `.croakrc`
+
+Croak supports two types of configuration files 
+
+#### Global file
+
+A global file can store the configuration of your projects and this configuration will be used in each Croak execution
+
+By default it will be located in `$HOME` or `%USERPROFILE%` directories, but you can define an environment variables called `CROAKRC` to specify a custom global file location
+
+#### Local file
+
+Local file can be located in any path, but it is recommended that you create it in your project or repository root folder
+
+Usually, a local file should have only one project configured. Any local configuration will override a global configuration (for example, if you have the same project configured in both files)
+
+Croak implements a similar file discovery algorithm like the one Grunt uses to discover the Gruntfile
 
 ### Available configuration options
 
-#### Global 
-
-```
-[super-project]
-gruntfile = /home/me/projects/super-project/grunt-project
-allow_register_tasks = true
-```
-
-##### Supported options per project
+Example project configuration
 
 ```ini
 [my-project]
@@ -164,8 +165,8 @@ module.exports = (croak) ->
 
 ### Gruntfile configuration
 
-Croak will automatically create a specific task, called `croak` which will be avaiable from Grunt config object.
-That's really useful for templating and configure absolute paths for your local projects
+Croak will automatically create a specific task, called `croak` which will be available from Grunt config object.
+That's really useful for templating and configuring absolute paths for your local projects
 
 ### Croak CLI
  
@@ -178,7 +179,7 @@ That's really useful for templating and configure absolute paths for your local 
 ### Use Croak from existent Gruntfile.js
 
 If you already have `Gruntfile.js` in each local repository of your project and you do not want to switch
-radically to Croak, you can use the `grunt-croak` task to make a less impact with the same result
+radically to Croak, you can use the `grunt-croak` task to make less impact with the same result
 
 ```
 $ npm install grunt-croak --save-dev
@@ -212,7 +213,14 @@ Take a look to the language [documentation][4] if you are new with it.
 Please, follow the LiveScript language conventions and [coding style][4]
 
 You must add new test cases for any feature or refactor you do, 
-also take in mind follow the same design/code patterns already existing
+also keep in mind to follow the same design/code patterns that already exist
+
+## TODO list
+
+- More test cases scenarios and destructive/evil testing
+- Support for extending/overriding Grunt configuration
+- Features c
+- Support for multiple Gruntfile in the same project?
 
 ## Authors
 

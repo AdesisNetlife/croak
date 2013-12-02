@@ -1,5 +1,9 @@
-require! <[ fs path grunt ]>
-require! _: 'prelude-ls'
+require! {
+  fs
+  path
+  grunt
+  _: './import'.lodash
+}
 
 env = process.env
 
@@ -14,12 +18,13 @@ module.exports = class Common
 
   @grunt-file-exists = (filepath) ~>
     if /Gruntfile.(js|coffee)$/i.test filepath
-      @file-exists filepath
+      filepath = "./#{filepath}" if /^Gruntfile/i.test filepath
+      @file.exists filepath
     else
-      @file-exists filepath, 'Gruntfile.js' or @file-exists filepath, 'Gruntfile.coffee'
+      @file.exists filepath, 'Gruntfile.js' or @file.exists filepath, 'Gruntfile.coffee'
 
   @extend = (target = {}, src) ->
-    return target unless _.is-type 'Object', src
+    return target unless _.is-object src
     for own prop, value of src
       target[prop] = value
     target
@@ -36,7 +41,7 @@ module.exports = class Common
 
   @file =
     exists: (filepath, filename = '') ->
-      if filepath?
+      if filepath? and _.is-string filepath
         fs.exists-sync path.join filepath, filename
       else
         no
@@ -44,7 +49,7 @@ module.exports = class Common
     is-directory: ->
       fs.lstat-sync(it).isDirectory!
 
-    read: -> 
+    read: ->
       if @exists it and not @is-directory it
         fs.read-file-sync it, 'utf8'
       else

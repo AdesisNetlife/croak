@@ -1,13 +1,13 @@
 require! {
   path 
   ini
-  is-type: 'prelude-ls'.is-type
+  _: './import'.lodash
   defaults: './config-defaults'
 }
 { CONF-VAR, FILENAME } = require './constants'
 { file, env, extend, clone, is-win32 }:common = require './common'
 
-module.exports =
+module.exports = config =
 
   config: {}
   global: null
@@ -34,14 +34,6 @@ module.exports =
       @local = local if has-data local
     @apply!
 
-  raw: ->
-    config = {}
-    [ 'global', 'local' ]forEach ~>
-      data = config[it] = {}
-      data.path = @["#{it}File"]!
-      data.data = file.read data.path if file.exists data.path
-    config
-
   write: ->
     file.write @global-file!, encode-config @global
     file.write @local-file(it), encode-config @local
@@ -58,6 +50,14 @@ module.exports =
   delete: ->
     @remove ...
 
+  raw: ->
+    config = {}
+    [ 'global', 'local' ]forEach ~>
+      data = config[it] = {}
+      data.path = @["#{it}File"]!
+      data.data = file.read data.path if file.exists data.path
+    config
+
   project: (project, data, local = false) ->
     if project and has-data data
       context = if local then 'local' else 'global'
@@ -72,6 +72,13 @@ module.exports =
       project = null
 
     project
+
+  project-resolve: ->
+    local = @local
+    if local? and has-data local
+      get-first-project local
+    else
+      null
 
   update: (project, data, local = false) ->
     if @config[project] and has-data data
@@ -108,12 +115,13 @@ module.exports =
     global-file = @global-file!
     filepath := path.normalize replace-vars filepath
 
-    console.log 'LOCAL FILE!'
-
     is-global-file = ->
       it is global-file
 
-    if filepath.indexOf(FILENAME) isnt -1
+    has-filename = ->
+      filepath.index-of(FILENAME) isnt -1
+
+    if has-filename!
       filepath = path.dirname filepath
 
     [1 to 4]reduce ->
@@ -130,7 +138,6 @@ module.exports =
     if is-global-file filepath
       filepath = path.join path.dirname(filepath), 'croak', FILENAME 
     
-    console.log 'FINAL PATH->', filepath
     filepath
 
 
@@ -150,21 +157,24 @@ replace-vars = ->
   it
 
 translate-paths = ->
-  # todo: get path from local file path location
+  # todo: obtain relative path from .croakrc location
   unless file.is-absolute it
+    #unless /^\./ is it
     it = path.join process.cwd!, it
   it
 
 process-value = (key, value) ->
-  if <[ gruntfile npm tasks base ]>indexOf(key) isnt -1
+  value = value |> replace-vars
+  if <[ gruntfile npm tasks base ]>index-of(key) isnt -1
     value = value |> translate-paths
-  value |> replace-vars
+  value
 
 config-transform = ->
-  return it unless is-type 'Object', it
+  return it unless _.is-object it
   
   for own key, value of it
-    if is-type 'Object', value
+    if _.is-object value
+      value['$name'] = key unless value['$name']
       it[key] = value |> config-transform |> apply-defaults 
     else
       it["_#{key}"] = value
@@ -175,10 +185,10 @@ config-write-transform = ->
   data = {}
 
   is-not-template = ->
-    /^\_/ isnt it
+    /^\_/ isnt it or /^\$/ isnt it
 
   has-variables = (value, orig-value) -> 
-    is-type 'String', value and /\$\{.*\}/ is orig-value
+    _.is-string value and /\$\{.*\}/ is orig-value
 
   for own project, config of it when config?
     project = data[project] = {}
@@ -194,7 +204,10 @@ encode-config = ->
   ini.stringify config-write-transform it
 
 has-data = ->
-  if it?
-    Object.keys(it)length >= 1
-  else
-    no
+  if _.is-object it then Object.keys(it)length >= 1 else no
+
+get-first-project = ->
+  if it? and has-data it
+    for own name, data of it when has-data data
+      return data
+

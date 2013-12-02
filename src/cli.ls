@@ -9,7 +9,7 @@ require! {
 exports.parse = (args) -> program.parse args
 
 program
-  .version "Croak: #{pkg.version}\nGrunt: #{grunt.version}"
+  .version "croak #{pkg.version}\ngrunt #{grunt.version}"
     ..option '-g, --global <path>', 'Use the global config file'.cyan
     ..option '-f, --force', 'Force command execution. Also will be passed to Grunt'.cyan
 

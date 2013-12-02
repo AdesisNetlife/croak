@@ -1,6 +1,6 @@
 {
   "name": "croak",
-  "version": "0.1.0-rc.1",
+  "version": "0.1.0-rc.0",
   "description": "Grunt automation made easy for large projects",
   "preferGlobal": true,
   "homepage": "http://github.com/adesisnetlife/croak",
@@ -35,8 +35,7 @@
     "commander": "~2.1.0",
     "ini": "~1.1.0",
     "resolve": "~0.6.0",
-    "promptly": "~0.2.0",
-    "prelude-ls": "~1.0.3"
+    "promptly": "~0.2.0"
   },
   "devDependencies": {
     "grunt-mocha-cli": "~1.0.3",
