@@ -237,7 +237,7 @@ $ croak config create
 
 You can CRUD config values easily from CLI
 ```
-$ croak config [set|get|remove] <key> [value] [-g, -p project]
+$ croak config [set|get|remove] <key> [value] [-g, -p <project>]
 ```
 
 ### Croak API
