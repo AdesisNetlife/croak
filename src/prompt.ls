@@ -21,7 +21,7 @@ module.exports = (message, callback, list, type, options) ->
 
     temp.type ?= 'prompt'
     for own param, value of temp when param isnt 'type'
-      fnArgs.push value
+      value |> fnArgs.push
 
     { type: temp.type, fnArgs: fnArgs }
 

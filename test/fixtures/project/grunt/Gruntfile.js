@@ -2,15 +2,15 @@ module.exports = function (grunt) {
   
   grunt.initConfig({
     log: {
-      foo: [1, 2, 3],
-      bar: 'hello world',
-      baz: false
+      foo: {},
+      bar: 'hello croak'
     },
     read: {
       file: __dirname + '/file.json'
     },
     croak_test: {
-      path: '<%= croak.cwd %>'
+      path: '<%= croak.cwd %>',
+      version: '<%= croak.version %>'
     }
   })
 

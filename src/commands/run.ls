@@ -8,58 +8,77 @@ require! {
 
 program
   .command 'run <task>'
-    ..description '\n  Run Grunt tasks'.cyan
-    ..usage 'my-project test'.cyan
-    ..option '-p, --project <path>', 'Specifies the project to run'.cyan
-    ..option '-c, --croakrc <path>', 'Use a custom .croakrc file path'.cyan
-    ..option '-x, --gruntfile <path>', 'Specifies the Gruntfile path'.cyan
-    ..option '-b, --base <path>', 'Specify an alternate base path. By default, all file paths are relative to the Gruntfile'.cyan
-    ..option '-f, --force', 'A way to force your way past warnings'.cyan
-    ..option '-d, --debug', 'Enable debugging mode for tasks that support it'.cyan
-    ..option '-v, --verbose', 'Verbose mode. A lot more information output'.cyan
-    ..option '--no-color', 'Disable colored output'.cyan
-    ..option '--stack', 'Print a stack trace when exiting with a warning or fatal error'.cyan
-    ..option '-t, --tasks <path>', 'Additional directory paths to scan for task and "extra" files'.cyan
-    ..option '-n, --npm <path>', 'Npm-installed grunt plugins to scan for task and "extra" files'.cyan
-    ..option '-s, --no-write', 'Disable writing files (dry run)'.cyan
-    ..option '--completion', 'Output shell auto-completion rules'.cyan
+    ..description '\n  Run Grunt tasks'
+    ..usage '<task> [options]'
+    ..option '-p, --project <path>', 'Specifies the project to run'
+    ..option '-c, --croakrc <path>', 'Use a custom .croakrc file path'
+    ..option '-x, --gruntfile <path>', 'Specifies the Gruntfile path'
+    ..option '-b, --base <path>', 'Specify an alternate base path'
+    ..option '-f, --force', 'A way to force your way past warnings'
+    ..option '-d, --debug', 'Enable debugging mode for tasks that support it'
+    ..option '-v, --verbose', 'Verbose mode. A lot more information output'
+    ..option '-t, --tasks <path>', 'Additional directory paths to scan for task and "extra" files'
+    ..option '-n, --npm <path>', 'Npm-installed grunt plugins to scan for task and "extra" files'
+    ..option '-w, --no-write', 'Disable writing files (dry run)'
+    ..option '--no-color', 'Disable colored output'
+    ..option '--stack', 'Print a stack trace when exiting with a warning or fatal error'
+    ..option '--completion', 'Output shell auto-completion rules'
     ..on '--help', ->
       echo '''
             Usage examples:
 
-              $ croak run build
-              $ croak run test my-project
-              $ croak run test -x path/to/Gruntfile.js
+              $ croak run task
+              $ croak run task -p my-project
+              $ croak run task --verbose --force
+              $ croak run task --gruntfile path/to/Gruntfile.js
+              $ croak run task --base path/to/base/dir/
           
       '''
     ..action -> run ...
     
 run = (task, options) ->
 
-  { croakrc, gruntfile, base } = options
+  echo-debug = ->
+    echo.apply null, (Array::slice.call &) ++ ['\n'] if debug or verbose
+
+  { gruntfile, base, debug, verbose } = options
+  { croakrc } = options.parent
   project = options.project if options.project
+
+  'Croak started in verbose mode'.green |> echo-debug
 
   try
     config.load croakrc
-  catch { message } 
-    exit 1, "Cannot read .croakrc: #{message}".red
+  catch { message }
+    "Cannot read .croakrc: #{message}" |> exit 1
 
   unless gruntfile
     unless project
+      'Project argument not specified, trying to resolve project from config...' |> echo-debug
       unless project := config.project-resolve!
-        exit 1, "Missing required 'project' argument".red
+        "Cannot use a default project, you must specify the project to use" |> exit 1
+      else
+        "Config file found, using the default project '#{project.$name}'..." |> echo-debug 
     else
       unless project := config.get project
-        exit 1, "Project not found. Have you actually configured it?".red
+        'Project not found. Have you actually configured it?' |> exit 2
 
-  if project
+  if project and not gruntfile
     { gruntfile } = project
 
   unless gruntfile
-    exit 2, "Cannot find the Gruntfile. Missing required 'gruntfile' config option".red
-  
-  unless util.grunt-file-exists gruntfile
-    exit 2, "Cannot run task. Gruntfile not found. Looking in:\n#{gruntfile}".red
+    "Cannot find the Gruntfile. Missing required 'gruntfile' config option" |> exit 2
+
+  "Looking for the Gruntfile in: #{gruntfile}" |> echo-debug
+  unless gruntfile := util.gruntfile-path gruntfile
+    'Gruntfile not found. Cannot run the task' |> exit 2
+
+  "Running project '#{project.$name}'..." |> echo-debug if project
+  "Gruntfile loaded:\n#{gruntfile}" |> echo-debug
+
+  "Running #{task} task...".cyan |> echo-debug
+
+  options <<< { croakrc, gruntfile, base, debug, verbose }
 
   croak.init project, options
 

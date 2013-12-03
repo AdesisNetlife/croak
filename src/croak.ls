@@ -16,6 +16,9 @@ module.exports =
     grunt.croak = _.defaults croak, { options.base, options.tasks, options.npm }
     # clean croak args
     grunt.cli.tasks.splice 0, 1
+    # force to override process.argv, it was taken 
+    # by the Grunt module instance and has precedence
+    _.extend grunt.cli.options, options
     # init grunt with inherited options
     grunt.cli options
 

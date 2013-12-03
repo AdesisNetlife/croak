@@ -106,7 +106,7 @@ describe 'Config', ->
           ..to.be.equal "#{__dirname}/fixtures/config/local/#{FILENAME}"
 
       it 'should not discover the file', ->
-        folder = "#{__dirname}/fixtures/config/local/folder/sub-folder/nested-folder/sub-nested-folder"
+        folder = "#{__dirname}/fixtures/config/local/folder/sub/nested/sub-nested/ultra-nested"
         expect config.local-file folder
           ..to.be.equal join process.cwd!, FILENAME
 

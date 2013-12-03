@@ -5,7 +5,7 @@ require! {
   _: './import'.lodash
 }
 
-env = process.env
+{ env } = process
 
 module.exports = class Common
 
@@ -16,33 +16,50 @@ module.exports = class Common
 
   @home = path.normalize env[(if Common.is-win32 then 'USERPROFILE' else 'HOME')] or ''
 
-  @grunt-file-exists = (filepath) ~>
+  @gruntfile-path = (filepath) ~>
+    add-gruntfile = (ext) ->
+      filepath := "Gruntfile.#{ext}" |> join filepath, _
+
+    is-not-path = ->
+      /^Gruntfile/i.test it
+
+    filepath := filepath |> @file.make-absolute
     if /Gruntfile.(js|coffee)$/i.test filepath
-      filepath = "./#{filepath}" if /^Gruntfile/i.test filepath
-      @file.exists filepath
+      filepath := "./#{filepath}" if filepath |> is-not-path 
+      if filepath |> @file.exists 
+        filepath
     else
-      @file.exists filepath, 'Gruntfile.js' or @file.exists filepath, 'Gruntfile.coffee'
+      if ('js' |> add-gruntfile |> @file.exists) or ('coffee' |> add-gruntfile |> @file.exists)
+        filepath
+
+  @gruntfile-exists = ~>
+    (@gruntile-path it)?
 
   @extend = (target = {}, src) ->
-    return target unless _.is-object src
+    return target unless src |> _.is-object
     for own prop, value of src
       target[prop] = value
     target
 
   @clone = ~>
-    @extend {}, it
+    it |> @extend {}, _ 
 
   @echo = ->
     console.log ...
 
-  @exit = ~>
-    @echo &1 if &1?
-    process.exit it or 0
+  @exit = (code) ~>
+    exit = -> code |> process.exit
+    if code is 0 or not code
+      process.exit 0
+    # if not 0, returns a partial function
+    (message) ~>
+      @echo (message).red if message? and code isnt 0
+      exit!
 
   @file =
     exists: (filepath, filename = '') ->
       if filepath? and _.is-string filepath
-        fs.exists-sync path.join filepath, filename
+        fs.exists-sync (filename |> join filepath, _)
       else
         no
 
@@ -56,13 +73,26 @@ module.exports = class Common
         ''
 
     delete: ->
-      fs.unlink-sync it
+      it |> fs.unlink-sync 
 
     write: (filepath, data) -> 
-      if @is-directory path.dirname filepath
-        fs.write-file-sync filepath, data, if is-node8 then 'utf8' else encoding: 'utf8'
+      if filepath |> path.dirname |> @is-directory
+        data |> fs.write-file-sync filepath, _, if is-node8 then 'utf8' else encoding: 'utf8'
 
     is-absolute: grunt.file.is-path-absolute
 
+    absolute-path: (relative, absolute = process.cwd!) ->
+      relative |> join absolute, _
+
+    make-absolute: ->
+      return it unless it
+      if it |> @is-absolute
+        it
+      else
+        @absolute-path ...
+
 is-node8 = ->
   /^0\.8\./.test process.versions.node
+
+join = ->
+  path.join ...

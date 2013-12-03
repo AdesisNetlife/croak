@@ -313,6 +313,7 @@ also keep in mind to follow the same design/code patterns that already exist
 
 ## TODO list
 
+- Support for relative paths on `.croakrc` based on its file location
 - More test cases scenarios and destructive/evil testing
 - More deep CLI test cases
 - Support for extending/overriding Grunt configuration
