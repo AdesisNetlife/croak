@@ -82,7 +82,7 @@ Abstraction is not always the best choice and some people hate it.
 Basically, an abstraction in software development tries to reduce notably the complexity  underlying details.
 
 With Croak you can provide an ideal level of abstraction for developers and, at the same time,
-you can offer the possibility to pass part of the abstraction, providing more responsibility to 
+you can offer the possibility to pass part of the abstraction, providing the desired level of responsibility to 
 the developer
 
 #### Stage
