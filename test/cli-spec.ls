@@ -44,6 +44,19 @@ describe 'CLI', ->
         expect it .to.match /grunt/i
         done!
 
+    describe 'run task directly using grunt', (_) ->
+
+      before ->
+        process.chdir "#{__dirname}/fixtures/project/grunt/"
+
+      after ->
+        process.chdir cwd
+
+      it 'should run the "log" task', (done) ->
+        exec 'data', <[grunt log]>, ->
+          expect it .to.match /hello croak/i
+          done!
+
   describe 'command', ->
 
     before ->

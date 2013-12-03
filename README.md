@@ -35,19 +35,6 @@ Installation of Croak as global package is recommended
 $ npm install -g croak
 ```
 
-**Do I need to have Grunt already installed?**
-
-No, Croak will do it for you. 
-`grunt-cli` will be replaced by Croak CLI
-
-**Can I use the Grunt CLI**
-
-Of course, it is avaliable using the `grunt` command
-
-```
-$ croak grunt --help
-```
-
 ### Configure it
 
 After you install it properly, you should configure croak
@@ -282,6 +269,41 @@ $ npm install grunt-croak --save-dev
 ```
 
 For more information, see the [grunt-croak][2] documentation
+
+## FAQ
+
+**Do I need to have Grunt already installed?**
+
+No, Croak will do it for you. And also 
+`grunt-cli` will be replaced by Croak CLI
+
+**Can I use the Grunt CLI**
+
+Of course, it is avaliable using the `grunt` command
+
+```
+$ croak grunt --help
+```
+
+**Do I need to have a Gruntfile in my repository?**
+
+No. An already existent Gruntfile is not required.
+
+You only need to specify the global Gruntfile you want to use 
+and optionally you can use a Croakfile to override or extend global configuration
+
+**Can I use both Croak and Grunt at the same time?**
+
+Yes. You must specify a global Gruntfile and also have your own repository Gruntfile.
+
+You can run both like this:
+
+```
+$ croak run task -p project
+```
+```
+$ croak grunt localtask
+```
 
 ## Development
 

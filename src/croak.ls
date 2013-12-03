@@ -7,11 +7,17 @@ require! {
 
 module.exports = 
 
+  grunt-version: grunt.version
+  
   init: (project, options) ->
     # extend options, temporary!
     options := _.extend {}, project, options |> omit-options 
     # wrap grunt.initConfig method
     grunt.init-config = init-config!
+    # init grunt with project options
+    @grunt options
+
+  grunt: (options = {}) ->
     # extend croak API to Grunt (todo)
     grunt.croak = _.defaults croak, { options.base, options.tasks, options.npm }
     # clean croak args
