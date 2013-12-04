@@ -1,6 +1,6 @@
 # Croak [![Build Status](https://secure.travis-ci.org/AdesisNetlife/croak.png?branch=master)](http://travis-ci.org/AdesisNetlife/croak) [![Dependency Status](https://gemnasium.com/adesisnetlife/croak.png)](https://gemnasium.com/adesisnetlife/croak)
 
-> Grunt automation made easy for large projects
+> Grunt automation made easy for large projects. Croak saves time and health
 
 `WORK IN PROCESS!`
 
@@ -15,14 +15,14 @@ always saving time and reducing changes impact
 
 Croak arises from the need to create an specific solution to abstract all the automation 
 configuration stuff and allowing you to delegate responsibilities in a proper way and sense
-in your project and developers
+in your project and developers, without losing control
 
 ### Features
 
 - Centralizes your project build tasks configuration
 - Easily manage and orchestrates different configuration for multiple projects
 - Abstract and provides more more control of your project automation tasks
-- Extends or overrides Grunt global tasks configuration from local
+- Extends or overwrites Grunt global tasks configuration from local
 - Provides the same Grunt API and CLI
 - Customizes Grunt options run mode from the config file (future `.gruntrc`)
 - Keeps clean your repository without Grunt node packages (in front end projects cases)
@@ -50,7 +50,7 @@ See the [configuration file](#configuration-file) section for more details
 
 In a few words, Croak allows you to have a multiple `Gruntfile.js` in global locations, and running them using a simple project identifier, also allowing you to define a pre-configured options to pass to Grunt from a ini configuration file
 
-Croak also allows your to extend or override Gruntfile configurations. This feature is useful when you think that your developers are not bad people, so you can provide a way to extend or override tasks
+Croak also allows your to extend or overwrite Gruntfile configurations. This feature is useful when you think that your developers are not bad people, so you can provide a way to customize tasks configuration
 
 ### Example scenario
 
@@ -100,7 +100,7 @@ By default it will be located in `$HOME` or `%USERPROFILE%` directories, but you
 
 Local file can be located in any path, but it is recommended that you create it in your project or repository root folder
 
-Usually, a local file should have only one project configured. Any local configuration will override a global configuration (for example, if you have the same project configured in both files)
+Usually, a local file should have only one project configured. Any local configuration will overwrite a global configuration (for example, if you have the same project configured in both files)
 
 Croak implements a similar file discovery algorithm like the one Grunt uses to discover the Gruntfile
 
@@ -111,7 +111,7 @@ Example project configuration
 ```ini
 [my-project]
 extend = true
-override = true
+overwrite = true
 register_tasks = true
 ;; grunt-specific
 gruntfile = ${HOME}/projects/my-project/Gruntfile.coffee
@@ -128,9 +128,32 @@ npm = mytask
  
 ### Adapt your existent Gruntfile
 
+Croak automatically exposes the croak config object in your Gruntfile, so you can use this 
+configuration like template values in your tasks config
+
+This is really useful because, in much cases, you need to use absolute paths in your Gruntfile
+
+**Croak grunt object**
+
+The following properties will be available:
+
+- cwd `User working directory when Croak is called`
+- root `Alias to cwd`
+- version `Current Croak version`
+- base `Grunt base path configured` [optional]
+- npm `Grunt npm load packages` [optional]
+- tasks `Grunt tasks load path` [optional]
+
+The above properties will be also available from `grunt.croak`
+
+**Example Gruntfile**
+
 ```js
 module.exports = function (grunt) {
-  
+  if (grunt.croak) {
+    console.log('Running Grunt from Croak', grunt.croak.version);
+  }
+
   grunt.initConfig({
     clean: {
       options: {
@@ -148,9 +171,16 @@ module.exports = function (grunt) {
         '<%= croak.cwd %>/demo/{,*/}*.js'
         '!<%= croak.cwd %>/src/scripts/vendor/*.js'
       ] 
+    },
+    connect: {
+      server: {
+        options: {
+          port: 9001,
+          base: '<%= croak.cwd %>'
+        }
+      }
     }
   });
-
 };
 ```
 
@@ -290,7 +320,7 @@ $ croak grunt --help
 No. An already existent Gruntfile is not required.
 
 You only need to specify the global Gruntfile you want to use 
-and optionally you can use a Croakfile to override or extend global configuration
+and optionally you can use a Croakfile to overwrite or extend global configuration
 
 **Can I use both Croak and Grunt at the same time?**
 

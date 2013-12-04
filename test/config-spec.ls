@@ -6,11 +6,10 @@ require! {
   common: '../lib/common'
   config: '../lib/config'
 }
-{ FILENAME, CONF-VAR } = require '../lib/constants'
-
+{ FILENAME, CONFVAR } = require '../lib/constants'
 
 home-var = if process.platform is 'win32' then 'USERPROFILE' else 'HOME'
-cwd = process.cwd!  
+cwd = process.cwd!
 
 describe 'Config', ->
 
@@ -30,10 +29,10 @@ describe 'Config', ->
     describe 'custom environment variable path', (_) ->
 
       before ->
-        process.env[CONF-VAR] = "#{__dirname}/fixtures/config/global/#{FILENAME}"
+        process.env[CONFVAR] = "#{__dirname}/fixtures/config/global/#{FILENAME}"
 
       after ->
-        process.env[CONF-VAR] = ''
+        process.env[CONFVAR] = ''
   
       it 'should have the expeted path', ->
         expect config.global-file! .to.be.equal "#{__dirname}/fixtures/config/global/#{FILENAME}"
@@ -85,13 +84,13 @@ describe 'Config', ->
     describe 'global and local config', (_) ->
 
       before ->
-        process.env[CONF-VAR] = "#{__dirname}/fixtures/config/global/.croakrc"
+        process.env[CONFVAR] = "#{__dirname}/fixtures/config/global/.croakrc"
 
       before ->
         config.load "#{__dirname}/fixtures/config/local"
 
       after ->
-        process.env[CONF-VAR] = ''
+        process.env[CONFVAR] = ''
 
       it 'should load the config properly', ->
         expect config.global .to.be.an 'object'
@@ -113,7 +112,7 @@ describe 'Config', ->
   describe 'write', (_) ->
 
     before ->
-      process.env[CONF-VAR] = "#{__dirname}/fixtures/temp/config/global/"
+      process.env[CONFVAR] = "#{__dirname}/fixtures/temp/config/global/"
       process.chdir "#{__dirname}/fixtures/temp/config/local"
 
     before ->
@@ -134,7 +133,7 @@ describe 'Config', ->
 
       it 'should write global config', ->
         config.write!
-        expect fs.existsSync "#{process.env[CONF-VAR]}/#{FILENAME}" .to.be.true
+        expect fs.existsSync "#{process.env[CONFVAR]}/#{FILENAME}" .to.be.true
       
       it 'should clean and read config from disk', ->
         config.clean!
@@ -175,7 +174,7 @@ describe 'Config', ->
       config.clean!
 
     before ->
-      process.env[CONF-VAR] = "#{__dirname}/fixtures/temp/config/global/"
+      process.env[CONFVAR] = "#{__dirname}/fixtures/temp/config/global/"
 
     before ->
       project = 
@@ -252,7 +251,7 @@ describe 'Config', ->
       config.clean!
 
     before ->
-      process.env[CONF-VAR] = "#{__dirname}/fixtures/temp/config/global/"
+      process.env[CONFVAR] = "#{__dirname}/fixtures/temp/config/global/"
 
     before ->
       project = 

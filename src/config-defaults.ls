@@ -2,9 +2,9 @@ module.exports =
 
   # croak-specific
   extend: false
-  override: false
+  overwrite: false
   register_taks: false
-  node_package: false
+  #node_package: false
   
   # grunt-specific
   base: false

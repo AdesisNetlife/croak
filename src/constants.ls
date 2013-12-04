@@ -1,3 +1,3 @@
 module.exports =
-  CONF-VAR: 'CROAKRC'
+  CONFVAR: 'CROAKRC'
   FILENAME: '.croakrc'

@@ -30,5 +30,5 @@ module.exports = (message, callback, list, type, options) ->
 get-type = ->
   type = typeof it
   if type is 'object'
-    type = 'array' if Object::toString.call it is '[object Array]'
+    type = 'array' if it |> Array.isArray
   type

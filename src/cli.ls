@@ -15,7 +15,7 @@ program
     ..option '-f, --force', 'Force command execution. Also will be passed to Grunt'
 
 program.on 'grunt', ->
-  croak.grunt!
+  croak.run-grunt!
 
 program.on '--help', ->
   echo '''

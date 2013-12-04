@@ -1,48 +1,59 @@
 require! {
-  path
   grunt
+  './config'
   version: '../package.json'.version
   _: './import'.lodash
 }
 
 module.exports = 
 
+  version: version
   grunt-version: grunt.version
-  
+
+  config: config
+  grunt: grunt
+
   init: (project, options) ->
-    # extend options, temporary!
-    options := _.extend {}, project, options |> omit-options 
+    # extends options with project config
+    options := options |> _.extend {}, project, _
+    # init grunt with project options
+    options |> @run-grunt
+
+  run: ->
+    @init ...
+
+  run-grunt: (options = {}) ->
+    # omit unsupported grunt options
+    options := options |> omit-options
     # wrap grunt.initConfig method
     grunt.init-config = init-config!
-    # init grunt with project options
-    @grunt options
-
-  grunt: (options = {}) ->
-    # extend croak API to Grunt (todo)
-    grunt.croak = _.defaults croak, { options.base, options.tasks, options.npm }
-    # clean croak args
-    grunt.cli.tasks.splice 0, 1
+    # extend croak API to provide it from Grunt
+    grunt.croak = { options.base, options.tasks, options.npm } |> _.defaults croak, _
+    # remove croak first argument
+    grunt.cli.tasks.splice 0, 1 if grunt.cli.tasks
     # force to override process.argv, it was taken 
     # by the Grunt module instance and has precedence
-    _.extend grunt.cli.options, options
+    options |> _.extend grunt.cli.options, _
     # init grunt with inherited options
-    grunt.cli options
+    options |> grunt.cli
 
-# todo: define API and use paths from config file
+
+# expose this object croak as config
 croak = 
-  base: path.normalize process.cwd!
-  cwd: path.normalize process.cwd!
+  root: config.path!local or process.cwd!
+  cwd: config.path!local or process.cwd!
   version: version
 
-set-croak-config = ->
+set-grunt-croak-config = ->
   # add specific options avaliable from config
   grunt.config.set 'croak', croak unless grunt.config.get 'croak'
 
 init-config = ->
   { init-config } = grunt
+
   (config) ->
     init-config config
-    set-croak-config!
+    set-grunt-croak-config!
 
 omit-options = ->
   options = {}

@@ -33,12 +33,12 @@ module.exports = class Common
         filepath
 
   @gruntfile-exists = ~>
-    (@gruntile-path it)?
+    (it |> @gruntile-path)?
 
   @extend = (target = {}, src) ->
     return target unless src |> _.is-object
     for own prop, value of src
-      target[prop] = value
+      target <<< { (prop): value }
     target
 
   @clone = ~>

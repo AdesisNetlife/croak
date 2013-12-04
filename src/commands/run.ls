@@ -41,8 +41,8 @@ run = (task, options) ->
   echo-debug = ->
     echo.apply null, (Array::slice.call &) ++ ['\n'] if debug or verbose
 
-  { gruntfile, base, debug, verbose } = options
-  { croakrc } = options.parent
+  { gruntfile, base, debug, verbose, parent } = options
+  { croakrc } = parent
   project = options.project if options.project
 
   'Croak started in verbose mode'.green |> echo-debug

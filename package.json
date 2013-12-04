@@ -47,6 +47,7 @@
     "grunt-livescript": "~0.5.1",
     "LiveScript": "~1.2.0",
     "mkdirp": "~0.3.5",
-    "suppose": "~0.3.0"
+    "suppose": "~0.3.0",
+    "sinon": "~1.7.3"
   }
 }

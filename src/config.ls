@@ -4,7 +4,7 @@ require! {
   _: './import'.lodash
   defaults: './config-defaults'
 }
-{ CONF-VAR, FILENAME } = require './constants'
+{ CONFVAR, FILENAME } = require './constants'
 { file, env, extend, clone, is-win32 }:common = require './common'
 
 local-path = null
@@ -30,10 +30,21 @@ module.exports = config =
     |> extend _, @local
 
   load: ->
-    if global = @global-file! |> @read |> config-transform
-      @global = global if global |> has-data 
-    if local = @local-file it |> @read |> config-transform 
-      @local = local if local |> has-data
+    global-config-path = @global-file!
+    local-config-path = @local-file it
+
+    add-filepath-to-config = (config, filepath) ->
+      if (config |> _.is-object) and filepath
+        config <<< { $path: filepath }
+        config <<< { $dirname: filepath |> path.dirname }
+
+    if global = global-config-path |> @read |> config-transform
+      @global = global if global |> has-data
+      global-config-path |> add-filepath-to-config global, _
+    if local = local-config-path |> @read |> config-transform
+      if local |> has-data
+        @local = local 
+        local-config-path |> add-filepath-to-config local, _
     @apply!
 
   write: ->
@@ -92,7 +103,7 @@ module.exports = config =
     data
 
   get: (project, key) ->
-    if project |> @config.hasOwnProperty 
+    if project |> @config.has-own-property 
       project := @config[project]
       if key
         project[key]
@@ -101,6 +112,17 @@ module.exports = config =
     else
       null
 
+  set: (data-obj, type = 'local') ->
+    if data-obj |> _.is-object
+      data-obj := data-obj |> config-transform
+      if @[type] |> _.is-object
+        data-obj |> _.extend @[type], _
+      else
+        @ <<< { (type): data-obj }
+
+  path: ->
+    { global: @global?.$path, local: @local?.$path }
+
   exists: ->
     (@get ...)?
 
@@ -108,7 +130,7 @@ module.exports = config =
     @project ...
 
   global-file: ->
-    if config-path = it or env CONF-VAR
+    if config-path = it or env CONFVAR
       config-path := config-path |> replace-vars |> path.normalize  
       if file.is-directory config-path
         config-path := config-path |> add-croakrc-file
@@ -143,14 +165,15 @@ module.exports = config =
       filepath = process.cwd! |> add-croakrc-file
     # prevent the local file discovery process do not resolve the global file
     if is-global-file filepath
-      filepath = path.join (filepath |> path.dirname), 'croak' |> add-croakrc-file 
+      # set to default
+      filepath = @local-path # #path.join (filepath |> path.dirname), 'croak' |> add-croakrc-file 
     
     filepath
 
-# accessor for customize the .croakrc file path lookup
+# accessor to customize the .croakrc file path lookup
 Object.define-property config, 'localPath', do 
   enumerable: true
-  get: -> local-path or process.cwd!
+  get: -> local-path or (process.cwd! |> add-croakrc-file)
   set: -> local-path := it
 
 
@@ -158,7 +181,8 @@ apply-defaults = ->
   it |> extend (defaults |> clone), _
 
 add-croakrc-file = ->
-  it |> path.join _, FILENAME
+  unless (it |> new RegExp "#{CONFVAR}$" .test)
+    it |> path.join _, FILENAME
 
 is-not-template-value = ->
   /^\_/ isnt it and /^\$/ isnt it
@@ -178,7 +202,7 @@ replace-vars = ->
 translate-paths = ->
   # todo: obtain relative path from .croakrc location
   unless it |> file.is-absolute 
-    it = it |> path.join process.cwd!, _
+    it = it |> path.join (config.path!local or process.cwd!), _
   it
 
 process-value = (key, value) ->
@@ -191,17 +215,16 @@ process-value = (key, value) ->
 config-transform = ->
   return it unless it |> _.is-object 
   
-  for own key, value of it
+  for own key, value of it when key |> is-not-template-value 
     if value |> _.is-object 
       value['$name'] = key unless value['$name']
-      it[key] = value |> config-transform |> apply-defaults 
+      it[key] = value |> config-transform |> apply-defaults
     else
-      if key |> is-not-template-value 
-        # support for global config options
-        if key isnt 'default' and key isnt 'project'
-          # save the original value (required for templating and variables)
-          it["_#{key}"] = value
-        it[key] = process-value key, value
+      # support for global config options
+      if key isnt 'default' and key isnt 'project'
+        # save the original value (required for templating and variables)
+        it["_#{key}"] = value
+      it[key] = value |> process-value key, _
   it
 
 config-write-transform = ->
@@ -211,7 +234,7 @@ config-write-transform = ->
     (value |> _.is-string) and /\$\{.*\}/ is orig-value
 
   set-global-config = (obj, key, value) ->
-    obj[key] = value
+    obj <<< { (key): value }
 
   can-copy = (key, value, orig-value) ->
     if "_#{key}" |> config.has-own-property
@@ -221,18 +244,18 @@ config-write-transform = ->
   for own project, config of it when config?
     project = data[project] = {}
     unless config |> _.is-object 
-      set-global-config data, project, value
+      data |> set-global-config _, project, value
     else
       for own key, value of config when key |> is-not-template-value 
         orig-value = config["_#{key}"]
         if value |> has-variables _, orig-value
           value = orig-value
-        if can-copy key, value, orig-value
+        if value |> can-copy key, _, orig-value
           project[key] = value
   data
 
 encode-config = ->
-  it |> config-write-transform |> ini.stringify 
+  it |> config-write-transform |> ini.stringify
 
 has-data = ->
   if it |> _.is-object then Object.keys it .length >= 1 else no
