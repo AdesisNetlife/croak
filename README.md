@@ -10,8 +10,7 @@
 
 [Grunt][1] is a fantastic utility largely adopted by the community made to automate tasks and simplify development time under node.js based projects
 
-Croak is just a simple, but featured wrapper for Grunt that aims to help you to manage and orchestrate Grunt tasks and configuration across large and distributed projects, 
-always saving time and reducing changes impact
+Croak is just a simple, but featured wrapper for Grunt that aims to help you to manage and orchestrate Grunt tasks and configuration across large and distributed projects, helping you to avoid redundancy, saving time and dramatically reducing changes impact
 
 Croak arises from the need to create an specific solution to abstract all the automation 
 configuration stuff and allowing you to delegate responsibilities in a proper way and sense
