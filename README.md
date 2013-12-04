@@ -66,7 +66,7 @@ See the [configuration file](#configuration-file) section for more details
 - [FAQ](#faq)
 - [Development](#development)
 - [Contributing](#contributing)
-- [To Do/Wish list](#todo-with-list)
+- [To Do/Wish list](#to-do-with-list)
 - [Authors](#authors)
 - [License](#license)
 
@@ -135,12 +135,11 @@ Croak implements a similar file discovery algorithm like the one Grunt uses to d
 List of supported config options
 
 | Name           | Type      | Default     | Description                                    |
-| -------------- | --------- | ----------- | ---------------------------------------------: |
+| -------------- | --------- | ----------- | ---------------------------------------------- |
 | extend         | `boolean` | false       | Enable extend existent tasks from Croakfile |
 | overwrite      | `boolean` | false       | Enable overwrite existent tasks from Croakfile |
 | register_tasks | `boolean` | false       | Enable register/create new tasks from Croakfile |
-| cwd            | `string`  | ${PWD}      | Working directory to pass to Grunfile. Default to ${PWD} or local `.croakrc` path |
-
+| cwd            | `string`  | ${PWD}      | Working directory to pass to Grunfile. Default to ${PWD} or local `.croakrc` path. Don't use this option unless you know what you are doing |
 
 **Example project configuration**
 
