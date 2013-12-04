@@ -8,13 +8,16 @@
 
 <img align="right" height="280" src="http://oi44.tinypic.com/f3azc7.jpg" style="float: right" />
 
-[Grunt][1] is a fantastic utility largely adopted by the community made to automate tasks and simplify development time under node.js based projects
+[Grunt][1] is an awesome automation tool largely adopted for node.js, that reduces  
+development time providing automation to do common tasks
 
-Croak is just a simple, but featured wrapper for Grunt that aims to help you to manage and orchestrate Grunt tasks and configuration across large and distributed projects, helping you to avoid redundancy, saving time and dramatically reducing changes impact
+Croak is just a simple, but featured wrapper for Grunt that aims to help you to manage 
+and orchestrate Grunt tasks configuration across large and distributed projects, helping you to avoid redundancy, 
+saving time and reducing dramatically changes impact during your project life-cycle
 
 Croak arises from the need to create an specific solution to abstract all the automation 
-configuration stuff and allowing you to delegate responsibilities in a proper way and sense
-in your project and developers, without losing control
+configuration stuff and allowing you to delegate responsibilities in a proper way
+in your project and to developers, without losing the desired level of control
 
 ### Features
 
@@ -36,14 +39,38 @@ $ npm install -g croak
 
 ### Configure it
 
-After you install it properly, you should configure croak
+After you install Croak, you should configure it
 ```
 $ croak config create -g
 ```
 
-The process above will create a ini file named `.croakrc` in your `$HOME` or `%USERPROFILE%` directory
+The process above will create the `.croakrc` config file in your `$HOME` directory
 
 See the [configuration file](#configuration-file) section for more details
+
+## Table of Contents
+
+- [Introduction](#introduction)
+  - [How it works](#how-it-works)
+  - [Example use case scenario](#example-use-case-scenario)
+  - [Do I really need Croak?](#do-i-really-need-croak)
+- [Current stage](#current-stage)
+  - [Grunt support](#grunt-support)
+- [Using Croak](#using-croak)
+  - [Configuration file](#configuration-file)
+    - [Global config](#global-config)
+    - [Local config](#local-config)
+    - [Available config options](#available-configuration-options)
+  - [Moving to Croak](#moving-to-croak)
+    - [Adapt your existent Gruntfile](#adapt-your-existent-gruntfile)
+- [FAQ](#faq)
+- [Development](#development)
+- [Contributing](#contributing)
+- [To Do/Wish list](#todo-with-list)
+- [Authors](#authors)
+- [License](#license)
+
+## Introduction
 
 ### How it works
 
@@ -51,7 +78,7 @@ In a few words, Croak allows you to have a multiple `Gruntfile.js` in global loc
 
 Croak also allows your to extend or overwrite Gruntfile configurations. This feature is useful when you think that your developers are not bad people, so you can provide a way to customize tasks configuration
 
-### Example scenario
+### Example use case scenario
 
 A representative scenario could be, for example, that your project has a relevant 
 number of repositories. Each repository needs its automation configuration 
@@ -71,12 +98,12 @@ With Croak you can provide an ideal level of abstraction for developers and, at 
 you can offer the possibility to pass part of the abstraction, providing the desired level of responsibility to 
 the developer
 
-#### Stage
+## Current stage
 
 Croak is an initial version ready to use, however is under active (re-)designing process 
 and important changes can be applied in a near future
 
-**Grunt support**
+#### Grunt support
 
 Croak supports Grunt `~0.4.0`
 
@@ -89,13 +116,13 @@ The Croak configuration file must called `.croakrc`
 
 Croak supports two types of configuration files 
 
-#### Global file
+#### Global config
 
 A global file can store the configuration of your projects and this configuration will be used in each Croak execution
 
 By default it will be located in `$HOME` or `%USERPROFILE%` directories, but you can define an environment variables called `CROAKRC` to specify a custom global file location
 
-#### Local file
+#### Local config
 
 Local file can be located in any path, but it is recommended that you create it in your project or repository root folder
 
@@ -105,7 +132,17 @@ Croak implements a similar file discovery algorithm like the one Grunt uses to d
 
 ### Available configuration options
 
-Example project configuration
+List of supported config options
+
+| Name           | Type      | Default     | Description                                    |
+| -------------- | --------- | ----------- | ---------------------------------------------: |
+| extend         | `boolean` | false       | Enable extend existent tasks from Croakfile |
+| overwrite      | `boolean` | false       | Enable overwrite existent tasks from Croakfile |
+| register_tasks | `boolean` | false       | Enable register/create new tasks from Croakfile |
+| cwd            | `string`  | ${PWD}      | Working directory to pass to Grunfile. Default to ${PWD} or local `.croakrc` path |
+
+
+**Example project configuration**
 
 ```ini
 [my-project]
@@ -119,12 +156,14 @@ no_color = false
 no_write = false
 debug = false
 verbose = false
-force = false
-stack = false
+force = true
+stack = true
 tasks = ../custom-tasks/
 npm = mytask
 ```
  
+## Moving to Croak
+
 ### Adapt your existent Gruntfile
 
 Croak automatically exposes the croak config object in your Gruntfile, so you can use this 
@@ -331,7 +370,7 @@ $ croak grunt localtask
 
 ## Development
 
-Only Node.js is reguired for development
+Only node.js is reguired for development
 
 1. Clone/fork this repository
 ```
@@ -357,7 +396,7 @@ Please, follow the LiveScript language conventions and [coding style][4]
 You must add new test cases for any feature or refactor you do, 
 also keep in mind to follow the same design/code patterns that already exist
 
-## TODO/WISH list
+## To Do/Wish list
 
 - Support for relative paths on `.croakrc` based on its file location
 - More test cases scenarios and destructive/evil testing
