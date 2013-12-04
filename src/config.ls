@@ -48,8 +48,8 @@ module.exports = config =
     @apply!
 
   write: ->
-    encode-config @global |> file.write @global-file!, _
-    encode-config @local |> file.write @local-file(it), _
+    encode-config @global |> file.write @global-file!, _ if @global |> has-data
+    encode-config @local |> file.write @local-file(it), _ if @local |> has-data
 
   save: ->
     @write ...

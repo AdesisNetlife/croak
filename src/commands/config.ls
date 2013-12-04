@@ -115,6 +115,8 @@ commands =
         save
       ]
 
+  add: -> @create ...
+
   remove: (key, value, options) ->
     try 
       if config.delete project

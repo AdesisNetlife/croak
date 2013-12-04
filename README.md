@@ -38,7 +38,7 @@ $ npm install -g croak
 
 After you install it properly, you should configure croak
 ```
-$ croak config -g create
+$ croak config create -g
 ```
 
 The process above will create a ini file named `.croakrc` in your `$HOME` or `%USERPROFILE%` directory
