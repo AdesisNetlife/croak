@@ -216,11 +216,6 @@ module.exports = (croak) ->
 
 ```
 
-### Gruntfile configuration
-
-Croak will automatically create a specific task, called `croak` which will be available from Grunt config object.
-That's really useful for templating and configuring absolute paths for your local projects
-
 ### Command-line interface
  
 ```
@@ -362,7 +357,7 @@ Please, follow the LiveScript language conventions and [coding style][4]
 You must add new test cases for any feature or refactor you do, 
 also keep in mind to follow the same design/code patterns that already exist
 
-## TODO list
+## TODO/WISH list
 
 - Support for relative paths on `.croakrc` based on its file location
 - More test cases scenarios and destructive/evil testing
