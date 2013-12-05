@@ -29,7 +29,7 @@ in your project and to the developers, without losing the desired level of contr
 - Customizes Grunt options run mode from the config file (future `.gruntrc`)
 - Keeps clean your repository without Grunt node packages (in front end projects cases)
 
-### When this is (probably) NOT for?
+### When do I NOT need it (probably)?
 
 - When you only have one or two repositories in your project
 - When you have an ultra specific grunt config on each project repository
@@ -41,7 +41,7 @@ in your project and to the developers, without losing the desired level of contr
   - have a lot of time to maintain its own automation tasks configuration
   - need to take full control of the automation tasks configuration
 
-### When this is for?
+### When do I need it?
 
 - When you want to centralize and take the control of the project build and automation configuration
 - When you want to reduce the build configuration change time and impact in your project
@@ -50,7 +50,7 @@ in your project and to the developers, without losing the desired level of contr
 - When you want to keep clean each repository form node packages (that is mean of Grunt npm tasks)
 - When you do NOT want to spend time doing redundant and not too much funny staff
 - When you do not enjoy too much providing support to developers about build configuration stuff
-- And whatever is on the 'what this is NOT for' list...
+- Or whatever is not on the 'I not need it' list...
 
 ## Installation
 
