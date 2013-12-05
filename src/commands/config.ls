@@ -53,10 +53,9 @@ commands =
 
   create: (key, value, options) ->
     { gruntfile, project, parent } = options
-    { global, croakrc, force } = parent 
+    { global, croakrc, force } = parent
 
-    if global and croakrc?
-      croakrc := config.global-file!
+    type = if global then 'global' else 'local'
 
     try
       config.load croakrc
@@ -65,6 +64,11 @@ commands =
 
     data = {}
     project = null
+
+    croakrc := config["#{type}File"]! unless croakrc
+
+    unless croakrc |> util.file.exists
+      ".croakrc will be created in: #{croakrc}" |> echo
 
     enter-project = (done) ->
       prompt "Enter the project name:", (err, it) ->
@@ -91,8 +95,6 @@ commands =
         done!
     
     save = ->
-      type = if global then 'global' else 'local'
-
       data |> config.set _, type
       try 
         config.write!

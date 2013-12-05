@@ -135,7 +135,7 @@ module.exports = config =
       if file.is-directory config-path
         config-path := config-path |> add-croakrc-file
       return config-path
-    
+    # defaults to user home directory
     common.home |> add-croakrc-file
 
   local-file: (filepath = @local-path) ->
@@ -164,13 +164,13 @@ module.exports = config =
     unless exists
       filepath = process.cwd! |> add-croakrc-file
     # prevent the local file discovery process do not resolve the global file
-    if is-global-file filepath
+    if filepath |> is-global-file 
       # set to default
       filepath = @local-path # #path.join (filepath |> path.dirname), 'croak' |> add-croakrc-file 
     
     filepath
 
-# accessor to customize the .croakrc file path lookup
+# accessor to customize the local .croakrc file path
 Object.define-property config, 'localPath', do 
   enumerable: true
   get: -> local-path or (process.cwd! |> add-croakrc-file)
@@ -190,12 +190,14 @@ is-not-template-value = ->
 replace-vars = ->
   if typeof it is 'string'
     it = it.replace /\$\{(.*)\}/g, (_, matched) ->
+      matched = matched?.toUpperCase!
       if is-win32
         matched = 'USERPROFILE' if matched is 'HOME'
         matched = 'CD' if matched is 'PWD'
         matched = 'HOMEDRIVE' if matched is 'ROOT' or matched is 'DRIVE'
       else
-        matched = '/' if matched is 'HOMEDRIVE' or matched is 'ROOT' 
+        matched = '/' if matched is 'HOMEDRIVE' or matched is 'ROOT'
+        matched = 'PWD' if matched is 'CD'
       env(matched?.toUpperCase!) or ''
   it
 

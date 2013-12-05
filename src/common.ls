@@ -51,14 +51,14 @@ module.exports = class Common
     exit = -> code |> process.exit
     if code is 0 or not code
       process.exit 0
-    # if not 0, returns a partial function
+    # if not 0, returns the partial function
     (message) ~>
       @echo (message).red if message? and code isnt 0
       exit!
 
   @file =
     exists: (filepath, filename = '') ->
-      if filepath? and _.is-string filepath
+      if filepath? and (filepath |> _.is-string)
         fs.exists-sync (filename |> join filepath, _)
       else
         no

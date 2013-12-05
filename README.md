@@ -8,22 +8,22 @@
 
 <img align="right" height="280" src="http://oi44.tinypic.com/f3azc7.jpg" style="float: right" />
 
-[Grunt][1] is an awesome automation tool largely adopted for [node.js][7], that reduces  
+[Grunt][1] is an awesome build and automation tool largely adopted for [node.js][7], that reduces  
 development time providing automation to do common tasks
 
 Croak is just a simple, but featured wrapper for Grunt that aims to help you to manage 
-and orchestrate Grunt tasks configuration across large and distributed projects, helping you to avoid redundancy, 
-saving time and reducing dramatically changes impact during your project life-cycle
+and orchestrate Grunt tasks configuration (aka Gruntfile) in large and distributed projects, 
+helping you to avoid redundancy, saving time and reducing dramatically changes impact during your project life-cycle
 
 Croak arises from the need to create an specific solution to abstract all the automation 
 configuration stuff and allowing you to delegate responsibilities in a proper way
-in your project and to developers, without losing the desired level of control
+in your project and to the developers, without losing the desired level of control and centralization
 
 ### Features
 
-- Centralizes your project build tasks configuration
+- Centralizes your project build and automation tasks configuration
 - Easily manage and orchestrates different configuration for multiple projects
-- Abstract and provides more more control of your project automation tasks
+- Abstract and provides more more control of your project build and automation tasks
 - Extends or overwrites Grunt global tasks configuration from local config
 - Provides the same Grunt API and CLI (things do not gonna change)
 - Customizes Grunt options run mode from the config file (future `.gruntrc`)
@@ -33,38 +33,43 @@ in your project and to developers, without losing the desired level of control
 
 - When you only have one or two repositories in your project
 - When you have an ultra specific grunt config on each project repository
-- When developers of your project (at least one):
-  - are an ultra skilled and really responsible guys
-  - have a lot of time to maintain its own automation tasks configuration
-  - need to take full control of the automation tasks config
 - When you or your team do not want to spend time updating/syncronizing automation stuff across repositories
 - When you do not need to centralize and (consequently) do not need to take the control
 - If you have a lot of free time and you enjoy doing redudant and not interesting tasks
+- When developers of your project... (at least one):
+  - are an ultra skilled and responsible guys
+  - have a lot of time to maintain its own automation tasks configuration
+  - need to take full control of the automation tasks configuration
 
 ### When this is for?
 
-- When you have a considerable number of repositories
-
-`TODO`
+- When you want to centralize and take the control of the project build and automation configuration
+- When you want to reduce the build configuration change time and impact in your project
+- When your project have a considerable number of repositories (more than 3, probably)
+- When your project build configuration are equal or very similar across different repositories
+- When you want to keep clean each repository form node packages (that is mean of Grunt npm tasks)
+- When you do NOT want to spend time doing redundant and not too much funny staff
+- When you do not enjoy too much providing support to developers about build configuration stuff
+- And whatever is on the 'what this is NOT for' list...
 
 ## Installation
 
-Installation of Croak as global package is recommended
+The most easy way is to install Croak is as global package:
 
 ```shell
 $ npm install -g croak
 ```
 
-### Configure it
+Then configure it:
 
-After you install Croak, you should configure it
 ```
 $ croak config create -g
 ```
 
-The process above will create the `.croakrc` config file in your `$HOME` directory
-
+The process above will create a `.croakrc` file in your user home directory, like global shared config. 
 See the [configuration file](#configuration-file) section for more details
+
+See [switching to Croak](#switching-to-croak) section for getting started
 
 ## Table of Contents
 
@@ -82,7 +87,7 @@ See the [configuration file](#configuration-file) section for more details
       - [Global options](#global-options)
       - [Croak-specific](#croak-specific)
       - [Grunt-specific](#grunt-specific)
-  - [Moving to Croak](#moving-to-croak)
+  - [Switching to Croak](#switching-to-croak)
     - [Adapting your existent Gruntfile](#adapting-your-existent-gruntfile)
     - [Use Croak from an existent Gruntfile](#use-croak-from-an-existent-gruntfile)
   - [Croakfile](#croakfile)
@@ -101,7 +106,7 @@ See the [configuration file](#configuration-file) section for more details
 
 ### How it works
 
-In a few words, Croak allows you to have a multiple `Gruntfile.js` in global locations, and running them using a simple project identifier, also allowing you to define a pre-configured options to pass to Grunt from a ini configuration file
+In a few words, Croak allows you to have a multiple `Gruntfile` in global locations and running them using a simple project identifier, also allowing you to define a pre-configured options to pass to Grunt in a simple configuration file
 
 Croak also allows your to extend or overwrite Gruntfile configurations. This feature is useful when you think that your developers are not bad people, so you can provide a way to customize tasks configuration
 
@@ -111,20 +116,24 @@ A representative scenario could be, for example, that your project has a relevan
 number of repositories. Each repository needs its automation configuration 
 for development, testing or building stuff.
 
-Usually, this configuration tends to grow when your repository has an amount of different tasks and this configuration also tends to be very similar or redundant 
+Usually, this configuration tends to grow when your repository has an amount of different tasks and 
+this configuration also tends to be very similar or redundant 
 across different repositories in your project
 
-Continuous changing and improvement is a constant in any software project, so using Croak you can reduce dramatically your project automation configuration changing time by centralizing it
+Continuous changing and improvement is a constant in any software project, so using Croak you can 
+reduce dramatically your project automation configuration changing time by centralizing it
 
 You can see a complete example project structure using Croak [here][6]
 
-### Do I really need Croak?
+### Abstraction is the best choice?
 
-Abstraction is not always the best choice and some people hate it.
-Basically, an abstraction in software development tries to reduce notably the complexity  underlying details.
+Abstraction is not always the best choice and some people can hate it.
+Basically, an abstraction in software development tries to reduce notably the complexity, 
+underlying details and gives more control
 
 With Croak you can provide an ideal level of abstraction for developers and, at the same time,
-you can offer the possibility to pass part of the abstraction, providing the desired level of responsibility to the developer
+you can offer the possibility to pass part of the abstraction, providing the desired level of responsibility to developers,
+so they want to keep all the stuff
 
 ## Current stage
 
@@ -165,7 +174,7 @@ Croak implements a similar file discovery algorithm like the one Grunt uses to d
 | Name           | Type      | Default     | Description                                    |
 | -------------- | --------- | ----------- | ---------------------------------------------- |
 | default        | `string`  | undefined   | Default project to use when no project is defined |
-| project        | `string`  | undefined   | Alias to `default` |
+| project        | `string`  | undefined   | Alias to `default`, just for a semantic association |
 
 #### Per-project config
 
@@ -184,20 +193,40 @@ The following options will probably available in Grunt's future versions in the 
 
 | Name           | Type      | Default     | Description                                    |
 | -------------- | --------- | ----------- | ---------------------------------------------- |
-| extend         | `boolean` | false       | Enable extend existent tasks from Croakfile |
-| overwrite      | `boolean` | false       | Enable overwrite existent tasks from Croakfile |
+| gruntfile      | `string`  | undefined   | Path to your build Gruntfile. It can be a relative path. You should define this option in all of your projects |
+| base           | `string`  | undefined   | Specify an alternate base path. By default, all file paths are relative to the Gruntfile |
+| no_color       | `boolean` | false       | Disable colored output |
+| debug          | `boolean` | false       | Enable debugging mode for tasks that support it |
+| stack          | `boolean` | false       | Print a stack trace when exiting with a warning or fatal error |
+| force          | `boolean` | false       | A way to force your way past warnings. Do not use this option, fix your code |
+| tasks          | `string`  | undefined   | Additional directory paths to scan for task and "extra" files |
+| npm            | `string`  | undefined   | Npm-installed grunt plugins to scan for task and "extra" files |
+| no_write       | `boolean` | false       | Disable writing files (dry run) |
+| verbose        | `boolean` | false       | Verbose mode. A lot more information output |
 
 
-**Example project configuration**
+You can use any of the config options also as command line flag. See the Grunt CLI [documentation][1]
+
+**Example file configuration**
+
+Example `.croakrc` file:
 
 ```ini
+default = super-project
+
+[super-project]
+extend = true
+gruntfile = ${HOME}/projects/super-project/build/Gruntfile.coffee
+debug = true
+stack = true
+
 [my-project]
 extend = true
 overwrite = true
 register_tasks = true
 ;; grunt-specific
-gruntfile = ${HOME}/projects/my-project/Gruntfile.coffee
-base = ${HOME}/projects/my-project/data/
+gruntfile = ${HOME}/projects/my-project/build/Gruntfile.js
+base = ${HOME}/projects/my-project/my-package/
 no_color = false
 no_write = false
 debug = false
@@ -207,8 +236,29 @@ stack = true
 tasks = ../custom-tasks/
 npm = mytask
 ```
- 
-## Moving to Croak
+
+You can use environment variables config values, using the `${VARIABLE_NAME}` notation
+
+**Note aboute cross-OS variables**
+
+In order to use the same config values across diferent OS, Croak will transparently translate
+common environment variables to the specific running OS
+
+For example, if your use `${HOME}`, Croak will translate it into `%USERPROFILE%` under Windows 
+The same case is applied for `${PWD}` and `%HOMEDRIVE%`, translating this last one into `/` under Unix-like OS
+
+##### Built-in Croak variables
+
+Aditionally, Croak introduces support for an easy way to use relative paths from Croak-specific files locations, 
+like the `.croakrc` config file path or `Croakfile`
+
+| Variable       | Value |      
+| -------------- | ------------------------------------------------- |
+| CROAKRC_PATH   | Absolute path to the `.croakrc` local file. If it not exists, ${PWD} will be used instead |
+| CROAKFILE_PATH | Absolute path to the used `Croakfile`. If it not exists, ${PWD} will be used instead |
+
+
+## Switching to Croak
 
 ### Adapting your existent Gruntfile
 
