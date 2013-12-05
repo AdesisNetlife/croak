@@ -56,13 +56,17 @@ See the [configuration file](#configuration-file) section for more details
   - [Do I really need Croak?](#do-i-really-need-croak)
 - [Current stage](#current-stage)
   - [Grunt support](#grunt-support)
-- [Using Croak](#using-croak)
+- [Getting started](#using-croak)
   - [Configuration file](#configuration-file)
     - [Global config](#global-config)
     - [Local config](#local-config)
     - [Available config options](#available-configuration-options)
+      - [Global options](#global-options)
+      - [Croak-specific](#croak-specific)
+      - [Grunt-specific](#grunt-specific)
   - [Moving to Croak](#moving-to-croak)
-    - [Adapt your existent Gruntfile](#adapt-your-existent-gruntfile)
+    - [Adapting your existent Gruntfile](#adapting-your-existent-gruntfile)
+  - [Croakfile](#croakfile)
 - [FAQ](#faq)
 - [Development](#development)
 - [Contributing](#contributing)
@@ -91,14 +95,17 @@ Continuous changing and improvement is a constant in any software project, so us
 
 You can see an example project structure using Croak [here][6] 
 
+### When Croak is the right choice?
+
+
+
 ### Do I really need Croak?
 
 Abstraction is not always the best choice and some people hate it.
 Basically, an abstraction in software development tries to reduce notably the complexity  underlying details.
 
 With Croak you can provide an ideal level of abstraction for developers and, at the same time,
-you can offer the possibility to pass part of the abstraction, providing the desired level of responsibility to 
-the developer
+you can offer the possibility to pass part of the abstraction, providing the desired level of responsibility to the developer
 
 ## Current stage
 
@@ -138,11 +145,12 @@ Croak implements a similar file discovery algorithm like the one Grunt uses to d
 
 | Name           | Type      | Default     | Description                                    |
 | -------------- | --------- | ----------- | ---------------------------------------------- |
-| default        | `string`  | undefined   | Defines the default project to use when no project is defined |
+| default        | `string`  | undefined   | Default project to use when no project is defined |
+| project        | `string`  | undefined   | Alias to `default` |
 
 #### Per-project config
 
-##### Croak config available options
+##### Croak-specific
 
 | Name           | Type      | Default     | Description                                    |
 | -------------- | --------- | ----------- | ---------------------------------------------- |
@@ -151,7 +159,9 @@ Croak implements a similar file discovery algorithm like the one Grunt uses to d
 | register_tasks | `boolean` | false       | Enable register/create new tasks from Croakfile |
 | cwd            | `string`  | ${PWD}      | Working directory to pass to Grunfile. Default to ${PWD} or local `.croakrc` path. Don't use this option unless you know what you are doing |
 
-##### Grunt config available options
+##### Grunt-specific
+
+The following options will probably available in Grunt's future versions in the `.gruntrc` file
 
 | Name           | Type      | Default     | Description                                    |
 | -------------- | --------- | ----------- | ---------------------------------------------- |
@@ -181,9 +191,9 @@ npm = mytask
  
 ## Moving to Croak
 
-### Adapt your existent Gruntfile
+### Adapting your existent Gruntfile
 
-Croak automatically exposes the croak config object in your Gruntfile, so you can use this 
+Croak will automatically exposes the croak object in Gruntfile, so you can use this 
 configuration like template values in your tasks config
 
 This is really useful because, in much cases, you need to use absolute paths in your Gruntfile
