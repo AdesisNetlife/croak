@@ -49,7 +49,7 @@ in your project and to the developers, without losing the desired level of contr
 - When your project build configuration are equal or very similar across different repositories
 - When you want to keep clean each repository form node packages (that is mean of Grunt npm tasks)
 - When you do NOT want to spend time doing redundant and not too much funny staff
-- When you do not enjoy too much providing support to developers about build configuration stuff
+- When you do not want to spend mush time providing support to developers about build configuration stuff
 - Or whatever is not on the 'I not need it' list...
 
 ## Installation
