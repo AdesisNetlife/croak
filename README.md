@@ -84,7 +84,12 @@ See the [configuration file](#configuration-file) section for more details
       - [Grunt-specific](#grunt-specific)
   - [Moving to Croak](#moving-to-croak)
     - [Adapting your existent Gruntfile](#adapting-your-existent-gruntfile)
+    - [Use Croak from an existent Gruntfile](#use-croak-from-an-existent-gruntfile)
   - [Croakfile](#croakfile)
+  - [Command-line interface](#command-line-interface)
+    - [Running tasks](#running-grunt-tasks)
+    - [Configuration](#configuration) 
+  - [API](#api)
 - [FAQ](#faq)
 - [Development](#development)
 - [Contributing](#contributing)
@@ -111,7 +116,7 @@ across different repositories in your project
 
 Continuous changing and improvement is a constant in any software project, so using Croak you can reduce dramatically your project automation configuration changing time by centralizing it
 
-You can see an example project structure using Croak [here][6] 
+You can see a complete example project structure using Croak [here][6]
 
 ### Do I really need Croak?
 
@@ -263,9 +268,40 @@ module.exports = function (grunt) {
 };
 ```
 
+#### Use Croak from an existent Gruntfile
+
+If you already have `Gruntfile.js` in each local repository of your project and you do not want to switch
+radically to Croak, you can use the `grunt-croak` task to make a less configuration impact
+with the same result
+
+##### Install the task
+
+```
+$ npm install grunt-croak --save-dev
+```
+
+##### Configute it in Gruntfile
+
+```
+grunt.loadNpmTasks('grunt-croak')
+
+grunt.initConfig({
+  croak: {
+    my_project: {
+      options: {
+        gruntfile: 'path/to/Gruntfile.js',
+        verbose: true
+      }
+    }
+  } 
+})
+```
+
+For more information, see the [grunt-croak][2] documentation
+
 ### Croakfile
 
-Like Grunt, Croak has its own specific configuration file.
+Like Grunt, Croak has its own specific configuration file
 
 `Currently under designing process...`
 
@@ -342,7 +378,7 @@ Then you can simply run:
 $ croak run task
 ```
 
-#### Configuring Croak from CLI
+#### Configuration
 
 Show the current existent config
 ```
@@ -359,20 +395,9 @@ You can CRUD config values easily from CLI
 $ croak config [set|get|remove] <key> [value] [-g, -p <project>]
 ```
 
-### Croak API
+### API
 
 `TODO`
-
-### Use Croak from existent Gruntfile.js
-
-If you already have `Gruntfile.js` in each local repository of your project and you do not want to switch
-radically to Croak, you can use the `grunt-croak` task to make less impact with the same result
-
-```
-$ npm install grunt-croak --save-dev
-```
-
-For more information, see the [grunt-croak][2] documentation
 
 ## FAQ
 
