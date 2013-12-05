@@ -38,7 +38,7 @@ in your project and to developers, without losing the desired level of control
   - have a lot of time to maintain its own automation tasks configuration
   - need to take full control of the automation tasks config
 - When you or your team do not want to spend time updating/syncronizing automation stuff across repositories
-- When you do not need to centralize and do not need to take the control
+- When you do not need to centralize and (consequently) do not need to take the control
 - If you have a lot of free time and you enjoy doing redudant and not interesting tasks
 
 ### When this is for?
