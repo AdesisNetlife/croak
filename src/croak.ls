@@ -13,6 +13,9 @@ module.exports =
   config: config
   grunt: grunt
 
+  load: ->
+    # todo
+
   init: (project, options) ->
     # extends options with project config
     options := options |> _.extend {}, project, _

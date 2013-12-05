@@ -8,7 +8,7 @@
 
 <img align="right" height="280" src="http://oi44.tinypic.com/f3azc7.jpg" style="float: right" />
 
-[Grunt][1] is an awesome automation tool largely adopted for node.js, that reduces  
+[Grunt][1] is an awesome automation tool largely adopted for [node.js][7], that reduces  
 development time providing automation to do common tasks
 
 Croak is just a simple, but featured wrapper for Grunt that aims to help you to manage 
@@ -89,6 +89,8 @@ across different repositories in your project
 
 Continuous changing and improvement is a constant in any software project, so using Croak you can reduce dramatically your project automation configuration changing time by centralizing it
 
+You can see an example project structure using Croak [here][6] 
+
 ### Do I really need Croak?
 
 Abstraction is not always the best choice and some people hate it.
@@ -132,7 +134,15 @@ Croak implements a similar file discovery algorithm like the one Grunt uses to d
 
 ### Available configuration options
 
-List of supported config options
+#### Global config
+
+| Name           | Type      | Default     | Description                                    |
+| -------------- | --------- | ----------- | ---------------------------------------------- |
+| default        | `string`  | undefined   | Defines the default project to use when no project is defined |
+
+#### Per-project config
+
+##### Croak config available options
 
 | Name           | Type      | Default     | Description                                    |
 | -------------- | --------- | ----------- | ---------------------------------------------- |
@@ -140,6 +150,14 @@ List of supported config options
 | overwrite      | `boolean` | false       | Enable overwrite existent tasks from Croakfile |
 | register_tasks | `boolean` | false       | Enable register/create new tasks from Croakfile |
 | cwd            | `string`  | ${PWD}      | Working directory to pass to Grunfile. Default to ${PWD} or local `.croakrc` path. Don't use this option unless you know what you are doing |
+
+##### Grunt config available options
+
+| Name           | Type      | Default     | Description                                    |
+| -------------- | --------- | ----------- | ---------------------------------------------- |
+| extend         | `boolean` | false       | Enable extend existent tasks from Croakfile |
+| overwrite      | `boolean` | false       | Enable overwrite existent tasks from Croakfile |
+
 
 **Example project configuration**
 
@@ -420,3 +438,5 @@ Released under the [MIT][5] license
 [3]: http://livescript.net
 [4]: https://github.com/gkz/LiveScript-style-guide
 [5]: https://github.com/adesisnetlive/croak/blob/master/LICENSE
+[6]: https://gist.github.com/h2non/7787640
+[7]: http://nodejs.org
