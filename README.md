@@ -24,10 +24,28 @@ in your project and to developers, without losing the desired level of control
 - Centralizes your project build tasks configuration
 - Easily manage and orchestrates different configuration for multiple projects
 - Abstract and provides more more control of your project automation tasks
-- Extends or overwrites Grunt global tasks configuration from local
-- Provides the same Grunt API and CLI
+- Extends or overwrites Grunt global tasks configuration from local config
+- Provides the same Grunt API and CLI (things do not gonna change)
 - Customizes Grunt options run mode from the config file (future `.gruntrc`)
 - Keeps clean your repository without Grunt node packages (in front end projects cases)
+
+### What this is (probably) NOT for?
+
+- When you only have one or two repositories in your project
+- When you have an ultra specific grunt config on each project repository
+- When developers of your project (at least one):
+  - are an ultra skilled and really responsible guys
+  - have a lot of time to maintain its own automation tasks configuration
+  - need to take full control of the automation tasks config
+- When you or your team do not want to spend time updating/syncronizing automation stuff across repositories
+- When you do not need to centralize and do not need to take the control
+- If you have a lot of free time and you enjoy doing redudant and not interesting tasks
+
+### What this is for?
+
+- When you have a considerable number of repositories
+
+`TODO`
 
 ## Installation
 
@@ -94,10 +112,6 @@ across different repositories in your project
 Continuous changing and improvement is a constant in any software project, so using Croak you can reduce dramatically your project automation configuration changing time by centralizing it
 
 You can see an example project structure using Croak [here][6] 
-
-### When Croak is the right choice?
-
-
 
 ### Do I really need Croak?
 
