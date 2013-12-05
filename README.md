@@ -29,7 +29,7 @@ in your project and to developers, without losing the desired level of control
 - Customizes Grunt options run mode from the config file (future `.gruntrc`)
 - Keeps clean your repository without Grunt node packages (in front end projects cases)
 
-### What this is (probably) NOT for?
+### When this is (probably) NOT for?
 
 - When you only have one or two repositories in your project
 - When you have an ultra specific grunt config on each project repository
@@ -41,7 +41,7 @@ in your project and to developers, without losing the desired level of control
 - When you do not need to centralize and do not need to take the control
 - If you have a lot of free time and you enjoy doing redudant and not interesting tasks
 
-### What this is for?
+### When this is for?
 
 - When you have a considerable number of repositories
 
