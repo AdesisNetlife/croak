@@ -3,13 +3,14 @@ require! {
   prompt: '../prompt'
   config: '../config'
   util: '../common'
-  async: '../import'.async
+  async: '../modules'.async
 }
 { echo, exit } = require '../common'
 
 program
   .command 'config <action> [key] [value]'
     ..description '\n  Read/write/update/remove croak config'
+    ..option '--force', 'Force the command execution'
     ..option '-p, --project', 'Specifies the project to run'
     ..option '-x, --gruntfile <path>', 'Specifies the Gruntfile path'
     ..option '-g, --global [path]', 'Use the global config file'
@@ -22,6 +23,7 @@ program
               $ croak config list
               $ croak config create
               $ croak config remove project
+              $ croak config remove project.force
               $ croak config set project.gruntfile /home/user/projects/my-project
               $ croak config get -g project.gruntfile
           
@@ -31,6 +33,26 @@ program
         "#{it} command not supported. Use --help to see the available commands" |> exit 1
       
       commands[it]apply commands, (Array::slice.call &)slice 1
+
+# alias to config create
+program
+  .command 'create [key] [value]'
+    ..description '\n  Creates a new .croakrc file'
+    ..option '--force', 'Force the command execution'
+    ..option '-p, --project', 'Specifies the project to run'
+    ..option '-x, --gruntfile <path>', 'Specifies the Gruntfile path'
+    ..option '-g, --global [path]', 'Use the global config file'
+    ..option '-c, --croakrc [path]', 'Use a custom .croakrc file path'
+    ..on '--help', ->
+      echo '''
+            Usage examples:
+
+              $ croak config create
+              $ croak config create -g -p my-project --gruntfile path/to/Gruntfile.js
+          
+    '''
+    ..action ->
+      commands.create.apply commands, &
 
 commands = 
 
@@ -70,11 +92,12 @@ commands =
     unless croakrc |> util.file.exists
       ".croakrc will be created in: #{croakrc}" |> echo
 
+    # prompt stepts
     enter-project = (done) ->
       prompt "Enter the project name:", (err, it) ->
         project := data[it] = {}
         if (it |> config.project) and not force
-          "Project '#{project}' already exists. Use --force to override it" |> exit 1
+          "Project '#{it}' already exists. Use --force to override it" |> exit 1
         done!
 
     enter-gruntfile = (done) ->
@@ -83,26 +106,28 @@ commands =
         done!
 
     enter-override = (done) ->
-      return done! unless global
+      return done! if global
       prompt "Enable overwriting tasks? [Y/n]:", 'confirm', (err, it) ->
         project.overwrite = it
         done!
 
     enter-extend = (done) ->
-      return done! unless global
+      return done! if global
       prompt "Enable extending tasks? [Y/n]:", 'confirm', (err, it) ->
         project.extend = it
         done!
     
     save = ->
-      data |> config.set _, type
+      data |> config.set _, global
+
       try 
         config.write!
         config.load!
       catch { message }
         "Cannot create the file: #{message}" |> exit 1
 
-      echo ".croakrc created successfully in:\n#{config.path![type]}"
+      echo ".croakrc created successfully"
+      exit 1
 
     if gruntfile and project
       project := data[it] = {}
@@ -120,19 +145,56 @@ commands =
   add: -> @create ...
 
   remove: (key, value, options) ->
+    "Missing required 'key' argument" |> exit 1 unless key
+    { global, croakrc } = options.parent
+    
     try 
-      if config.delete project
+      config.load croakrc
+      if config.remove key
         config.write!
-        echo "Project '#{project}' deleted successfully"
+        "Config '#{key}' value removed successfully" |> echo
       else 
-        throw new Error 'cannot delete'
+        throw new Error 'value do not exists'
     catch { message }
-      "Cannot delete #{project} due to an error: #{message}" |> exit 1
-      
-
-  set: (key, value, options) ->
-    # todo
+      "Cannot delete '#{key}' due to an error: #{message}" |> exit 1
 
   get: (key, value, options) ->
-    # todo
+    "Missing required 'key' argument" |> exit 1 unless key
+
+    { croakrc } = options.parent
+
+    try
+      config.load croakrc
+    catch { message }
+      "Cannot read .croakrc: #{message}" |> exit 1
+
+    if value := config.get key.to-lower-case!
+      if typeof value is 'string'
+        value |> echo
+      else
+        for own prop, data of value
+          "#{prop}: #{data}" |> echo
+    else
+      "Config '#{key}' value not exists" |> exit 1
+
+  set: (key, value, options) ->
+    "Missing required 'key' argument" |> exit 1 unless key
+    "Missing required 'value' argument" |> exit 1 unless value
+
+    { croakrc, global } = options.parent
+
+    try
+      config.load croakrc
+    catch { message }
+      "Cannot read .croakrc: #{message}" |> exit 1
+
+    if value := config.set-key key, value, global
+      try 
+        config.write!
+      catch { message }
+        "Cannot save config due to an error: #{message}" |> exit 1
+      
+      "Value '#{key}' updated successfully" |> echo
+    else
+      "Cannot set '#{key}' value. Project '#{key.split('.')[0]}' do not exists" |> exit 1
 

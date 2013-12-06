@@ -1,5 +1,8 @@
 require! {
+  fs
   suppose
+  mkdirp
+  rimraf
   spawn: child_process.spawn
   expect: chai.expect
   version: '../package.json'.version
@@ -7,10 +10,16 @@ require! {
 
 cwd = process.cwd!
 node = process.execPath
-croak = [ "#{__dirname}/../bin/croak" ]
+croak = "#{__dirname}/../bin/croak"
+
+exists = ->
+  fs.exists-sync it
+
+read = ->
+  fs.read-file-sync it
 
 exec = (type, args, callback) ->
-  command = spawn node, croak ++ args, cwd: process.cwd!
+  command = spawn node, [ croak ] ++ args, cwd: process.cwd!
   if type is 'close'
     command.on type, callback
   else
@@ -88,10 +97,8 @@ describe 'CLI', ->
           done!
 
       describe 'flags', (_) ->
-        cwd = null
 
         before ->
-          cwd := process.cwd!
           process.chdir "#{__dirname}/fixtures/empty/"
 
         after ->
@@ -137,6 +144,12 @@ describe 'CLI', ->
 
     describe 'config', (_) ->
 
+      before ->
+        process.chdir "#{__dirname}/fixtures/config/local"
+
+      after ->
+        process.chdir cwd
+
       it 'should show the help', (done) ->
         exec 'data', <[config --help]>, ->
           expect it .to.match /\$ croak config/
@@ -148,18 +161,44 @@ describe 'CLI', ->
           done!
 
       describe '--croakrc', (_) ->
-        cwd = null
-
-        before ->
-          cwd := process.cwd!
-          process.chdir "#{__dirname}/fixtures/empty/"
-
-        after ->
-          process.chdir cwd
 
         it 'should use a custom .croakrc path location', (done) ->
           exec 'data', <[config list --croakrc]> ++ ["#{__dirname}/fixtures/config/local/.croakrc"], ->
             expect it .to.match /\[local-project\]/i
             done!
+
+
+      describe 'create', (_) ->
+
+
+    describe 'create', (_) ->
+      dir = "#{__dirname}/fixtures/temp/cli/create"
+
+      before ->
+        rimraf.sync dir
+        mkdirp.sync dir
+
+      before ->
+        process.chdir dir
+
+      after ->
+        process.chdir cwd
+
+      it 'should create a new .croakrc local file', (done) ->
+        suppose(croak, ['create'])
+          .debug(fs.createWriteStream('cli.log'))
+          .on(/project name:/).respond('sample\n')
+          .on(/Gruntfile path \(/).respond('../../gruntfile/Gruntfile.js\n')
+          .on(/overwriting tasks\?/).respond('n\n')
+          .on(/extending tasks\?/).respond('y\n')
+        .error (err) ->
+          throw new Error err
+        .end (code) ->
+          expect code .to.be.equal 0
+          expect exists "#{dir}/.croakrc" .to.be.true
+          done!
+
+      it 'should exists the created project', ->
+        expect read "#{dir}/.croakrc" .to.match /\[sample\]/
 
 

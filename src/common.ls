@@ -2,7 +2,7 @@ require! {
   fs
   path
   grunt
-  _: './import'.lodash
+  _: './modules'.lodash
 }
 
 { env } = process

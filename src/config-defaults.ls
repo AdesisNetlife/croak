@@ -7,13 +7,13 @@ module.exports =
   #node_package: false
   
   # grunt-specific
-  base: false
-  gruntfile: false
+  base: null
+  gruntfile: null
   no_color: false
   no_write: false
   debug: false
   verbose: false
   force: false
   stack: false
-  tasks: false
-  npm: false
+  tasks: null
+  npm: null

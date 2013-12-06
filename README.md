@@ -48,13 +48,13 @@ in your project and to the developers, without losing the desired level of contr
 - When your project have a considerable number of repositories (more than 3, probably)
 - When your project build configuration are equal or very similar across different repositories
 - When you want to keep clean each repository form node packages (that is mean of Grunt npm tasks)
-- When you do NOT want to spend time doing redundant and not too much funny staff
+- When you do NOT want to spend time doing redundant and not too much funny stuff
 - When you do not want to spend mush time providing support to developers about build configuration stuff
-- Or whatever is not on the 'I not need it' list...
+- Or whatever is not on the 'When do I not need' list...
 
 ## Installation
 
-The most easy way is to install Croak is as global package:
+It is recommended you install Croak as global package:
 
 ```shell
 $ npm install -g croak
@@ -79,7 +79,7 @@ See [switching to Croak](#switching-to-croak) section for getting started
   - [Do I really need Croak?](#do-i-really-need-croak)
 - [Current stage](#current-stage)
   - [Grunt support](#grunt-support)
-- [Getting started](#using-croak)
+- [Using Croak](#using-croak)
   - [Configuration file](#configuration-file)
     - [Global config](#global-config)
     - [Local config](#local-config)
@@ -189,7 +189,8 @@ Croak implements a similar file discovery algorithm like the one Grunt uses to d
 
 ##### Grunt-specific
 
-The following options will probably available in Grunt's future versions in the `.gruntrc` file
+The following options will be (probably) available in Grunt's future versions, under the `.gruntrc` file,
+however Croak now supports them for now
 
 | Name           | Type      | Default     | Description                                    |
 | -------------- | --------- | ----------- | ---------------------------------------------- |
@@ -207,9 +208,9 @@ The following options will probably available in Grunt's future versions in the 
 
 You can use any of the config options also as command line flag. See the Grunt CLI [documentation][1]
 
-**Example file configuration**
+##### Example file configuration
 
-Example `.croakrc` file:
+A multi-project `.croakrc` configuration file
 
 ```ini
 default = super-project
@@ -239,12 +240,12 @@ npm = mytask
 
 You can use environment variables config values, using the `${VARIABLE_NAME}` notation
 
-**Note aboute cross-OS variables**
+##### Note aboute cross-OS variables
 
 In order to use the same config values across diferent OS, Croak will transparently translate
 common environment variables to the specific running OS
 
-For example, if your use `${HOME}`, Croak will translate it into `%USERPROFILE%` under Windows 
+For example, if your use `${HOME}`, Croak will translate it into `%USERPROFILE%` under Windows.
 The same case is applied for `${PWD}` and `%HOMEDRIVE%`, translating this last one into `/` under Unix-like OS
 
 ##### Built-in Croak variables
@@ -256,7 +257,7 @@ like the `.croakrc` config file path or `Croakfile`
 | -------------- | ------------------------------------------------- |
 | CROAKRC_PATH   | Absolute path to the `.croakrc` local file. If it not exists, ${PWD} will be used instead |
 | CROAKFILE_PATH | Absolute path to the used `Croakfile`. If it not exists, ${PWD} will be used instead |
-
+| GRUNTFILE_PATH | Absolute path to the used `Gruntfile`. If it not exists, ${PWD} will be used instead |
 
 ## Switching to Croak
 
@@ -271,7 +272,7 @@ This is really useful because, in much cases, you need to use absolute paths in 
 
 The following properties will be available:
 
-- cwd `User working directory when Croak is called`
+- cwd `Absolute path to the user working directory when Croak is called`
 - root `Alias to cwd`
 - version `Current Croak version`
 - base `Grunt base path configured` [optional]
@@ -381,6 +382,10 @@ module.exports = (croak) ->
     }
 
 ```
+
+#### Croakfile API
+
+`TODO`
 
 ### Command-line interface
  

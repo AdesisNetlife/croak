@@ -2,7 +2,7 @@ require! {
   grunt
   './config'
   version: '../package.json'.version
-  _: './import'.lodash
+  _: './modules'.lodash
 }
 
 module.exports = 
