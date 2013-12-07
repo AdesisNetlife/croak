@@ -8,6 +8,7 @@ require! {
 { file, env, extend, clone, is-win32 }:common = require './common'
 
 local-path = null
+global-options = <[ default project ]>
 
 module.exports = config =
 
@@ -126,19 +127,21 @@ module.exports = config =
         @ <<< { (context): data-obj }
 
   set-key: (key, value, global = true) ->
+    setted = false
     if (key |> _.is-string) and value?
       context = if global then 'global' else 'local'
       key := key.split '.'
       project = key[0]
 
-      if project := @[context]?[project]
-        if project |> _.is-object
+      if @[context] |> _.is-object
+        # global config values
+        if project |> is-global-config-value
+          @[context] <<< { (project): value }
+          setted := yes
+        else if (project := @[context][project])? and (project |> _.is-object)
           ({ (key[1]): value } |> config-transform) |> _.extend project, _
-        else
-          # global config values
-          @[context][project] = value
-        return yes
-    no
+          setted := yes
+    setted
 
   remove: (key) ->
     return no unless (key |> _.is-string)
@@ -224,8 +227,7 @@ add-croakrc-file = ->
     it |> path.join _, FILENAME
 
 is-global-config-value = ->
-  values = <[ default project ]>
-  values.index-of(it) isnt -1
+  it? and (it |> global-options.index-of) isnt -1 and not (it |> _.is-object)
 
 is-not-template-value = ->
   /^\_/ isnt it and /^\$/ isnt it

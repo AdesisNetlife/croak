@@ -107,13 +107,13 @@ commands =
 
     enter-override = (done) ->
       return done! if global
-      prompt "Enable overwriting tasks? [Y/n]:", 'confirm', (err, it) ->
+      prompt "Enable overwrite tasks? [Y/n]:", 'confirm', (err, it) ->
         project.overwrite = it
         done!
 
     enter-extend = (done) ->
       return done! if global
-      prompt "Enable extending tasks? [Y/n]:", 'confirm', (err, it) ->
+      prompt "Enable extend tasks? [Y/n]:", 'confirm', (err, it) ->
         project.extend = it
         done!
     
@@ -127,7 +127,7 @@ commands =
         "Cannot create the file: #{message}" |> exit 1
 
       echo ".croakrc created successfully"
-      exit 1
+      exit 0
 
     if gruntfile and project
       project := data[it] = {}
@@ -196,5 +196,5 @@ commands =
       
       "Value '#{key}' updated successfully" |> echo
     else
-      "Cannot set '#{key}' value. Project '#{key.split('.')[0]}' do not exists" |> exit 1
+      "Cannot set '#{key}'. Project '#{key.split('.')[0]}' do not exists or it is an invalid option" |> exit 1
 

@@ -1,8 +1,8 @@
 require! {
   grunt
   './config'
-  version: '../package.json'.version
   _: './modules'.lodash
+  version: '../package.json'.version
 }
 
 module.exports = 

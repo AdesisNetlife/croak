@@ -131,9 +131,8 @@ Abstraction is not always the best choice and some people can hate it.
 Basically, an abstraction in software development tries to reduce notably the complexity, 
 underlying details and gives more control
 
-With Croak you can provide an ideal level of abstraction for developers and, at the same time,
-you can offer the possibility to pass part of the abstraction, providing the desired level of responsibility to developers,
-so they want to keep all the stuff
+With Croak you can provide an ideal level of abstraction to developers without losing the control and
+aditionally, providing a way freedom to developers who need specific configuration to his needs
 
 ## Current stage
 
@@ -189,8 +188,8 @@ Croak implements a similar file discovery algorithm like the one Grunt uses to d
 
 ##### Grunt-specific
 
-The following options will be (probably) available in Grunt's future versions, under the `.gruntrc` file,
-however Croak now supports them for now
+The following options will be (probably) available in Grunt on future versions in `.gruntrc` file,
+however Croak now supports them
 
 | Name           | Type      | Default     | Description                                    |
 | -------------- | --------- | ----------- | ---------------------------------------------- |

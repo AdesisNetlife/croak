@@ -2,14 +2,13 @@ require! {
   path
   program: commander
   croak: './croak'
-  pkg: '../package.json'
   echo: './common'.echo
 }
 
 exports.parse = (args) -> program.parse args
 
 program
-  .version "croak #{pkg.version}\ngrunt #{croak.grunt-version}"
+  .version "croak #{croak.version}\ngrunt #{croak.grunt-version}"
     ..option '-g, --global [path]', 'Use the global config file'
     ..option '-c, --croakrc [path]', 'Use a custom .croakrc file path'
     ..option '-f, --force', 'Force command execution. Also will be passed to Grunt'

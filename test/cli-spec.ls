@@ -186,11 +186,11 @@ describe 'CLI', ->
 
       it 'should create a new .croakrc local file', (done) ->
         suppose(croak, ['create'])
-          .debug(fs.createWriteStream('cli.log'))
+          #.debug(fs.createWriteStream('cli.log'))
           .on(/project name:/).respond('sample\n')
           .on(/Gruntfile path \(/).respond('../../gruntfile/Gruntfile.js\n')
-          .on(/overwriting tasks\?/).respond('n\n')
-          .on(/extending tasks\?/).respond('y\n')
+          .on(/overwrite tasks\?/).respond('n\n')
+          .on(/extend tasks\?/).respond('y\n')
         .error (err) ->
           throw new Error err
         .end (code) ->
@@ -198,7 +198,8 @@ describe 'CLI', ->
           expect exists "#{dir}/.croakrc" .to.be.true
           done!
 
-      it 'should exists the created project', ->
+      it 'should exists the created project in .croakrc', ->
         expect read "#{dir}/.croakrc" .to.match /\[sample\]/
+        expect read "#{dir}/.croakrc" .to.match /Gruntfile\.js/
 
 
