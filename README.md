@@ -115,11 +115,14 @@ number of repositories. Each repository needs its automation configuration
 for development, testing or building stuff.
 
 Usually, this configuration tends to grow when your repository has an amount of different tasks and 
-this configuration also tends to be very similar or redundant 
-across different repositories in your project
+also it tends to be very similar or redundant across different repositories in your project
 
-Continuous changing and improvement is a constant in any software project, so using Croak you can 
-reduce dramatically your project automation configuration changing time by centralizing it
+You probably need the same tasks in your project to, for example, run tests, generate documentation,
+statically analize the code, generate a coverage report or measure the code complexibility
+
+Continuous changing and improvement is a constant in any software project.
+Using Croak you can reduce dramatically your project automation configuration changing time centralizing it 
+and ensuring changes will be aplied to the entire project
 
 You can see a complete example project structure using Croak [here][6]
 
@@ -177,9 +180,10 @@ Croak implements a similar file discovery algorithm like the one Grunt uses to d
 
 ##### Croak-specific
 
-| Name           | Type      | Default     | Description                                    |
-| -------------- | --------- | ----------- | ---------------------------------------------- |
-| package        | `string`  | undefined   | Node package which contains the Gruntfile, it will be resolved as local and global package. This is a recommended alternative to the `gruntfile` option |
+| Name              | Type      | Default     | Description                                    |
+| ----------------- | --------- | ----------- | ---------------------------------------------- |
+| package           | `string`  | undefined   | Node package which contains the Gruntfile, it will be resolved as local and global package. This is a recommended alternative to the `gruntfile` option |
+| package_gruntfile | `string`  | undefined   | Specifies the Gruntfile path to use relative to the `package` root directory. By default Croak tries to find it in the package root folder or inside `grunt` directory |
 | extend         | `boolean` | false       | Enable extend existent tasks from Croakfile |
 | overwrite      | `boolean` | false       | Enable overwrite existent tasks from Croakfile |
 | register_tasks | `boolean` | false       | Enable register/create new tasks from Croakfile |
@@ -192,7 +196,7 @@ however Croak now supports them
 
 | Name           | Type      | Default     | Description                                    |
 | -------------- | --------- | ----------- | ---------------------------------------------- |
-| gruntfile      | `string`  | undefined   | Path to your build Gruntfile. It can be a relative path. You should define this option in all of your projects |
+| gruntfile      | `string`  | undefined   | Path to your build Gruntfile. It can be a relative path. You should define this option in all of your projects. If you define the `package` option, Gruntfile path will be relative to the `package` root directory. By default Croak tries to find it in the package root folder or inside the `grunt` directory, you only need to use this option with `package` if your Gruntfile exist in a custom directory |
 | base           | `string`  | undefined   | Specify an alternate base path. By default, all file paths are relative to the Gruntfile |
 | no_color       | `boolean` | false       | Disable colored output |
 | debug          | `boolean` | false       | Enable debugging mode for tasks that support it |
@@ -268,10 +272,10 @@ This is really useful because, in much cases, you need to use absolute paths in 
 
 **Croak grunt object**
 
-The following properties will be available:
+The following properties will be available as Croak task in Grunt:
 
-- cwd `Absolute path to the user working directory when Croak is called`
-- root `Alias to cwd`
+- cwd `Absolute path to the current user working directory when Croak is called`
+- root `Absolute base path to the existent .croakrc or Croakfile. If not exists, cwd will be used`
 - version `Current Croak version`
 - base `Grunt base path configured` [optional]
 - npm `Grunt npm load packages` [optional]
