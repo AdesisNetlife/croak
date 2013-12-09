@@ -69,14 +69,12 @@ $ croak config create -g
 The process above will create a `.croakrc` file in your user home directory, like global shared config. 
 See the [configuration file](#configuration-file) section for more details
 
-See [switching to Croak](#switching-to-croak) section for getting started
-
 ## Table of Contents
 
 - [Introduction](#introduction)
   - [How it works](#how-it-works)
   - [Example use case scenario](#example-use-case-scenario)
-  - [Do I really need Croak?](#do-i-really-need-croak)
+  - [Abstraction can be dangerous?](#abstraction-can-be-dangerous)
 - [Current stage](#current-stage)
   - [Grunt support](#grunt-support)
 - [Using Croak](#using-croak)
@@ -125,7 +123,7 @@ reduce dramatically your project automation configuration changing time by centr
 
 You can see a complete example project structure using Croak [here][6]
 
-### Abstraction is the best choice?
+### Abstraction can be dangerous?
 
 Abstraction is not always the best choice and some people can hate it.
 Basically, an abstraction in software development tries to reduce notably the complexity, 
@@ -137,7 +135,7 @@ aditionally, providing a way freedom to developers who need specific configurati
 ## Current stage
 
 Croak is an initial version ready to use, however is under active (re-)designing process 
-and important changes can be applied in a near future
+and important changes can be applied in a near future version (but minor versions, do not worry about it)
 
 #### Grunt support
 
