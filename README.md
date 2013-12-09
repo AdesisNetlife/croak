@@ -8,12 +8,12 @@
 
 <img align="right" height="280" src="http://oi44.tinypic.com/f3azc7.jpg" style="float: right" />
 
-[Grunt][1] is an awesome build and automation tool largely adopted for [node.js][7], that reduces  
-development time providing automation to do common tasks
+[Grunt][1] is an awesome task runner and build automation tool largely adopted for [node.js][7]
 
 Croak is just a simple, but featured wrapper for Grunt that aims to help you to manage 
 and orchestrate Grunt tasks configuration (aka Gruntfile) in large and distributed projects, 
-helping you to avoid redundancy, saving time and reducing dramatically changes impact during your project life-cycle
+helping you to avoid redundancy, saving time and reducing dramatically changes impact 
+during the project life-cycle
 
 Croak arises from the need to create an specific solution to abstract all the automation 
 configuration stuff and allowing you to delegate responsibilities in a proper way
@@ -35,7 +35,7 @@ in your project and to the developers, without losing the desired level of contr
 - When you have an ultra specific grunt config on each project repository
 - When you or your team do not want to spend time updating/syncronizing automation stuff across repositories
 - When you do not need to centralize and (consequently) do not need to take the control
-- If you have a lot of free time and you enjoy doing redudant and not interesting tasks
+- When you have a lot of free time and you enjoy doing redudant and not too much interesting tasks
 - When developers of your project... (at least one):
   - are an ultra skilled and responsible guys
   - have a lot of time to maintain its own automation tasks configuration
@@ -181,6 +181,7 @@ Croak implements a similar file discovery algorithm like the one Grunt uses to d
 
 | Name           | Type      | Default     | Description                                    |
 | -------------- | --------- | ----------- | ---------------------------------------------- |
+| package        | `string`  | undefined   | Node package which contains the Gruntfile, it will be resolved locally and globally. It is a recommended alternative to the `gruntfile` option |
 | extend         | `boolean` | false       | Enable extend existent tasks from Croakfile |
 | overwrite      | `boolean` | false       | Enable overwrite existent tasks from Croakfile |
 | register_tasks | `boolean` | false       | Enable register/create new tasks from Croakfile |

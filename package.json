@@ -35,7 +35,8 @@
     "commander": "~2.1.0",
     "ini": "~1.1.0",
     "resolve": "~0.6.0",
-    "promptly": "~0.2.0"
+    "promptly": "~0.2.0",
+    "requireg": "~0.1.1"
   },
   "devDependencies": {
     "grunt-mocha-cli": "~1.0.3",

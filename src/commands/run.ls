@@ -7,7 +7,7 @@ require! {
 { echo, exit } = require '../common'
 
 program
-  .command 'run <task>'
+  .command 'run [task]'
     ..description '\n  Run Grunt tasks'
     ..usage '<task> [options]'
     ..option '-p, --project <path>', 'Specifies the project to run'
@@ -27,7 +27,7 @@ program
       echo '''
             Usage examples:
 
-              $ croak run task
+              $ croak run
               $ croak run task -p my-project
               $ croak run task --verbose --force
               $ croak run task --gruntfile path/to/Gruntfile.js
@@ -76,7 +76,7 @@ run = (task, options) ->
   "Running project '#{project.$name}'..." |> echo-debug if project
   "Gruntfile loaded:\n#{gruntfile}" |> echo-debug
 
-  "Running #{task} task...".cyan |> echo-debug
+  "Running #{task or 'default'} task...".cyan |> echo-debug
 
   options <<< { croakrc, gruntfile, base, debug, verbose }
 

@@ -1,6 +1,7 @@
 require! {
-  path 
   ini
+  path 
+  requireg
   _: './modules'.lodash
   defaults: './config-defaults'
 }
@@ -258,10 +259,32 @@ translate-paths = ->
     it = it |> path.join (config.path!local or process.cwd!), _
   it
 
-process-value = (key, value) ->
-  value = value |> replace-vars
+resolve-node-package = ->
+  # support to path names
+  it |> path.normalize |> requireg.resolve |> path.dirname
+
+# search for package.json file
+find-gruntfile-in-package = ->
+  filepath = null
+  # support for specific Gruntfile directories
+  [1 to 5]reduce ->
+    unless filepath
+      if file.exists new-filepath = (it |> path.join _, 'package.json')
+        filepath := new-filepath |> path.dirname
+      it |> path.join _, '../'
+  , it
+
+  filepath
+
+process-config-value = (key, value) ->
+  value := value |> replace-vars
+  
   if <[ gruntfile npm tasks base ]>index-of(key) isnt -1
-    value = value |> translate-paths
+    value := value |> translate-paths
+  else if key is 'package'
+    # resolve node package and discover gruntfile
+    value := value |> resolve-node-package |> find-gruntfile-in-package
+
   value
 
 # process config values and create new config with defaults per project
@@ -275,7 +298,7 @@ config-transform = ->
     else
       # save the original value (required for templating and variables)
       it["_#{key}"] = value
-      it[key] = value |> process-value key, _
+      it[key] = value |> process-config-value key, _
   it
 
 config-write-transform = ->
