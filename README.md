@@ -179,7 +179,7 @@ Croak implements a similar file discovery algorithm like the one Grunt uses to d
 
 | Name           | Type      | Default     | Description                                    |
 | -------------- | --------- | ----------- | ---------------------------------------------- |
-| package        | `string`  | undefined   | Node package which contains the Gruntfile, it will be resolved locally and globally. It is a recommended alternative to the `gruntfile` option |
+| package        | `string`  | undefined   | Node package which contains the Gruntfile, it will be resolved as local and global package. This is a recommended alternative to the `gruntfile` option |
 | extend         | `boolean` | false       | Enable extend existent tasks from Croakfile |
 | overwrite      | `boolean` | false       | Enable overwrite existent tasks from Croakfile |
 | register_tasks | `boolean` | false       | Enable register/create new tasks from Croakfile |
@@ -223,8 +223,8 @@ stack = true
 extend = true
 overwrite = true
 register_tasks = true
+package = my-project-builder
 ;; grunt-specific
-gruntfile = ${HOME}/projects/my-project/build/Gruntfile.js
 base = ${HOME}/projects/my-project/my-package/
 no_color = false
 no_write = false
