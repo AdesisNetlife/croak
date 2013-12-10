@@ -288,7 +288,7 @@ The above properties will be also available from `grunt.croak`
 ```js
 module.exports = function (grunt) {
   if (grunt.croak) {
-    console.log('Running Grunt from Croak', grunt.croak.version);
+    grunt.log.writeln('Running Grunt from Croak (v.' + grunt.croak.version + ')');
   }
 
   grunt.initConfig({

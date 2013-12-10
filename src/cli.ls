@@ -16,10 +16,10 @@ program
 program.on 'grunt', ->
   croak.run-grunt!
 
-program.on '--help', ->
+program.on '--help', help = ->
   echo '''
       Usage examples:
-    
+
         $ croak config create -g /home/user/conf/.croakrc
         $ croak run test -p my-project
 
@@ -28,10 +28,12 @@ program.on '--help', ->
         $ croak <command> --help
 
       Grunt help:
-        
+
         $ croak grunt --help
 
   '''
+
+program.command 'help' .action help
 
 module <- <[ config run ]>forEach
 require "./commands/#{module}"
