@@ -2,7 +2,7 @@
 
 > Grunt automation made easy for large projects. Save time and health with Croak
 
-`WORK IN PROCESS!`
+`WORK IN PROCESS! Features may be here today, gone tomorrow`
 
 ## About
 

@@ -25,8 +25,8 @@ module.exports = class Common
 
     filepath := filepath |> @file.make-absolute
     if /Gruntfile.(js|coffee)$/i.test filepath
-      filepath := "./#{filepath}" if filepath |> is-not-path 
-      if filepath |> @file.exists 
+      filepath := "./#{filepath}" if filepath |> is-not-path
+      if filepath |> @file.exists
         filepath
     else
       if ('js' |> add-gruntfile |> @file.exists) or ('coffee' |> add-gruntfile |> @file.exists)
@@ -42,7 +42,7 @@ module.exports = class Common
     target
 
   @clone = ~>
-    it |> @extend {}, _ 
+    it |> @extend {}, _
 
   @echo = ->
     console.log ...
@@ -73,9 +73,9 @@ module.exports = class Common
         ''
 
     delete: ->
-      it |> fs.unlink-sync 
+      it |> fs.unlink-sync
 
-    write: (filepath, data) -> 
+    write: (filepath, data) ->
       if filepath |> path.dirname |> @is-directory
         data |> fs.write-file-sync filepath, _, if is-node8 then 'utf8' else encoding: 'utf8'
 
@@ -90,6 +90,7 @@ module.exports = class Common
         it
       else
         @absolute-path ...
+
 
 is-node8 = ->
   /^0\.8\./.test process.versions.node
