@@ -35,5 +35,5 @@ program.on '--help', help = ->
 
 program.command 'help' .action help
 
-module <- <[ config run ]>forEach
+module <- <[ config run init ]>forEach
 require "./commands/#{module}"

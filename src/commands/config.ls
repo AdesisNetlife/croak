@@ -26,12 +26,12 @@ program
               $ croak config remove project.force
               $ croak config set project.gruntfile /home/user/projects/my-project
               $ croak config get -g project.gruntfile
-          
-    '''
+
+      '''
     ..action ->
       unless commands[it]
         "#{it} command not supported. Use --help to see the available commands" |> exit 1
-      
+
       commands[it]apply commands, (Array::slice.call &)slice 1
 
 # alias to config create
@@ -49,18 +49,18 @@ program
 
               $ croak config create
               $ croak config create -g -p my-project --gruntfile path/to/Gruntfile.js
-          
-    '''
+
+      '''
     ..action ->
       commands.create.apply commands, &
 
-commands = 
+commands =
 
   list: (key, value, options) ->
     { croakrc, global } = options.parent
     global-flag = global
     config.local-path = croakrc if croakrc
-    
+
     { global, local } = config.raw!
     echo """
       ; global #{global.path}
@@ -92,7 +92,7 @@ commands =
     unless croakrc |> util.file.exists
       ".croakrc will be created in: #{croakrc}" |> echo
 
-    # prompt stepts
+    # prompt steps
     enter-project = (done) ->
       prompt "Enter the project name:", (err, it) ->
         project := data[it] = {}
@@ -116,11 +116,11 @@ commands =
       prompt "Enable extend tasks? [Y/n]:", 'confirm', (err, it) ->
         project.extend = it
         done!
-    
+
     save = ->
       data |> config.set _, global
 
-      try 
+      try
         config.write!
         config.load!
       catch { message }
@@ -147,13 +147,13 @@ commands =
   remove: (key, value, options) ->
     "Missing required 'key' argument" |> exit 1 unless key
     { global, croakrc } = options.parent
-    
-    try 
+
+    try
       config.load croakrc
       if config.remove key
         config.write!
         "Config '#{key}' value removed successfully" |> echo
-      else 
+      else
         throw new Error 'value do not exists'
     catch { message }
       "Cannot delete '#{key}' due to an error: #{message}" |> exit 1
@@ -189,11 +189,11 @@ commands =
       "Cannot read .croakrc: #{message}" |> exit 1
 
     if value := config.set-key key, value, global
-      try 
+      try
         config.write!
       catch { message }
         "Cannot save config due to an error: #{message}" |> exit 1
-      
+
       "Value '#{key}' updated successfully" |> echo
     else
       "Cannot set '#{key}'. Project '#{key.split('.')[0]}' do not exists or it is an invalid option" |> exit 1

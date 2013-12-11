@@ -37,8 +37,7 @@ module.exports = class Common
 
   @extend = (target = {}, src) ->
     return target unless src |> _.is-object
-    for own prop, value of src
-      target <<< { (prop): value }
+    for own prop, value of src then target <<< { (prop): value }
     target
 
   @clone = ~>

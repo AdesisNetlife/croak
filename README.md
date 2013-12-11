@@ -1,4 +1,4 @@
-# Croak [![Build Status](https://secure.travis-ci.org/AdesisNetlife/croak.png?branch=master)](http://travis-ci.org/AdesisNetlife/croak) [![Dependency Status](https://gemnasium.com/adesisnetlife/croak.png)](https://gemnasium.com/adesisnetlife/croak)
+# Croak [![Build Status](https://secure.travis-ci.org/AdesisNetlife/croak.png?branch=master)][travis] [![Dependency Status](https://gemnasium.com/adesisnetlife/croak.png)][dependencies] [![NPM version](https://badge.fury.io/js/croak.png)][badge] [![Roadchange](//roadchange.com/AdesisNetlife/croak/badge.png)][roadchange]
 
 > Grunt automation made easy for large projects. Save time and health with Croak
 
@@ -10,12 +10,12 @@
 
 [Grunt][1] is an awesome task runner and build automation tool largely adopted for [node.js][7]
 
-Croak is just a simple, but featured wrapper for Grunt that aims to help you to manage 
-and orchestrate Grunt tasks configuration (aka Gruntfile) in large and distributed projects, 
-helping you to avoid redundancy, saving time and reducing dramatically changes impact 
+Croak is just a simple, but featured wrapper for Grunt that aims to help you to manage
+and orchestrate Grunt tasks configuration (aka Gruntfile) in large and distributed projects,
+helping you to avoid redundancy, saving time and reducing dramatically changes impact
 during the project life-cycle
 
-Croak arises from the need to create an specific solution to abstract all the automation 
+Croak arises from the need to create an specific solution to abstract all the automation
 configuration stuff and allowing you to delegate responsibilities in a proper way
 in your project and to the developers, without losing the desired level of control and centralization
 
@@ -66,7 +66,7 @@ Then configure it:
 $ croak config create -g
 ```
 
-The process above will create a `.croakrc` file in your user home directory, like global shared config. 
+The process above will create a `.croakrc` file in your user home directory, like global shared config.
 See the [configuration file](#configuration-file) section for more details
 
 ## Table of Contents
@@ -91,7 +91,7 @@ See the [configuration file](#configuration-file) section for more details
   - [Croakfile](#croakfile)
   - [Command-line interface](#command-line-interface)
     - [Running tasks](#running-grunt-tasks)
-    - [Configuration](#configuration) 
+    - [Configuration](#configuration)
   - [API](#api)
 - [FAQ](#faq)
 - [Development](#development)
@@ -110,18 +110,18 @@ Croak also allows your to extend or overwrite Gruntfile configurations. This fea
 
 ### Example use case scenario
 
-A representative scenario could be, for example, that your project has a relevant 
-number of repositories. Each repository needs its automation configuration 
+A representative scenario could be, for example, that your project has a relevant
+number of repositories. Each repository needs its automation configuration
 for development, testing or building stuff.
 
-Usually, this configuration tends to grow when your repository has an amount of different tasks and 
+Usually, this configuration tends to grow when your repository has an amount of different tasks and
 also it tends to be very similar or redundant across different repositories in your project
 
 You probably need the same tasks in your project to, for example, run tests, generate documentation,
 statically analize the code, generate a coverage report or measure the code complexibility
 
 Continuous changing and improvement is a constant in any software project.
-Using Croak you can reduce dramatically your project automation configuration changing time centralizing it 
+Using Croak you can reduce dramatically your project automation configuration changing time centralizing it
 and ensuring changes will be aplied to the entire project
 
 You can see a complete example project structure using Croak [here][6]
@@ -129,7 +129,7 @@ You can see a complete example project structure using Croak [here][6]
 ### Abstraction can be dangerous?
 
 Abstraction is not always the best choice and some people can hate it.
-Basically, an abstraction in software development tries to reduce notably the complexity, 
+Basically, an abstraction in software development tries to reduce notably the complexity,
 underlying details and gives more control
 
 With Croak you can provide an ideal level of abstraction to developers without losing the control and
@@ -137,7 +137,7 @@ aditionally, providing a way freedom to developers who need specific configurati
 
 ## Current stage
 
-Croak is an initial version ready to use, however is under active (re-)designing process 
+Croak is an initial version ready to use, however is under active (re-)designing process
 and important changes can be applied in a near future version (but minor versions, do not worry about it)
 
 #### Grunt support
@@ -151,7 +151,7 @@ Croak supports Grunt `~0.4.0`
 Croak uses disk files to persistent store the configuration
 The Croak configuration file must called `.croakrc`
 
-Croak supports two types of configuration files 
+Croak supports two types of configuration files
 
 #### Global config
 
@@ -191,7 +191,7 @@ Croak implements a similar file discovery algorithm like the one Grunt uses to d
 
 ##### Grunt-specific
 
-The following options will be (probably) available in Grunt on future versions in `.gruntrc` file,
+The following options will be (probably) available in Grunt on future versions inside the `.gruntrc` file,
 however Croak now supports them
 
 | Name           | Type      | Default     | Description                                    |
@@ -252,10 +252,10 @@ The same case is applied for `${PWD}` and `%HOMEDRIVE%`, translating this last o
 
 ##### Built-in Croak variables
 
-Aditionally, Croak introduces support for an easy way to use relative paths from Croak-specific files locations, 
+Aditionally, Croak introduces support for an easy way to use relative paths from Croak-specific files locations,
 like the `.croakrc` config file path or `Croakfile`
 
-| Variable       | Value |      
+| Variable       | Value |
 | -------------- | ------------------------------------------------- |
 | CROAKRC_PATH   | Absolute path to the `.croakrc` local file. If it not exists, ${PWD} will be used instead |
 | CROAKFILE_PATH | Absolute path to the used `Croakfile`. If it not exists, ${PWD} will be used instead |
@@ -265,7 +265,7 @@ like the `.croakrc` config file path or `Croakfile`
 
 ### Adapting your existent Gruntfile
 
-Croak will automatically exposes the croak object in Gruntfile, so you can use this 
+Croak will automatically exposes the croak object in Gruntfile, so you can use this
 configuration like template values in your tasks config
 
 This is really useful because, in much cases, you need to use absolute paths in your Gruntfile
@@ -307,7 +307,7 @@ module.exports = function (grunt) {
         '<%= croak.cwd %>/src/scripts/{,*/}*.js'
         '<%= croak.cwd %>/demo/{,*/}*.js'
         '!<%= croak.cwd %>/src/scripts/vendor/*.js'
-      ] 
+      ]
     },
     connect: {
       server: {
@@ -346,7 +346,7 @@ grunt.initConfig({
         verbose: true
       }
     }
-  } 
+  }
 })
 ```
 
@@ -360,25 +360,25 @@ Like Grunt, Croak has its own specific configuration file
 
 ```coffee
 module.exports = (croak) ->
-  
+
   if croak.taskSupported 'uglify'
-    croak.registerTask 'js-minification', [ 'clean', 'uglify' ] 
+    croak.registerTask 'js-minification', [ 'clean', 'uglify' ]
 
   config: (croak, grunt) ->
     croak.extend 'uglify', {
-      options: 
+      options:
         sourceMaps: true
-      minify: 
-        files: 
+      minify:
+        files:
           src: ['**/*.js']
           dest: '<%= croak.cwd %>/test'
     }
 
     croak.set 'jshint', {
-      options: 
+      options:
         node: true
-      sources: 
-        files: 
+      sources:
+        files:
           src: ['**/*.js']
           dest: '<%= croak.cwd %>/test'
     }
@@ -390,15 +390,15 @@ module.exports = (croak) ->
 `TODO`
 
 ### Command-line interface
- 
+
 ```
 Usage: croak [options] [command]
 
 Commands:
 
-  config <action> [project] [key] [value] 
+  config <action> [project] [key] [value]
     Read/write/update/delete croak config
-  run [options] <task>   
+  run [options] <task>
     Run Grunt tasks
 
 Options:
@@ -460,7 +460,7 @@ $ croak config [set|get|remove] <key> [value] [-g, -p <project>]
 
 **Do I need to have Grunt already installed?**
 
-No, Croak will do it for you. And also 
+No, Croak will do it for you. And also
 `grunt-cli` will be replaced by Croak CLI
 
 **Can I use the Grunt CLI**
@@ -475,7 +475,7 @@ $ croak grunt --help
 
 No. An already existent Gruntfile is not required.
 
-You only need to specify the global Gruntfile you want to use 
+You only need to specify the global Gruntfile you want to use
 and optionally you can use a Croakfile to overwrite or extend global configuration
 
 **Can I use both Croak and Grunt at the same time?**
@@ -502,7 +502,7 @@ $ git clone git@github.com:adesisnetlife/croak.git && cd croak
 
 2. Install package dependencies
 ```
-$ npm install 
+$ npm install
 ```
 
 3. Run tests
@@ -516,12 +516,13 @@ Croak is completely written in LiveScript language.
 Take a look to the language [documentation][4] if you are new with it.
 Please, follow the LiveScript language conventions and [coding style][4]
 
-You must add new test cases for any feature or refactor you do, 
+You must add new test cases for any feature or refactor you do,
 also keep in mind to follow the same design/code patterns that already exist
 
 ## To Do/Wish list
 
 - Support for relative paths on `.croakrc` based on its file location
+- Use to inquirer node module instead of promptly (for a more featured and pretty CLI)
 - More test cases scenarios and destructive/evil testing
 - More deep CLI test cases
 - Support for extending/overriding Grunt configuration
@@ -546,3 +547,7 @@ Released under the [MIT][5] license
 [5]: https://github.com/adesisnetlive/croak/blob/master/LICENSE
 [6]: https://gist.github.com/h2non/7787640
 [7]: http://nodejs.org
+[travis]: http://travis-ci.org/AdesisNetlife/croak
+[dependencies]: https://gemnasium.com/adesisnetlife/croak
+[badge]: http://badge.fury.io/js/croak
+[roadchange]: http://roadchange.com/AdesisNetlife/croak
