@@ -20,7 +20,7 @@ program.on '--help', help = ->
         $ croak init [name]
         $ croak add [name]
         $ croak config [create|list|get|set|remove]
-        $ croak run task -p project
+        $ croak run task
         $ croak grunt task
 
       Command specific help:
