@@ -74,7 +74,7 @@ describe 'Config package', ->
 
       it 'should resolve the package and the Gruntfile.js', ->
         expect config.config.sample .to.be.an 'object'
-        expect config.config['package'] .to.be.null
+        expect config.config.sample['package'] .to.be.null
 
   describe 'resolve package by path', (_) ->
     dir = "#{__dirname}/fixtures/package/path/"
