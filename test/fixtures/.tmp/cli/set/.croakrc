@@ -1,7 +1,0 @@
-[sample]
-extend = true
-overwrite = false
-register_tasks = false
-gruntfile = ./new/path/to/Gruntfile.js
-debug = false
-stack = true
