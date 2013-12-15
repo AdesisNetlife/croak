@@ -9,7 +9,7 @@ require! {
 
 program
   .command 'init [name]'
-    ..description '\n  Run Grunt tasks'
+    ..description '\n  Create new projects in .croakrc'
     ..usage '[options]'
     ..option '--force', 'Force command execution'
     ..option '-x, --gruntfile <path>', 'Specifies the Gruntfile path'
@@ -31,7 +31,8 @@ program
 
 module.exports = init = (name, options) ->
 
-  { force, global, gruntfile, pkg, sample } = options.parent
+  { pkg, sample, gruntfile, parent, global, force } = options
+
   croak.config.load!
 
   set-config-project = (project, data, global) ->
@@ -53,7 +54,6 @@ module.exports = init = (name, options) ->
 
   write-config = ->
     try
-      it! if it
       croak.config.write!
       success-message!
     catch { message }
@@ -62,13 +62,13 @@ module.exports = init = (name, options) ->
   create-project-with-package = (project, pkg) ->
     data = {} <<< package: pkg
     data |> set-config-project project, _, global
-    config-write!
+    write-config!
     exit 0
 
   create-project-with-gruntfile = (project, gruntfile) ->
     data = {} <<< { gruntfile }
     data |> set-config-project project, _, global
-    config-write!
+    write-config!
     exit 0
 
   create-sample-project = ->
@@ -85,6 +85,7 @@ module.exports = init = (name, options) ->
 
     create-default!
     write-config!
+    exit 0
 
   prompt-creation-process = ->
     data = {}
@@ -151,9 +152,9 @@ module.exports = init = (name, options) ->
     ]
 
   if gruntfile and name
-    create-project-with-gruntfile!
+    name |> create-project-with-gruntfile _, gruntfile
   else if pkg and name
-    create-project-with-package!
+    name |> create-project-with-package _, pkg
   else if sample
     create-sample-project!
   else

@@ -28,7 +28,7 @@
   },
   "scripts": {
     "test": "grunt test",
-    "release": "grunt publish"
+    "publish": "grunt publish"
   },
   "dependencies": {
     "grunt": "~0.4.2",

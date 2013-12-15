@@ -357,7 +357,7 @@ describe 'Config', ->
       config.write!
 
     it 'should remove an option', ->
-      expect config.remove 'project.stack' .to.be.equal true
+      expect config.remove 'project.stack' .to.be.true
 
     it 'should not exists the removed option', ->
       expect config.get 'project.stack' .to.be.null
@@ -366,7 +366,10 @@ describe 'Config', ->
       expect config.remove 'project' .to.be.true
 
     it 'should remove non-existent project', ->
-      expect config.remove 'non-existent' .to.be.equal true
+      expect config.remove 'non-existent' .to.be.true
+
+    it 'should remove non-existent project option', ->
+      expect config.remove 'non-existent.option' .to.be.true
 
     it 'should write and load changes from disk', ->
       config.write!

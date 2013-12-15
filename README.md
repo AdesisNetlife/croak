@@ -2,7 +2,7 @@
 
 > Grunt automation made easy for large projects. Save time and health with Croak
 
-### Disclaimer
+#### Disclaimer
 
 `BETA VERSION`
 Features may be here today, gone tomorrow
@@ -339,7 +339,7 @@ with the same result
 $ npm install grunt-croak --save-dev
 ```
 
-##### Configute it in Gruntfile
+##### Add it in your Gruntfile
 
 ```
 grunt.loadNpmTasks('grunt-croak')
@@ -443,6 +443,16 @@ Then you can simply run:
 $ croak run task
 ```
 
+You can also run subtasks:
+```
+$ croak run task:subtask
+```
+
+or multiple tasks:
+```
+$ croak run task anothertask
+```
+
 #### Configuration
 
 Show the current existent config
@@ -516,6 +526,11 @@ $ npm install
 3. Run tests
 ```
 $ npm test
+```
+
+4. Coding zen mode
+```
+$ grunt dev [--force]
 ```
 
 ## Contributing

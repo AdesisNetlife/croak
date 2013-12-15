@@ -1,7 +1,7 @@
 require! {
+  './init'
   '../prompt'
-  '../config'
-  util: '../common'
+  '../croak'
   '../modules'.async
   program: commander
 }
@@ -24,9 +24,8 @@ program
               $ croak config list
               $ croak config create
               $ croak config remove project
-              $ croak config remove project.force
-              $ croak config set project.gruntfile /home/user/projects/my-project
               $ croak config get -g project.gruntfile
+              $ croak config set project.gruntfile ${HOME}/builder/Gruntfile.js
 
       '''
     ..action ->
@@ -35,34 +34,14 @@ program
 
       commands[it]apply commands, (Array::slice.call &)slice 1
 
-# alias to config create
-program
-  .command 'create [key] [value]'
-    ..description '\n  Creates a new .croakrc file'
-    ..option '--force', 'Force the command execution'
-    ..option '-p, --project', 'Specifies the project to run'
-    ..option '-x, --gruntfile <path>', 'Specifies the Gruntfile path'
-    ..option '-g, --global', 'Use the global config file'
-    ..option '-c, --croakrc [path]', 'Use a custom .croakrc file path'
-    ..on '--help', ->
-      echo '''
-            Usage examples:
-
-              $ croak config create
-              $ croak config create -g -p my-project --gruntfile path/to/Gruntfile.js
-
-      '''
-    ..action ->
-      commands.create.apply commands, &
-
 commands =
 
   list: (key, value, options) ->
-    { croakrc, global } = options.parent
+    { croakrc, global } = options
     global-flag = global
-    config.local-path = croakrc if croakrc
+    croak.config.local-path = croakrc if croakrc
 
-    { global, local } = config.raw!
+    { global, local } = croak.config.raw!
     echo """
       ; global #{global.path}
       #{global.data}
@@ -74,57 +53,53 @@ commands =
 
   show: -> @list ...
 
-  create: (key, value, options) ->
+  raw: -> @list ...
+
+  create: (name, value, options) ->
+    name |> init _, { sample: true, options.global }
 
   add: -> @create ...
 
   remove: (key, value, options) ->
     "Missing required 'key' argument" |> exit 1 unless key
-    { global, croakrc } = options.parent
+
+    { croakrc } = options
+    croakrc |> load-config
 
     try
-      config.load croakrc
-      if config.remove key
-        config.write!
-        "Config '#{key}' value removed successfully" |> echo
-      else
-        throw new Error 'value do not exists'
+      croak.config.remove key
+      croak.config.write!
+      "'#{key}' was removed successfully from config" |> echo
     catch { message }
       "Cannot delete '#{key}' due to an error: #{message}" |> exit 1
+
+  delete: -> @remove ...
 
   get: (key, value, options) ->
     "Missing required 'key' argument" |> exit 1 unless key
 
-    { croakrc } = options.parent
+    { croakrc } = options
+    croakrc |> load-config
 
-    try
-      config.load croakrc
-    catch { message }
-      "Cannot read .croakrc: #{message}" |> exit 1
-
-    if value := config.get key.to-lower-case!
+    if value := croak.config.get key.to-lower-case!
       if typeof value is 'string'
         value |> echo
       else
         for own prop, data of value
-          "#{prop}: #{data}" |> echo
+          then "#{prop}: #{data}" |> echo
     else
-      "Config '#{key}' value not exists" |> exit 1
+      "Config '#{key}' value do not exists" |> exit 1
 
   set: (key, value, options) ->
     "Missing required 'key' argument" |> exit 1 unless key
     "Missing required 'value' argument" |> exit 1 unless value
 
-    { croakrc, global } = options.parent
+    { croakrc, global } = options
+    croakrc |> load-config
 
-    try
-      config.load croakrc
-    catch { message }
-      "Cannot read .croakrc: #{message}" |> exit 1
-
-    if value := config.set key, value, global
+    if value := croak.config.set key, value, not global
       try
-        config.write!
+        croak.config.write!
       catch { message }
         "Cannot save config due to an error: #{message}" |> exit 1
 
@@ -132,3 +107,8 @@ commands =
     else
       "Cannot set '#{key}'. Project '#{key.split('.')[0]}' do not exists or it is an invalid option" |> exit 1
 
+load-config = ->
+  try
+    croak.config.load it
+  catch { message }
+    "Cannot read .croakrc: #{message}" |> exit 1

@@ -1,6 +1,5 @@
 require! {
   '../croak'
-  '../config'
   util: '../common'
   program: commander
 }
@@ -39,23 +38,22 @@ program
 
 run = (task, options) ->
 
-  { gruntfile, base, debug, verbose, parent, project } = options
-  { croakrc } = parent
+  { gruntfile, base, debug, verbose, parent, project, croakrc } = options
 
   echo-debug = ->
-    echo.apply null, (Array::slice.call &) ++ ['\n'] if debug or verbose
+    echo.apply null, ['>>'.green] ++ (Array::slice.call &) ++ ['\n'] if debug or verbose
 
   'Croak started in verbose mode'.green |> echo-debug
 
   try
-    config.load croakrc
+    croak.config.load croakrc
   catch { message }
     "Cannot read .croakrc: #{message}" |> exit 1
 
   unless gruntfile
     unless project
-      'Project argument not specified, trying to resolve project from config...' |> echo-debug
-      unless project := config.project-resolve!
+      'Project argument not specified, trying to resolve project from croak.config...' |> echo-debug
+      unless project := croak.config.project-resolve!
         '''
         Cannot resolve a default project, you must specify the project. Use:
         $ croak run task -p project
@@ -63,7 +61,7 @@ run = (task, options) ->
       else
         "Config file found, using the default project '#{project.$project}'..." |> echo-debug
     else
-      unless project := project |> config.get
+      unless project := project |> croak.config.get
         'Project not found. Have you actually configured it?' |> exit 2
 
   if project and not gruntfile
@@ -72,7 +70,7 @@ run = (task, options) ->
   unless gruntfile
     "Cannot find the Gruntfile. Missing required 'gruntfile' option" |> exit 2
 
-  "Looking for the Gruntfile in: #{gruntfile}" |> echo-debug
+  "Looking for the Gruntfile in:\n#{gruntfile}" |> echo-debug
   unless gruntfile := util.gruntfile-path gruntfile
     'Gruntfile not found. Cannot run the task' |> exit 2
 

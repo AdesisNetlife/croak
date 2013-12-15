@@ -1,9 +1,9 @@
 require! promptly
 
 module.exports = (message, callback, list, type, options) ->
-  # simple input arguments normalizer based on its type
+
   args = Array::slice.call &
-  
+
   { type, fnArgs } = do ->
     temp = {}
     fnArgs = []

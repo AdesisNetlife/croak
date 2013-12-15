@@ -4,11 +4,11 @@
   rm
   chdir
   expect
-  suppose
-  version
-  exists
   read
   exec
+  env
+  home-var
+  home
 } = require './lib/helper'
 
 describe 'CLI config', (_) ->
@@ -35,34 +35,23 @@ describe 'CLI config', (_) ->
       exec 'data', <[config list --croakrc]> ++ ["#{__dirname}/fixtures/config/local/.croakrc"], ->
         expect it .to.match /\[local-project\]/i
         done!
-  /*
-  describe 'create', (_) ->
+
+  describe 'create', ->
     dir = "#{__dirname}/fixtures/.tmp/cli/create"
-
-    before-each ->
-      rm dir
-      mkdirp dir
-
-    before-each ->
-      chdir dir
-
-    after-each ->
-      chdir cwd
 
     describe 'local', (_) ->
 
-      it 'should create a new .croakrc local file', (done) ->
-        suppose(<[ create ]>)
-          #.debug(util.createWriteStream 'cli.log')
-          .on(/project name:/).respond('sample\n')
-          .on(/Gruntfile path \(/).respond('../../gruntfile/Gruntfile.js\n')
-          .on(/overwrite tasks\?/).respond('n\n')
-          .on(/extend tasks\?/).respond('y\n')
-        .error (err) ->
-          throw new Error err
-        .end (code) ->
-          expect code .to.be.equal 0
-          expect exists "#{dir}/.croakrc" .to.be.true
+      before ->
+        rm dir
+        mkdirp dir
+        chdir dir
+
+      after ->
+        chdir cwd
+
+      it 'should create a new .croakrc', (done) ->
+        exec 'close', <[ config create sample ]>, ->
+          expect it .to.be.equal 0
           done!
 
       it 'should exists the created project in .croakrc', ->
@@ -71,21 +60,103 @@ describe 'CLI config', (_) ->
 
     describe 'global', (_) ->
 
-      it 'should create a new .croakrc global file', (done) ->
-        suppose(<[ create -g ]>)
-          #.debug(util.createWriteStream 'cli.log')
-          .on(/project name:/).respond('sample\n')
-          .on(/Gruntfile path \(/).respond('../../gruntfile/Gruntfile.js\n')
-          .on(/overwrite tasks\?/).respond('n\n')
-          .on(/extend tasks\?/).respond('y\n')
-        .error (err) ->
-          throw new Error err
-        .end (code) ->
-          expect code .to.be.equal 0
-          expect exists "#{dir}/.croakrc" .to.be.true
+      before ->
+        rm dir
+        mkdirp dir
+        chdir dir
+
+      before ->
+        env[home-var] = dir
+
+      after ->
+        chdir cwd
+
+      after ->
+        env[home-var] = home
+
+      it 'should create a new .croakrc', (done) ->
+        exec 'close', <[ config create global-sample -g ]>, ->
+          expect it .to.be.equal 0
           done!
 
       it 'should exists the created project in .croakrc', ->
-        expect read "#{dir}/.croakrc" .to.match /\[sample\]/
+        expect read "#{dir}/.croakrc" .to.match /\[global-sample\]/
         expect read "#{dir}/.croakrc" .to.match /Gruntfile\.js/
-  */
+
+
+  describe 'set', (_) ->
+    dir = "#{__dirname}/fixtures/.tmp/cli/set"
+
+    before ->
+      rm dir
+      mkdirp dir
+      chdir dir
+
+    after ->
+      chdir cwd
+
+    it 'should create a new .croakrc', (done) ->
+      exec 'close', <[ config create sample ]>, ->
+        expect it .to.be.equal 0
+        done!
+
+    it 'should set a new option to the existent project', (done) ->
+      exec 'close', <[ config set sample.gruntfile ./new/path/to/Gruntfile.js ]>, ->
+        expect it .to.be.equal 0
+        done!
+
+    it 'should change the option properly', ->
+      expect read "#{dir}/.croakrc" .to.match /\/new\/path\/to\/Gruntfile/
+
+  describe 'get', (_) ->
+    dir = "#{__dirname}/fixtures/.tmp/cli/get"
+
+    before ->
+      rm dir
+      mkdirp dir
+      chdir dir
+
+    after ->
+      chdir cwd
+
+    it 'should create a new .croakrc', (done) ->
+      exec 'close', <[ config create sample ]>, ->
+        expect it .to.be.equal 0
+        done!
+
+    it 'should get an existent project option', (done) ->
+      exec 'data', <[ config get sample.gruntfile ]>, ->
+        expect it .to.be.equal '../path/to/Gruntfile.js\n'
+        done!
+
+    it 'should return the proper exit code if the option do not exist', (done) ->
+      exec 'close', <[ config get sample.nonexistent ]>, ->
+        expect it .to.be.equal 1
+        done!
+
+  describe 'remove', (_) ->
+    dir = "#{__dirname}/fixtures/.tmp/cli/remove"
+
+    before ->
+      rm dir
+      mkdirp dir
+      chdir dir
+
+    after ->
+      chdir cwd
+
+    it 'should create a new .croakrc', (done) ->
+      exec 'close', <[ config create sample ]>, ->
+        expect it .to.be.equal 0
+        done!
+
+    it 'should remove an existent project option', (done) ->
+      exec 'close', <[ config remove sample.gruntfile ]>, ->
+        expect it .to.be.equal 0
+        done!
+
+    it 'should not exist the removed project option', (done) ->
+      exec 'close', <[ config get sample.gruntfile ]>,  ->
+        expect it .to.be.equal 1
+        done!
+

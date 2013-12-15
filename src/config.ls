@@ -32,9 +32,9 @@ module.exports = config =
     |> _.extend _, @global
     |> _.extend _, @local
 
-  load: ->
+  load: (local-path) ->
     global-config-path = @global-file!
-    local-config-path = it |> @local-file
+    local-config-path = local-path |> @local-file
 
     add-filepath-to-config = (config, filepath) ->
       if (config |> _.is-object) and filepath
@@ -132,11 +132,11 @@ module.exports = config =
 
     if option?
       if @global?[project]?[option]?
-        key |> @set _, null
+        value = key |> @set _, null
       else if @local?[project]?[option]?
-        key |> @set _, null, true
+        value = key |> @set _, null, true
       @apply!
-      not @config[project][key]?
+      not value?
     else
       @global?[project] &&= null
       @local?[project] &&= null
@@ -255,7 +255,7 @@ translate-paths = ->
   # todo: obtain relative path from .croakrc location
   # apply path based on the current global or local config file
   unless it |> file.is-absolute
-    it = it |> path.join get-config-dirname-path!, _
+    it := it |> path.join get-config-dirname-path!, _
   it
 
 resolve-node-package = ->
@@ -278,7 +278,10 @@ find-gruntfile-in-package = ->
 process-config-value = (key, value) ->
   value := value |> replace-vars
 
-  if <[ gruntfile npm tasks base package ]>index-of(key) isnt -1
+  is-path-like-value = ->
+    <[ gruntfile npm tasks base package ]>index-of(it) isnt -1
+
+  if (key |> is-path-like-value) and (value |> _.is-string)
     value := value |> translate-paths
   else if key is 'package'
     # resolve node package and discover gruntfile

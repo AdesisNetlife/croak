@@ -20,13 +20,13 @@ describe 'CLI init', (_) ->
     rm dir
     mkdirp dir
     chdir dir
-  
+
   init-after = ->
     rm dir
     chdir cwd
-  
+
   describe 'setup process', ->
-    
+
     describe 'local config', (_) ->
 
       before init-before
@@ -47,18 +47,46 @@ describe 'CLI init', (_) ->
 
       it 'should exists the created project in .croakrc', ->
         expect read "#{dir}/.croakrc" .to.match /\[local-project\]/
-      
+
       it 'should have the expected package option value', ->
         expect read "#{dir}/.croakrc" .to.match /package = builder/
 
       it 'should have the default project', ->
         expect read "#{dir}/.croakrc" .to.match /\$default = local-project/
 
+      describe 'using the add command alias', (_) ->
+
+        before init-before
+        after init-after
+
+        it 'should create .croakrc', (done) ->
+          suppose(<[ add ]>)
+            .on(/Enter the project name/).respond('local-project\n')
+            .on(/The project has a node.js build package/).respond('y\n')
+            .on(/Enter the package name/).respond('builder\n')
+            .on(/project by default/).respond('y\n')
+          .error (err) ->
+            throw new Error err
+          .end (code) ->
+            expect code .to.be.equal 0
+            expect exists "#{dir}/.croakrc" .to.be.true
+            done!
+
+        it 'should exists the created project in .croakrc', ->
+          expect read "#{dir}/.croakrc" .to.match /\[local-project\]/
+
+        it 'should have the expected package option value', ->
+          expect read "#{dir}/.croakrc" .to.match /package = builder/
+
+        it 'should have the default project', ->
+          expect read "#{dir}/.croakrc" .to.match /\$default = local-project/
+
+
     describe 'global config', (_) ->
 
       before init-before
       after init-after
-      
+
       before ->
         env[home-var] = dir
 
@@ -83,7 +111,7 @@ describe 'CLI init', (_) ->
 
       it 'should exists the created project in .croakrc', ->
         expect read "#{dir}/.croakrc" .to.match /\[global-project\]/
-      
+
       it 'should have the expected package option value', ->
         expect read "#{dir}/.croakrc" .to.match /package = builder/
 
@@ -96,26 +124,19 @@ describe 'CLI init', (_) ->
       it 'should have the default project', ->
         expect read "#{dir}/.croakrc" .to.match /\$default = global-project/
 
-  /*
-  describe 'force creation', (_) ->
+  describe 'sample project', (_) ->
+
+    before init-before
+    after init-after
 
     before ->
-      rm dir
-      mkdirp dir
-
-    before ->
-      chdir dir
+      env[home-var] = dir
 
     after ->
-      rm dir
-      chdir cwd
+      env[home-var] = home
 
     it 'should create a new .croakrc global file', (done) ->
-      suppose(<[ init ]>)
-        .on(/project name:/).respond('global-project\n')
-        .on(/Gruntfile path \(/).respond('../../gruntfile/Gruntfile.js\n')
-        .on(/overwrite tasks\?/).respond('n\n')
-        .on(/extend tasks\?/).respond('y\n')
+      suppose(<[ init sample-project --sample ]>)
       .error (err) ->
         throw new Error err
       .end (code) ->
@@ -124,6 +145,53 @@ describe 'CLI init', (_) ->
         done!
 
     it 'should exists the created project in .croakrc', ->
-      expect read "#{dir}/.croakrc" .to.match /\[sample\]/
+      expect read "#{dir}/.croakrc" .to.match /\[sample-project\]/
       expect read "#{dir}/.croakrc" .to.match /Gruntfile\.js/
-  */
+
+  describe 'flags --gruntfile', (_) ->
+
+    before init-before
+    after init-after
+
+    before ->
+      env[home-var] = dir
+
+    after ->
+      env[home-var] = home
+
+    it 'should create a new .croakrc global file', (done) ->
+      suppose(<[ init custom-project --gruntfile ../path/to/Gruntfile.js ]>)
+      .error (err) ->
+        throw new Error err
+      .end (code) ->
+        expect code .to.be.equal 0
+        expect exists "#{dir}/.croakrc" .to.be.true
+        done!
+
+    it 'should exists the created project in .croakrc', ->
+      expect read "#{dir}/.croakrc" .to.match /\[custom-project\]/
+      expect read "#{dir}/.croakrc" .to.match /path\/to\/Gruntfile\.js/
+
+  describe 'flags --pkg', (_) ->
+
+    before init-before
+    after init-after
+
+    before ->
+      env[home-var] = dir
+
+    after ->
+      env[home-var] = home
+
+    it 'should create a new .croakrc global file', (done) ->
+      suppose(<[ init custom-project --pkg builder ]>)
+      .error (err) ->
+        throw new Error err
+      .end (code) ->
+        expect code .to.be.equal 0
+        expect exists "#{dir}/.croakrc" .to.be.true
+        done!
+
+    it 'should exists the created project in .croakrc', ->
+      expect read "#{dir}/.croakrc" .to.match /\[custom-project\]/
+      expect read "#{dir}/.croakrc" .to.match /package = builder/

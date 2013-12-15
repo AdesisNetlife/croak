@@ -9,6 +9,9 @@
   exist
   read
   exec
+  home-var
+  home
+  env
 } = require './lib/helper'
 
 describe 'CLI general flags', (_) ->
@@ -27,9 +30,11 @@ describe 'CLI run', (_) ->
 
   before ->
     chdir "#{__dirname}/fixtures/project/src/"
+    env[home-var] = "#{__dirname}/fixtures/project/src/folder/subfolder"
 
   after ->
     chdir cwd
+    env[home-var] = ''
 
   it 'should run the "log" task', (done) ->
     exec 'close', <[run log]>, ->
