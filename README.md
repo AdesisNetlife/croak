@@ -1,4 +1,4 @@
-# Croak [![Build Status](https://secure.travis-ci.org/AdesisNetlife/croak.png?branch=master)][9] [![Dependency Status](https://gemnasium.com/h2non/grunt-beatiful-docs.png)][10] [![NPM version](https://badge.fury.io/js/croak.png)][11] [![Roadchange](https://roadchange.com/AdesisNetlife/croak/badge.png)][12]
+# Croak [![Build Status](https://secure.travis-ci.org/AdesisNetlife/croak.png?branch=master)][9] [![Dependency Status](https://gemnasium.com/AdesisNetlife/croak.png)][10] [![NPM version](https://badge.fury.io/js/croak.png)][11] [![Roadchange](https://roadchange.com/AdesisNetlife/croak/badge.png)][12]
 
 > Grunt automation made easy for large projects. Save time and health with Croak
 
@@ -611,6 +611,8 @@ Copyright (c) 2013 Adesis Netlife S.L and contributors
 
 Released under the [MIT][5] license
 
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/AdesisNetlife/croak/trend.png)]
+
 [1]: http://gruntjs.com
 [2]: https://github.com/h2non/grunt-croak
 [3]: http://livescript.net
@@ -620,6 +622,6 @@ Released under the [MIT][5] license
 [7]: http://nodejs.org
 [8]: http://gruntjs.com/api/grunt
 [9]: http://travis-ci.org/AdesisNetlife/croak
-[10]: https://gemnasium.com/h2non/grunt-beatiful-docs
+[10]: https://gemnasium.com/AdesisNetlife/croak.png
 [11]: http://badge.fury.io/js/croak
 [12]: http://roadchange.com/AdesisNetlife/croak
