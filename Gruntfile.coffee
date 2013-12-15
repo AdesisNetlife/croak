@@ -12,7 +12,7 @@ module.exports = (grunt) ->
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json')
 
-    clean: ['lib', 'test/*.js', 'test/fixtures/temp/**']
+    clean: ['lib', 'test/*.js', 'test/fixtures/.tmp/**']
 
     livescript:
       options:
@@ -23,6 +23,12 @@ module.exports = (grunt) ->
         cwd: 'src/'
         src: ['**/*.ls']
         dest: 'lib/'
+        ext: '.js'
+      test:
+        expand: true
+        cwd: 'test/lib'
+        src: ['**/*.ls']
+        dest: 'test/lib'
         ext: '.js'
 
     mochacli:
@@ -43,20 +49,10 @@ module.exports = (grunt) ->
         spawn: false
       src:
         files: ['src/**/*.ls']
-        tasks: ['livescript:src', 'simplemocha']
+        tasks: ['test']
       test:
         files: ['test/**/*.ls']
-        tasks: ['livescript:test', 'simplemocha']
-
-  grunt.event.on 'watch', (action, files, target)->
-    grunt.log.writeln "#{target}: #{files} has #{action}"
-
-    lsData = grunt.config ['livescript', target]
-    files = [files] if _.isString files
-    files = files.map (file)-> path.relative lsData.cwd, file
-    lsData.src = files
-
-    grunt.config ['livescript', target], lsData
+        tasks: ['test']
 
 
   grunt.registerTask 'compile', [
@@ -67,6 +63,12 @@ module.exports = (grunt) ->
   grunt.registerTask 'test', [
     'compile',
     'mochacli'
+  ]
+
+  grunt.registerTask 'dev', [
+    'compile',
+    'mochacli'
+    'watch'
   ]
 
   grunt.registerTask 'publish', [

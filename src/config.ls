@@ -1,24 +1,25 @@
 require! {
   ini
-  path 
+  path
   requireg
-  _: './modules'.lodash
+  _: 'lodash'
   defaults: './config-defaults'
 }
 { CONFVAR, FILENAME } = require './constants'
-{ file, env, extend, clone, is-win32 }:common = require './common'
+{ file }:util = require './common'
 
 local-path = null
-global-options = <[ default project ]>
+global-options = <[ $default ]>
 
 module.exports = config =
 
+  # config store
   config: {}
   global: null
   local: null
 
   read: ->
-    return null unless it |> file.exists 
+    return null unless it |> file.exists
     it |> file.read |> ini.parse
 
   clean: ->
@@ -27,31 +28,32 @@ module.exports = config =
     @config = {}
 
   apply: ->
-    @config 
-    |> extend _, @global
-    |> extend _, @local
+    @config
+    |> _.extend _, @global
+    |> _.extend _, @local
 
   load: ->
     global-config-path = @global-file!
-    local-config-path = @local-file it
+    local-config-path = it |> @local-file
 
     add-filepath-to-config = (config, filepath) ->
       if (config |> _.is-object) and filepath
         config <<< { $path: filepath }
         config <<< { $dirname: filepath |> path.dirname }
 
-    if global = global-config-path |> @read |> config-transform
+    if global = global-config-path |> @read
       @global = global if global |> has-data
-      global-config-path |> add-filepath-to-config global, _
-    if local = local-config-path |> @read |> config-transform
+      global-config-path |> add-filepath-to-config global, _ |> config-transform _
+    if local = local-config-path |> @read
       if local |> has-data
-        @local = local 
-        local-config-path |> add-filepath-to-config local, _
+        @local = local
+        local-config-path |> add-filepath-to-config local, _ |> config-transform _, 'local'
     @apply!
 
   write: ->
-    for key, value in <[global local]> when @[key] |> has-data
-      (@[key] |> encode-config) |> file.write @["#{key}File"]!, _
+    for key, value in <[ global local ]>
+      when @[key] |> has-data
+      then (@[key] |> encode-config) |> file.write @["#{key}File"]!, _
 
   save: ->
     @write ...
@@ -64,122 +66,102 @@ module.exports = config =
       data.data = data.path |> file.read if data.path |> file.exists
     config
 
-  project: (project, data, local = false) ->
-    if project and data |> has-data
-      context = if local then 'local' else 'global'
-      @[context] ?= {}
-      @[context][project] = data |> config-transform 
-      @apply!
-
-    if project := @config[project]
-      if project.grunt_path?
-        project.grunt_path = project.grunt_path |> path.normalize
+  get-default: ->
+    if @local?.$default |> @exists
+      @local.$default |> @get
+    else if @global?.$default |> @exists
+      @global.$default |> @get
+    else if @local |> has-data
+      @local |> get-first-member
     else
-      project = null
-    project
+      null
 
   project-resolve: ->
-    project = null
-    unless @local
-      if @global? and project := @global.default?
-        @global.default
-    else if @local? and project := @local.default |> @get
-      project
-    else if @local? and @local |> has-data
-      @local |> get-first-member 
-    else
-      project
+    @get-default ...
 
   update: (project, data, local = false) ->
-    if @config[project] and has-data data
+    if @config[project] and data |> has-data
       context = if local then 'local' else 'global'
       @[context] ?= {}
-      data := @[context][project] |> extend _, (data |> config-transform)
+      data := @[context][project] |> _.extend _, (data |> config-transform)
       @apply!
     data
 
   get: (key) ->
-    project = key
+    return @config |> _.clone-deep unless key |> _.is-string
 
-    if (key |> _.is-string)
-      key := key.split '.'
-      project := key[0]
-      key := key[1]
-
-    if project |> @config.has-own-property 
-      project := @config[project]
+    [ project, key ] = key.split '.'
+    if project := @config[project]
       if key
-        if value = project["_#{key}"]
-          value
+        if "_#{key}" |> project.has-own-property
+          project["_#{key}"]
         else
           null
       else
-        project |> get-template-values
+        project |> get-config-tmpl-values
     else
       null
 
-  set: (data-obj, global = false) ->
-    if data-obj |> _.is-object
-      context = if global then 'global' else 'local'
-      data-obj := data-obj |> config-transform
-      if @[context] |> _.is-object
-        data-obj |> _.extend @[context], _
-      else
-        @ <<< { (context): data-obj }
+  set: (key, value, local = false) ->
+    context = if local then 'local' else 'global'
+    { set-object, set-value } = context |> set-config @, _
 
-  set-key: (key, value, global = true) ->
-    setted = false
-    if (key |> _.is-string) and value?
-      context = if global then 'global' else 'local'
-      key := key.split '.'
-      project = key[0]
+    if key |> _.is-plain-object
+      key |> set-object
+      value := key
+    else if key |> _.is-string
+      value |> set-value key, _
+    else
+      value := null
 
-      if @[context] |> _.is-object
-        # global config values
-        if project |> is-global-config-value
-          @[context] <<< { (project): value }
-          setted := yes
-        else if (project := @[context][project])? and (project |> _.is-object)
-          ({ (key[1]): value } |> config-transform) |> _.extend project, _
-          setted := yes
-    setted
+    @apply!
+    value
+
+  set-local: (key, value) ->
+    value |> @set key, _, true
+
+  value: (key, value, local = false) ->
+    if value?
+      @set ...
+    else
+      @get ...
 
   remove: (key) ->
     return no unless (key |> _.is-string)
+    [ project, option ] = key.split '.'
 
-    project = key
-    key := key.split '.'
-    project := key[0]
-    key := key[1]
-
-    if key and @config[project]
-      @global?[project][key] &&= null
-      @local?[project][key] &&= null
+    if option?
+      if @global?[project]?[option]?
+        key |> @set _, null
+      else if @local?[project]?[option]?
+        key |> @set _, null, true
       @apply!
-      !@config[project][key]?
+      not @config[project][key]?
     else
       @global?[project] &&= null
       @local?[project] &&= null
       @apply!
-      !@config[project]?
+      not @config[project]?
 
   path: ->
-    { global: @global?.$path, local: @local?.$path }
+    global: @global?.$path or @global-file!
+    local: @local?.$path or @local-file!
+
+  dirname: ->
+    global: @global?.$dirname or (@global-file! |> path.dirname)
+    local: @local?.$dirname or (@local-file! |> path.dirname)
 
   exists: ->
-    (@get ...)?
-
-  section: ->
-    @project ...
+    it |> @config.has-own-property
 
   global-file: ->
-    if config-path = it or env CONFVAR
-      config-path := config-path |> replace-vars |> path.normalize  
+    if config-path = it or util.env CONFVAR
+      config-path := config-path |> replace-vars |> path.normalize
       if file.is-directory config-path
         config-path := config-path |> add-croakrc-file
       return config-path
     # defaults to user home directory
-    common.home |> add-croakrc-file
+    util.user-home |> add-croakrc-file
 
   local-file: (filepath = @local-path) ->
     exists = false
@@ -193,7 +175,7 @@ module.exports = config =
       filepath.index-of(FILENAME) isnt -1
 
     if has-filename!
-      filepath := filepath |> path.dirname 
+      filepath := filepath |> path.dirname
 
     # tries to discover .croakrc in cwd and fall back to higher directories
     [1 to 5]reduce ->
@@ -207,21 +189,23 @@ module.exports = config =
     unless exists
       filepath = process.cwd! |> add-croakrc-file
     # prevent the local file discovery process do not resolve the global file
-    if filepath |> is-global-file 
+    if filepath |> is-global-file
       # set to default
-      filepath = @local-path # #path.join (filepath |> path.dirname), 'croak' |> add-croakrc-file 
-    
+      filepath = @local-path # #path.join (filepath |> path.dirname), 'croak' |> add-croakrc-file
+
     filepath
 
 # accessor to customize the local .croakrc file path
-Object.define-property config, 'localPath', do 
+Object.define-property config, 'localPath', do
   enumerable: true
   get: -> local-path or (process.cwd! |> add-croakrc-file)
   set: -> local-path := it
 
-
+#
+# helpers
+#
 apply-defaults = ->
-  it |> extend (defaults |> clone), _
+  it |> _.extend (defaults |> _.clone), _
 
 add-croakrc-file = ->
   unless (it |> new RegExp "#{CONFVAR}$" .test)
@@ -233,30 +217,45 @@ is-global-config-value = ->
 is-not-template-value = ->
   /^\_/ isnt it and /^\$/ isnt it
 
-get-template-values = ->
+get-config-tmpl-values = ->
   obj = {}
-  for own key, value of it when !(key |> is-not-template-value)
-    obj <<< { (key.slice 1): value } if value?
+  for own key, value of it
+    when not (key |> is-not-template-value)
+    then obj <<< (key.slice 1): value if value?
   obj
+
+get-config-dirname-path = ->
+  config.dirname!local or config.dirname!global or process.cwd!
 
 replace-vars = ->
   if typeof it is 'string'
     it = it.replace /\$\{(.*)\}/g, (_, matched) ->
       matched = matched?.toUpperCase!
-      if is-win32
+      # TODO!!
+      replace-croak-vars = ->
+        switch it
+          when 'CROAKRC_PATH' then
+            it := get-config-dirname-path!
+          when 'CROAKFILE_PATH' then
+
+          when 'GRUNTFILE_PATH' then
+        it
+
+      if util.is-win32
         matched = 'USERPROFILE' if matched is 'HOME'
         matched = 'CD' if matched is 'PWD'
         matched = 'HOMEDRIVE' if matched is 'ROOT' or matched is 'DRIVE'
       else
         matched = '/' if matched is 'HOMEDRIVE' or matched is 'ROOT'
         matched = 'PWD' if matched is 'CD'
-      env(matched?.toUpperCase!) or ''
+      util.env(matched?.toUpperCase!) or ''
   it
 
 translate-paths = ->
   # todo: obtain relative path from .croakrc location
-  unless it |> file.is-absolute 
-    it = it |> path.join (config.path!local or process.cwd!), _
+  # apply path based on the current global or local config file
+  unless it |> file.is-absolute
+    it = it |> path.join get-config-dirname-path!, _
   it
 
 resolve-node-package = ->
@@ -278,8 +277,8 @@ find-gruntfile-in-package = ->
 
 process-config-value = (key, value) ->
   value := value |> replace-vars
-  
-  if <[ gruntfile npm tasks base ]>index-of(key) isnt -1
+
+  if <[ gruntfile npm tasks base package ]>index-of(key) isnt -1
     value := value |> translate-paths
   else if key is 'package'
     # resolve node package and discover gruntfile
@@ -287,43 +286,78 @@ process-config-value = (key, value) ->
 
   value
 
-# process config values and create new config with defaults per project
-config-transform = ->
-  return it unless it |> _.is-object
-  
-  for own key, value of it when key |> is-not-template-value 
-    if value |> _.is-object
-      value['$project'] = key unless value['$project']
-      it[key] = value |> config-transform |> apply-defaults
+set-config = (obj, context) ->
+
+  set-object: ->
+    if it |> has-data
+      # extend or overwrite?
+      obj <<< (context): it |> _.clone-deep |> config-transform
     else
-      # save the original value (required for templating and variables)
-      it["_#{key}"] = value
-      it[key] = value |> process-config-value key, _
+      null
+
+  set-value: (key, value) ->
+    [ project, option ] = key.split '.'
+    obj[context] = {} unless obj[context] |> _.is-plain-object
+    value := value |> _.clone-deep if value |> _.is-object
+
+    if project |> is-global-config-value
+      obj[context] <<< (project): value
+    else if not option?
+      obj[context] <<< (project): value |> config-transform
+    else if (project := obj[context][project])? and (project |> _.is-plain-object)
+      if value |> _.is-plain-object
+        value := value |> config-transform
+      ((option): value) |> config-transform |> _.extend project, _
+    else
+      null
+
+# process config values as template and creates a new one with default options
+config-transform = (it, type = 'global') ->
+  return it unless it |> _.is-plain-object
+
+  for own key, value of it
+    when key |> is-not-template-value
+    then
+      if value |> _.is-object
+        # inherits Croak internal specific options, better for decoupling
+        value <<< { it.$path } unless value.$path
+        value <<< { it.$dirname } unless value.$dirname
+        value <<< $project: key unless value.$project
+        value <<< $type: type unless value.$type
+        it <<< (key): value |> config-transform _, type |> apply-defaults
+      else
+        # save the original value (required for templating and variables)
+        it <<< "_#{key}": value
+        it <<< (key): value |> process-config-value key, _
   it
 
 config-write-transform = ->
   data = {}
 
   set-global-config = (data, key, value) ->
-    data <<< { (key): value }
+    data <<< (key): value
 
   can-copy = (config, key, value, orig-value) ->
     if "_#{key}" |> config.has-own-property
       if (value isnt false  and value?) or value is orig-value
         yes
 
-  for own project, options of it when options?
-    # global config
-    if options |> _.is-string
-      if project |> is-global-config-value
-        data |> set-global-config _, project, options
-    # project config
-    else if options |> _.is-object
-      project = data[project] = {}
-      for own key, value of options when key |> is-not-template-value
-        orig-value = options["_#{key}"]
-        if value |> can-copy options, key, _, orig-value
-          project[key] = orig-value if orig-value?
+  for own project, options of it
+    when options?
+    then
+      # global config
+      if options |> _.is-string
+        if project |> is-global-config-value
+          data |> set-global-config _, project, options
+      # project specific config
+      else if options |> _.is-object
+        project = data[project] = {}
+        for own key, value of options
+          when key |> is-not-template-value
+          then
+            orig-value = options["_#{key}"]
+            if value |> can-copy options, key, _, orig-value
+              project <<< (key): orig-value if orig-value?
   data
 
 encode-config = ->
@@ -333,7 +367,8 @@ has-data = ->
   if it |> _.is-object then Object.keys it .length >= 1 else no
 
 get-first-member = ->
-  if it? and it |> has-data 
-    for own name, data of it when data |> has-data
-      return data
+  if it? and it |> has-data
+    for own name, data of it
+      when data |> has-data
+      then return data
 

@@ -1,11 +1,11 @@
-module.exports = 
+module.exports =
 
   # croak-specific
   extend: false
   overwrite: false
-  register_taks: false
-  #node_package: false
-  
+  register_task: false
+  'package': null
+
   # grunt-specific
   base: null
   gruntfile: null

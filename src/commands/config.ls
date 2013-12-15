@@ -1,9 +1,9 @@
 require! {
-  program: commander
-  prompt: '../prompt'
-  config: '../config'
+  '../prompt'
+  '../config'
   util: '../common'
-  async: '../modules'.async
+  '../modules'.async
+  program: commander
 }
 { echo, exit } = require '../common'
 
@@ -13,6 +13,7 @@ program
     ..option '--force', 'Force the command execution'
     ..option '-p, --project', 'Specifies the project to run'
     ..option '-x, --gruntfile <path>', 'Specifies the Gruntfile path'
+    ..option '-z, --pkg <name>', 'Specifies the build node package to use'
     ..option '-g, --global [path]', 'Use the global config file'
     ..option '-c, --croakrc [path]', 'Use a custom .croakrc file path'
     ..usage '[create|list|remove|set|get]'
@@ -41,7 +42,7 @@ program
     ..option '--force', 'Force the command execution'
     ..option '-p, --project', 'Specifies the project to run'
     ..option '-x, --gruntfile <path>', 'Specifies the Gruntfile path'
-    ..option '-g, --global [path]', 'Use the global config file'
+    ..option '-g, --global', 'Use the global config file'
     ..option '-c, --croakrc [path]', 'Use a custom .croakrc file path'
     ..on '--help', ->
       echo '''
@@ -74,73 +75,6 @@ commands =
   show: -> @list ...
 
   create: (key, value, options) ->
-    { gruntfile, project, parent } = options
-    { global, croakrc, force } = parent
-
-    type = if global then 'global' else 'local'
-
-    try
-      config.load croakrc
-    catch { message }
-      "Cannot read .croakrc: #{message}" |> exit 1
-
-    data = {}
-    project = null
-
-    croakrc := config["#{type}File"]! unless croakrc
-
-    unless croakrc |> util.file.exists
-      ".croakrc will be created in: #{croakrc}" |> echo
-
-    # prompt steps
-    enter-project = (done) ->
-      prompt "Enter the project name:", (err, it) ->
-        project := data[it] = {}
-        if (it |> config.project) and not force
-          "Project '#{it}' already exists. Use --force to override it" |> exit 1
-        done!
-
-    enter-gruntfile = (done) ->
-      prompt "Enter the Gruntfile path (e.g: ${HOME}/project/Gruntfile.js):", (err, it) ->
-        project.gruntfile = it
-        done!
-
-    enter-override = (done) ->
-      return done! if global
-      prompt "Enable overwrite tasks? [Y/n]:", 'confirm', (err, it) ->
-        project.overwrite = it
-        done!
-
-    enter-extend = (done) ->
-      return done! if global
-      prompt "Enable extend tasks? [Y/n]:", 'confirm', (err, it) ->
-        project.extend = it
-        done!
-
-    save = ->
-      data |> config.set _, global
-
-      try
-        config.write!
-        config.load!
-      catch { message }
-        "Cannot create the file: #{message}" |> exit 1
-
-      echo ".croakrc created successfully"
-      exit 0
-
-    if gruntfile and project
-      project := data[it] = {}
-      project <<< { gruntfile }
-      save!
-    else
-      async.series [
-        enter-project
-        enter-gruntfile
-        enter-override
-        enter-extend
-        save
-      ]
 
   add: -> @create ...
 
@@ -188,7 +122,7 @@ commands =
     catch { message }
       "Cannot read .croakrc: #{message}" |> exit 1
 
-    if value := config.set-key key, value, global
+    if value := config.set key, value, global
       try
         config.write!
       catch { message }

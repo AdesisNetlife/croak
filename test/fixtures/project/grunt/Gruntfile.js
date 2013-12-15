@@ -1,5 +1,5 @@
 module.exports = function (grunt) {
-  
+
   grunt.initConfig({
     log: {
       foo: {},
@@ -25,5 +25,7 @@ module.exports = function (grunt) {
   grunt.registerMultiTask('croak_test', 'Croak test task', function() {
     grunt.log.writeln(this.target + ': ' + this.data)
   })
+
+  grunt.registerTask('default', ['log'])
 
 }

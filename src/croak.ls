@@ -1,11 +1,11 @@
 require! {
   grunt
   './config'
-  _: './modules'.lodash
+  _: lodash
   version: '../package.json'.version
 }
 
-module.exports = 
+module.exports =
 
   version: version
   grunt-version: grunt.version
@@ -20,12 +20,12 @@ module.exports =
     # extends options with project config
     options := options |> _.extend {}, project, _
     # init grunt with project options
-    options |> @run-grunt
+    options |> @init-grunt
 
   run: ->
     @init ...
 
-  run-grunt: (options = {}) ->
+  init-grunt: (options = {}) ->
     # omit unsupported grunt options
     options := options |> omit-options
     # wrap grunt.initConfig method
@@ -34,7 +34,7 @@ module.exports =
     grunt.croak = { options.base, options.tasks, options.npm } |> _.defaults croak, _
     # remove croak first argument
     grunt.cli.tasks.splice 0, 1 if grunt.cli.tasks
-    # force to override process.argv, it was taken 
+    # force to override process.argv, it was taken
     # by the Grunt module instance and has precedence
     options |> _.extend grunt.cli.options, _
     # init grunt with inherited options
@@ -42,7 +42,7 @@ module.exports =
 
 
 # expose this object croak as config
-croak = 
+croak =
   root: config.path!local or process.cwd!
   cwd: config.path!local or process.cwd!
   version: version
@@ -74,8 +74,8 @@ omit-options = ->
     verbose
   ]>
 
-  for own key, value of it 
-    when grunt-args.index-of(key) isnt -1 and value isnt false and value?
-      options[key] = value
+  for own key, value of it
+    when value? and value isnt false and (key |> grunt-args.index-of) isnt -1
+    then options <<< (key): value
 
   options

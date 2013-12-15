@@ -36,7 +36,9 @@
     "ini": "~1.1.0",
     "resolve": "~0.6.0",
     "promptly": "~0.2.0",
-    "requireg": "~0.1.1"
+    "requireg": "~0.1.1",
+    "colors": "~0.6.2",
+    "lodash": "~2.4.1"
   },
   "devDependencies": {
     "grunt-mocha-cli": "~1.0.3",

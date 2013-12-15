@@ -1,9 +1,9 @@
 require! {
   fs
   sinon
-  join: path.join
-  expect: chai.expect
-  croak: '../lib/croak'
+  path.join
+  chai.expect
+  '../lib/croak'
 }
 { FILENAME, CONFVAR } = require '../lib/constants'
 
@@ -33,26 +33,26 @@ describe 'Croak', ->
 
 
     describe 'public methods', (_) ->
-      
+
       it 'should expose the init() method', ->
         expect croak.run .to.be.an 'function'
 
       it 'should expose the run() method', ->
         expect croak.run .to.be.an 'function'
 
-      it 'should expose the run-grunt() method', ->
-        expect croak.run .to.be.an 'function'
+      it 'should expose the init-grunt() method', ->
+        expect croak.init-grunt .to.be.an 'function'
 
 
   describe 'run()', (_) ->
     spy = project = options = null
 
     before ->
-      project := 
+      project :=
         extend: false
         $name: 'croak'
         gruntfile: "#{__dirname}/fixtures/project/grunt/Gruntfile.js"
-    
+
     before ->
       options :=
         base: "#{__dirname}/fixtures/project/src"
@@ -64,7 +64,7 @@ describe 'Croak', ->
 
     before ->
       spy := sinon.spy!
-    
+
     it 'should call run() method', ->
       croak.run project, options
 
@@ -80,7 +80,7 @@ describe 'Croak', ->
 
   describe 'runGrunt()', (_) ->
     spy = options = null
-   
+
     before ->
       options :=
         gruntfile: "#{__dirname}/fixtures/project/grunt/Gruntfile.js"
@@ -90,13 +90,13 @@ describe 'Croak', ->
         invalid: 'invalid property'
 
     before ->
-      croak.grunt.cli = -> spy ...
+      spy := sinon.spy!
 
     before ->
-      spy := sinon.spy!
-    
+      croak.grunt.cli = -> spy ...
+
     it 'should call run() method', ->
-      croak.run-grunt options
+      croak.init-grunt options
 
     it 'should call grunt.cli()', ->
       expect spy.called .to.be.true
