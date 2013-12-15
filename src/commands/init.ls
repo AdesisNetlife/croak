@@ -16,6 +16,7 @@ program
     ..option '-z, --pkg <name>', 'Specifies the build node package to use'
     ..option '-g, --global', 'Creates a global config file'
     ..option '-s, --sample', 'Creates a file with a sample project config'
+    ..option '-d, --usedef', 'Set the project to use by default'
     ..on '--help', ->
       echo '''
             Usage examples:
@@ -31,12 +32,17 @@ program
 
 module.exports = init = (name, options) ->
 
-  { pkg, sample, gruntfile, parent, global, force } = options
+  { pkg, sample, gruntfile, parent, global, force, usedef } = options
 
   croak.config.load!
 
+  set-default = (name, local) ->
+    name |> croak.config.set '$default', _, local
+
   set-config-project = (project, data, global) ->
-    data |> croak.config.set project, _, not global
+    local = not global
+    data |> croak.config.set project, _, local
+    project |> set-default _, local if usedef
 
   get-config-path = ->
     croak.config.dirname![if global then 'global' else 'local']
@@ -60,7 +66,7 @@ module.exports = init = (name, options) ->
       "Cannot create the file: #{message}" |> exit 1
 
   create-project-with-package = (project, pkg) ->
-    data = {} <<< package: pkg
+    data = {} <<< 'package': pkg
     data |> set-config-project project, _, global
     write-config!
     exit 0
@@ -131,8 +137,9 @@ module.exports = init = (name, options) ->
         done!
 
     enter-set-default-project = (done) ->
+      return done! if usedef
       prompt "Use the '#{project}' project by default? [Y/n]:", 'confirm', (err, it) ->
-        project |> set-config-project '$default', _, global if it
+        usedef := it
         done!
 
     save = ->

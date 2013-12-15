@@ -46,7 +46,7 @@ run = (task, options) ->
   'Croak started in verbose mode'.green |> echo-debug
 
   try
-    croak.config.load croakrc
+    croak.load croakrc
   catch { message }
     "Cannot read .croakrc: #{message}" |> exit 1
 

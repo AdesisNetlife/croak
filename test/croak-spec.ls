@@ -1,14 +1,13 @@
-require! {
-  fs
+{
+  cwd
+  chdir
+  expect
   sinon
-  path.join
-  chai.expect
+} = require './lib/helper'
+
+require! {
   '../lib/croak'
 }
-{ FILENAME, CONFVAR } = require '../lib/constants'
-
-home-var = if process.platform is 'win32' then 'USERPROFILE' else 'HOME'
-cwd = process.cwd!
 
 describe 'Croak', ->
 

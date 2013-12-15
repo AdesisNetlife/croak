@@ -3,7 +3,7 @@ module.exports =
   # croak-specific
   extend: false
   overwrite: false
-  register_task: false
+  register_tasks: false
   'package': null
 
   # grunt-specific

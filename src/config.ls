@@ -50,10 +50,12 @@ module.exports = config =
         local-config-path |> add-filepath-to-config local, _ |> config-transform _, 'local'
     @apply!
 
-  write: ->
-    for key, value in <[ global local ]>
-      when @[key] |> has-data
-      then (@[key] |> encode-config) |> file.write @["#{key}File"]!, _
+  write: (local-path) ->
+    for type in <[ global local ]>
+      when @[type] |> has-data
+      then
+        (@[type] |> encode-config)
+          |> file.write (@[type].$path or @["#{type}File"] local-path), _
 
   save: ->
     @write ...
@@ -161,7 +163,7 @@ module.exports = config =
         config-path := config-path |> add-croakrc-file
       return config-path
     # defaults to user home directory
-    util.user-home |> add-croakrc-file
+    util.user-home! |> add-croakrc-file
 
   local-file: (filepath = @local-path) ->
     exists = false
@@ -177,7 +179,8 @@ module.exports = config =
     if has-filename!
       filepath := filepath |> path.dirname
 
-    # tries to discover .croakrc in cwd and fall back to higher directories
+    # tries to discover .croakrc in the cwd
+    # fall back to higher directories
     [1 to 5]reduce ->
       unless exists
         if file.exists new-filepath = (it |> add-croakrc-file)
@@ -203,6 +206,7 @@ Object.define-property config, 'localPath', do
 
 #
 # helpers
+# todo: refactor, isolate in module/s?
 #
 apply-defaults = ->
   it |> _.extend (defaults |> _.clone), _
@@ -236,9 +240,6 @@ replace-vars = ->
         switch it
           when 'CROAKRC_PATH' then
             it := get-config-dirname-path!
-          when 'CROAKFILE_PATH' then
-
-          when 'GRUNTFILE_PATH' then
         it
 
       if util.is-win32
@@ -252,34 +253,39 @@ replace-vars = ->
   it
 
 translate-paths = ->
-  # todo: obtain relative path from .croakrc location
-  # apply path based on the current global or local config file
+  # todo: support for global and local files paths
   unless it |> file.is-absolute
     it := it |> path.join get-config-dirname-path!, _
   it
 
 resolve-node-package = ->
-  # support to path names
-  it |> path.normalize |> requireg.resolve |> path.dirname
+  # support to package path definition
+  it := it |> translate-paths if /\//.test it
+  # resolve node module path
+  (it |> requireg.resolve) or it
 
-# search for package.json file
+# resolve for Gruntfile via package location
 find-gruntfile-in-package = ->
-  filepath = null
-  # support for specific Gruntfile directories
-  [1 to 5]reduce ->
-    unless filepath
-      if file.exists new-filepath = (it |> path.join _, 'package.json')
-        filepath := new-filepath |> path.dirname
-      it |> path.join _, '../'
-  , it
+  return null unless it
+  gruntpath = null
 
-  filepath
+  unless it |> util.gruntfile-match
+    # search the Gruntfile in the package root directory
+    # and fall back to higher directories
+    [1 to 5]reduce ->
+      unless gruntpath
+        if filepath = it |> util.gruntfile-path
+          gruntpath := filepath
+        it |> path.join _, '../'
+    , it
+
+  gruntpath
 
 process-config-value = (key, value) ->
   value := value |> replace-vars
 
   is-path-like-value = ->
-    <[ gruntfile npm tasks base package ]>index-of(it) isnt -1
+    <[ gruntfile npm tasks base ]>index-of(it) isnt -1
 
   if (key |> is-path-like-value) and (value |> _.is-string)
     value := value |> translate-paths
@@ -314,6 +320,15 @@ set-config = (obj, context) ->
     else
       null
 
+filter-unsupported-options = ->
+  config = {}
+
+  for own key, value of it
+    when (key := key.to-lower-case!) |> defaults.has-own-property
+    then config <<< (key): value
+
+  config
+
 # process config values as template and creates a new one with default options
 config-transform = (it, type = 'global') ->
   return it unless it |> _.is-plain-object
@@ -322,6 +337,7 @@ config-transform = (it, type = 'global') ->
     when key |> is-not-template-value
     then
       if value |> _.is-object
+        value := value |> filter-unsupported-options
         # inherits Croak internal specific options, better for decoupling
         value <<< { it.$path } unless value.$path
         value <<< { it.$dirname } unless value.$dirname
@@ -332,6 +348,7 @@ config-transform = (it, type = 'global') ->
         # save the original value (required for templating and variables)
         it <<< "_#{key}": value
         it <<< (key): value |> process-config-value key, _
+
   it
 
 config-write-transform = ->
@@ -340,9 +357,10 @@ config-write-transform = ->
   set-global-config = (data, key, value) ->
     data <<< (key): value
 
-  can-copy = (config, key, value, orig-value) ->
+  can-write = (config, key, value, orig-value) ->
     if "_#{key}" |> config.has-own-property
-      if (value isnt false  and value?) or value is orig-value
+      # write if the option if it is same than the original or it is not null
+      if value is orig-value or (value isnt false and config["_#{key}"]?)
         yes
 
   for own project, options of it
@@ -355,11 +373,12 @@ config-write-transform = ->
       # project specific config
       else if options |> _.is-object
         project = data[project] = {}
+        # copy project config options
         for own key, value of options
           when key |> is-not-template-value
           then
             orig-value = options["_#{key}"]
-            if value |> can-copy options, key, _, orig-value
+            if value |> can-write options, key, _, orig-value
               project <<< (key): orig-value if orig-value?
   data
 

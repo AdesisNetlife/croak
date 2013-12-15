@@ -1,11 +1,11 @@
-# Croak [![Build Status](https://secure.travis-ci.org/AdesisNetlife/croak.png?branch=master)][travis] [![Dependency Status](https://gemnasium.com/h2non/grunt-beatiful-docs.png)][dependencies] [![NPM version](https://badge.fury.io/js/croak.png)][badge] [![Roadchange](https://roadchange.com/AdesisNetlife/croak/badge.png)][roadchange]
+# Croak [![Build Status](https://secure.travis-ci.org/AdesisNetlife/croak.png?branch=master)][9] [![Dependency Status](https://gemnasium.com/h2non/grunt-beatiful-docs.png)][10] [![NPM version](https://badge.fury.io/js/croak.png)][11] [![Roadchange](https://roadchange.com/AdesisNetlife/croak/badge.png)][12]
 
 > Grunt automation made easy for large projects. Save time and health with Croak
 
-#### Disclaimer
+**Disclaimer**
 
-`BETA VERSION`
-Features may be here today, gone tomorrow
+Croak is ready to use in relaxed environment,
+but things can change in a near future, so features may be here today, gone tomorrow or viceversa
 
 ## About
 
@@ -144,8 +144,9 @@ aditionally, providing a way freedom to developers who need specific configurati
 
 ## Current stage
 
-Croak is an initial version ready to use, however is under active (re-)designing process
-and important changes can be applied in a near future version (but minor versions, do not worry about it)
+Croak is an initial version ready to use in relaxed working environment,
+however it is under active (re-)designing process and important changes
+can be added/removed in near future version
 
 #### Grunt support
 
@@ -264,7 +265,9 @@ like the `.croakrc` config file path or `Croakfile`
 | Variable       | Value |
 | -------------- | ------------------------------------------------- |
 | CROAKRC_PATH   | Absolute path to the `.croakrc` local file. If it not exists, ${PWD} will be used instead |
+<!--
 | CROAKFILE_PATH | Absolute path to the used `Croakfile`. If it not exists, ${PWD} will be used instead |
+-->
 | GRUNTFILE_PATH | Absolute path to the used `Gruntfile`. If it not exists, ${PWD} will be used instead |
 
 ## Switching to Croak
@@ -400,31 +403,40 @@ module.exports = (croak) ->
 Croak provides a straightforward CLI that allows you to do almost everything (including all that you can do with)
 
 ```
-Usage: croak [options] [command]
+  Usage: croak [options] [command]
 
-Commands:
+  Commands:
 
-  config <action> [project] [key] [value]
-    Read/write/update/delete croak config
-  run [options] <task>
-    Run Grunt tasks
+    help
+    init [options] [name]
+      Create new projects in .croakrc
+    config [options] <action> [key] [value]
+      Read/write/update/remove croak config
+    run [options] [task]
+      Run Grunt tasks
+    add [options] [name]
+      Add new projects in .croakrc
 
-Options:
+  Options:
 
-  -h, --help           output usage information
-  -V, --version        output the version number
-  -g, --global <path>  Use the global config file
-  -f, --force          Force command execution. Also will be passed to Grunt
+    -h, --help     output usage information
+    -V, --version  output the version number
 
 Usage examples:
 
-  $ croak config create -g /home/user/conf/.croakrc
-  $ croak run test -p my-project
+  $ croak init [name]
+  $ croak add [name]
+  $ croak config [create|list|get|set|remove]
+  $ croak run task
+  $ croak grunt task
 
 Command specific help:
 
   $ croak <command> --help
 
+Grunt help:
+
+  $ croak grunt --help
 ```
 
 #### Running Grunt tasks
@@ -472,7 +484,42 @@ $ croak config [get|set|remove] <key> [value] [-g]
 
 ### Programmatic API
 
-`TODO`
+You can use croak as node.js module and use it from you application
+
+> **Disclaimer**
+> Node.js API can change radically in a future
+> Retrocompatibility is not guaranteed for beta 0.x.x releases
+
+#### Install as local package
+
+```
+$ npm install croak [--save] [--save-dev]
+```
+
+#### Require the module
+
+```js
+var croak = require('croak')
+```
+
+#### Croak API
+The `croak` module exposes the following members
+
+##### version
+Current Croak module version
+
+##### gruntVersion
+The current Grunt version (who is using Croak)
+
+##### grunt
+Expose the Grunt module. See [Grunt API][8] for more information
+
+##### config
+Exposes the Croak config module. [Click here](#croak-config-api) to see the config API
+
+##### load()
+
+#### Croak Config API
 
 ## FAQ
 
@@ -571,7 +618,8 @@ Released under the [MIT][5] license
 [5]: https://github.com/adesisnetlive/croak/blob/master/LICENSE
 [6]: https://gist.github.com/h2non/7787640
 [7]: http://nodejs.org
-[travis]: http://travis-ci.org/AdesisNetlife/croak
-[dependencies]: https://gemnasium.com/h2non/grunt-beatiful-docs
-[badge]: http://badge.fury.io/js/croak
-[roadchange]: http://roadchange.com/AdesisNetlife/croak
+[8]: http://gruntjs.com/api/grunt
+[9]: http://travis-ci.org/AdesisNetlife/croak
+[10]: https://gemnasium.com/h2non/grunt-beatiful-docs
+[11]: http://badge.fury.io/js/croak
+[12]: http://roadchange.com/AdesisNetlife/croak

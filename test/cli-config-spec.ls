@@ -160,3 +160,17 @@ describe 'CLI config', (_) ->
         expect it .to.be.equal 1
         done!
 
+    it 'should remove an non-existent project option', (done) ->
+      exec 'close', <[ config remove sample.non-existent ]>, ->
+        expect it .to.be.equal 0
+        done!
+
+    it 'should remove a project', (done) ->
+      exec 'close', <[ config remove sample ]>, ->
+        expect it .to.be.equal 0
+        done!
+
+    it 'should not exist the project', (done) ->
+      exec 'close', <[ config get sample ]>, ->
+        expect it .to.be.equal 1
+        done!

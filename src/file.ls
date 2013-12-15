@@ -31,7 +31,7 @@ module.exports = _.extend {}, grunt.file,
       data |> fs.write-file-sync filepath, _, if is-node8 then 'utf8' else encoding: 'utf8'
 
   absolute-path: (relative, absolute = process.cwd!) ->
-    relative |> join absolute, _
+    relative |> path.join absolute, _
 
   make-absolute: ->
     return it unless it

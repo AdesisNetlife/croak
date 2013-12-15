@@ -1,22 +1,28 @@
-require! {
-  fs
+{
+  cwd
   mkdirp
-  path.join
-  chai.expect
-  '../lib/common'
+  rm
+  chdir
+  expect
+  read
+  exec
+  home-var
+  home
+  env
+  exists
+  join
+} = require './lib/helper'
+
+require! {
   '../lib/config'
 }
 { FILENAME, CONFVAR } = require '../lib/constants'
 
-home-var = if process.platform is 'win32' then 'USERPROFILE' else 'HOME'
-home = common.user-home
-cwd = process.cwd!
-
 describe 'Config', ->
 
   before ->
-    mkdirp.sync "#{__dirname}/fixtures/.tmp/config/global"
-    mkdirp.sync "#{__dirname}/fixtures/.tmp/config/local"
+    mkdirp "#{__dirname}/fixtures/.tmp/config/global"
+    mkdirp "#{__dirname}/fixtures/.tmp/config/local"
 
   describe 'file location', (_) ->
 
@@ -30,10 +36,10 @@ describe 'Config', ->
     describe 'custom environment variable path', (_) ->
 
       before ->
-        process.env[CONFVAR] = "#{__dirname}/fixtures/config/global/#{FILENAME}"
+        env[CONFVAR] = "#{__dirname}/fixtures/config/global/#{FILENAME}"
 
       after ->
-        process.env[CONFVAR] = ''
+        env[CONFVAR] = ''
 
       it 'should have the expeted path', ->
         expect config.global-file! .to.be.equal "#{__dirname}/fixtures/config/global/#{FILENAME}"
@@ -44,15 +50,15 @@ describe 'Config', ->
     describe 'file discovery with invalid paths', (_) ->
 
       before ->
-        process.env[CONFVAR] = "#{__dirname}/fixtures/.tmp/config/global/"
-        process.chdir "#{__dirname}/fixtures/.tmp/config/local"
+        env[CONFVAR] = "#{__dirname}/fixtures/.tmp/config/global/"
+        chdir "#{__dirname}/fixtures/.tmp/config/local"
 
       before ->
         config.clean!
 
       after ->
-        process.env[CONFVAR] = ''
-        process.chdir cwd
+        env[CONFVAR] = ''
+        chdir cwd
 
       it 'should read non-existent files', ->
         expect config.global .to.be.null
@@ -98,18 +104,18 @@ describe 'Config', ->
     describe 'E2E', ->
 
       describe 'global config', (_) ->
-        home = process.env[home-var]
+        home = env[home-var]
 
         before ->
-          common.user-home = "#{__dirname}/fixtures/config/global"
-          process.chdir "#{__dirname}/fixtures/config"
+          env[home-var] = "#{__dirname}/fixtures/config/global"
+          chdir "#{__dirname}/fixtures/config"
 
         before ->
           config.load!
 
         after ->
-          common.user-home = home
-          process.chdir cwd
+          env[home-var] = home
+          chdir cwd
 
         it 'should exist the global config', ->
           expect config.global .to.be.an 'object'
@@ -123,11 +129,14 @@ describe 'Config', ->
       describe 'local config', (_) ->
 
         before ->
-          common.user-home = "#{__dirname}/fixtures"
+          env[home-var] = "#{__dirname}/fixtures"
 
         before ->
           config.clean!
           config.load "#{__dirname}/fixtures/config/local"
+
+        after ->
+          env[home-var] = home
 
         it 'should not exist global config', ->
           expect config.global .to.be.null
@@ -141,13 +150,13 @@ describe 'Config', ->
       describe 'global and local config', (_) ->
 
         before ->
-          process.env[CONFVAR] = "#{__dirname}/fixtures/config/global/.croakrc"
+          env[CONFVAR] = "#{__dirname}/fixtures/config/global/.croakrc"
 
         before ->
           config.load "#{__dirname}/fixtures/config/local"
 
         after ->
-          process.env[CONFVAR] = ''
+          env[CONFVAR] = ''
 
         it 'should load the config properly', ->
           expect config.global .to.be.an 'object'
@@ -164,14 +173,14 @@ describe 'Config', ->
         it 'should not discover the file', ->
           folder = "#{__dirname}/fixtures/config/local/folder/sub/nested/sub-nested/ultra-nested"
           expect config.local-file folder
-            ..to.be.equal join process.cwd!, FILENAME
+            ..to.be.equal join cwd, FILENAME
 
 
   describe 'write', (_) ->
 
     before ->
-      process.env[CONFVAR] = "#{__dirname}/fixtures/.tmp/config/global/"
-      process.chdir "#{__dirname}/fixtures/.tmp/config/local"
+      env[CONFVAR] = "#{__dirname}/fixtures/.tmp/config/global/"
+      chdir "#{__dirname}/fixtures/.tmp/config/local"
 
     before ->
       config.clean!
@@ -227,7 +236,7 @@ describe 'Config', ->
 
         it 'should write global config', ->
           config.write!
-          expect fs.existsSync "#{process.env[CONFVAR]}/#{FILENAME}" .to.be.true
+          expect exists "#{env[CONFVAR]}/#{FILENAME}" .to.be.true
 
         it 'should clean and read config from disk', ->
           config.clean!
@@ -250,7 +259,7 @@ describe 'Config', ->
 
         it 'should write local config', ->
           config.write!
-          expect fs.existsSync "#{__dirname}/fixtures/.tmp/config/local/#{FILENAME}" .to.be.true
+          expect exists "#{__dirname}/fixtures/.tmp/config/local/#{FILENAME}" .to.be.true
 
         it 'should clean and read config from disk', ->
           config.clean!
@@ -268,7 +277,7 @@ describe 'Config', ->
       config.clean!
 
     before ->
-      process.env[CONFVAR] = "#{__dirname}/fixtures/.tmp/config/global/"
+      env[CONFVAR] = "#{__dirname}/fixtures/.tmp/config/global/"
 
     before ->
       project =
@@ -345,7 +354,7 @@ describe 'Config', ->
       config.clean!
 
     before ->
-      process.env[CONFVAR] = "#{__dirname}/fixtures/.tmp/config/global/"
+      env[CONFVAR] = "#{__dirname}/fixtures/.tmp/config/global/"
 
     before ->
       project =

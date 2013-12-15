@@ -1,7 +1,6 @@
 require! {
   fs
   path
-  grunt
   './file'
   _: 'lodash'
   exit: './modules'.exit
@@ -9,14 +8,18 @@ require! {
 
 { env } = process
 
-module.exports = class Common
+module.exports = class common
 
   @env = (key) ->
     env[key] or null
 
   @is-win32 = process.platform is 'win32'
 
-  @user-home = path.normalize env[(if Common.is-win32 then 'USERPROFILE' else 'HOME')] or ''
+  @user-home = ~>
+    path.normalize env[(if @is-win32 then 'USERPROFILE' else 'HOME')] or ''
+
+  @gruntfile-match = ->
+    /Gruntfile.(js|coffee)$/i.test it
 
   @gruntfile-path = (filepath) ~>
     add-gruntfile = (ext) ->
@@ -26,7 +29,7 @@ module.exports = class Common
       /^Gruntfile/i.test it
 
     filepath := filepath |> @file.make-absolute
-    if /Gruntfile.(js|coffee)$/i.test filepath
+    if filepath |> @gruntfile-match
       filepath := "./#{filepath}" if filepath |> is-not-path
       if filepath |> @file.exists
         filepath
@@ -39,8 +42,7 @@ module.exports = class Common
 
   @extend = _.extend
 
-  @clone = ~>
-    _.clone ...
+  @clone = _.clone
 
   @echo = ->
     console.log ...

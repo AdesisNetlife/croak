@@ -14,11 +14,11 @@ module.exports =
   grunt: grunt
 
   load: ->
-    # todo
+    it |> config.load
 
   init: (project, options) ->
     # extends options with project config
-    options := options |> _.extend {}, project, _
+    options := (options |> _.extend {}, project, _) |> map-options
     # init grunt with project options
     options |> @init-grunt
 
@@ -79,3 +79,12 @@ omit-options = ->
     then options <<< (key): value
 
   options
+
+map-options = ->
+  map =
+    'package': 'gruntfile'
+
+  for own origin, target of map
+    when (origin := it[origin])? and not it[target]?
+    then it <<< (target): origin
+  it
