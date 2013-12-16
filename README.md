@@ -5,7 +5,7 @@
 ### WORK IN PROCESS!!
 
 **Disclaimer**:
-Croak is ready to use in relaxed environment,
+Croak is ready to use in relaxed environments,
 but things can change in a near future, so features may be here today, gone tomorrow or viceversa
 
 ## About
