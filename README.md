@@ -4,7 +4,7 @@
 
 ### WORK IN PROCESS!!
 
-**Disclaimer**
+**Disclaimer**:
 Croak is ready to use in relaxed environment,
 but things can change in a near future, so features may be here today, gone tomorrow or viceversa
 
