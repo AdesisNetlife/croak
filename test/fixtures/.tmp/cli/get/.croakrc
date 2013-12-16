@@ -1,0 +1,7 @@
+[sample]
+gruntfile = ../path/to/Gruntfile.js
+extend = true
+overwrite = false
+register_tasks = false
+debug = false
+stack = true

@@ -2,8 +2,9 @@
 
 > Grunt automation made easy for large projects. Save time and health with Croak
 
-**Disclaimer**
+### WORK IN PROCESS!!
 
+**Disclaimer**
 Croak is ready to use in relaxed environment,
 but things can change in a near future, so features may be here today, gone tomorrow or viceversa
 
@@ -27,7 +28,7 @@ during the project life-cycle
 - Uses global Gruntfiles based on path or node packages already installed
 - Provides the same Grunt API and CLI (things do not gonna change too much)
 - Customizes Grunt execution options from a config file (future `.gruntrc`)
-- You do not need local node package installed in order to run Grunt tasks
+- You do not need local node packages installed in order to run Grunt
 
 ## Installation
 
@@ -190,7 +191,6 @@ Croak implements a similar file discovery algorithm like the one Grunt uses to d
 | Name              | Type      | Default     | Description                                    |
 | ----------------- | --------- | ----------- | ---------------------------------------------- |
 | package           | `string`  | undefined   | Node package which contains the Gruntfile, it will be resolved as local and global package. This is a recommended alternative to the `gruntfile` option |
-| package_gruntfile | `string`  | undefined   | Specifies the Gruntfile path to use relative to the `package` root directory. By default Croak tries to find it in the package root folder or inside `grunt` directory |
 | extend         | `boolean` | false       | Enable extend existent tasks from Croakfile |
 | overwrite      | `boolean` | false       | Enable overwrite existent tasks from Croakfile |
 | register_tasks | `boolean` | false       | Enable register/create new tasks from Croakfile |
@@ -222,7 +222,7 @@ You can use any of the config options also as command line flag. See the Grunt C
 A multi-project `.croakrc` configuration file
 
 ```ini
-default = super-project
+$default = super-project
 
 [super-project]
 extend = true
@@ -265,10 +265,10 @@ like the `.croakrc` config file path or `Croakfile`
 | Variable       | Value |
 | -------------- | ------------------------------------------------- |
 | CROAKRC_PATH   | Absolute path to the `.croakrc` local file. If it not exists, ${PWD} will be used instead |
+| GRUNTFILE_PATH | Absolute path to the used `Gruntfile`. If it not exists, ${PWD} will be used instead |
 <!--
 | CROAKFILE_PATH | Absolute path to the used `Croakfile`. If it not exists, ${PWD} will be used instead |
 -->
-| GRUNTFILE_PATH | Absolute path to the used `Gruntfile`. If it not exists, ${PWD} will be used instead |
 
 ## Switching to Croak
 
@@ -486,18 +486,18 @@ $ croak config [get|set|remove] <key> [value] [-g]
 
 You can use croak as node.js module and use it from you application
 
-> **Disclaimer**
-> Node.js API can change radically in a future
+> **Disclaimer**:
+> node.js API can change radically in a future.
 > Retrocompatibility is not guaranteed for beta 0.x.x releases
 
-#### Install as local package
+#### Installation
 
+Install Croak as local package
 ```
 $ npm install croak [--save] [--save-dev]
 ```
 
-#### Require the module
-
+Then require the module
 ```js
 var croak = require('croak')
 ```
@@ -512,14 +512,85 @@ Current Croak module version
 The current Grunt version (who is using Croak)
 
 ##### grunt
-Expose the Grunt module. See [Grunt API][8] for more information
+Expose the Grunt module object. See [Grunt API][8] for more information
 
 ##### config
 Exposes the Croak config module. [Click here](#croak-config-api) to see the config API
 
-##### load()
+##### load([ configPath ])
+Discover configuration files, then it will read, parse and load projects configuration
+
+##### init([ project, options ])
+
+##### initGrunt([ options ])
 
 #### Croak Config API
+
+The Croak config object is exposed via croak module
+
+```js
+var croakConfig = require('croak').config
+```
+
+##### load([ filePath ])
+Discover configuration files, then it will read, parse and load projects configuration
+
+##### write([ filePath ])
+Save exitent configuration in disk
+
+It will **throw an Error exception** if cannot write data
+
+##### raw()
+Return an `object` with the both global and local properties with
+the config data as raw string (ini format)
+
+##### get([ key ])
+Retrieves an existent config value. It can return the whole or access to an specific fix,
+simply querying with property access dot notation
+
+```js
+croakConfig.get('my-project') // { gruntfile: './path/to/Gruntfile.js' ... }
+croakConfig.get('my-project.gruntfile') // './path/to/Gruntfile.js'
+```
+
+##### getDefault()
+Returns the default configured project. If it is not configured,
+it will return the first existent project, first looking in local config, and then in global
+
+##### set(key [, value, isLocalConfig])
+Setter for config properties. You can set a new project,
+or a specific project config value with a primitive type
+
+```js
+croakConfig.set('my-project', { gruntfile: '../Gruntile.js' })
+croakConfig.set('my-project.gruntfile', '../new/path/to/Gruntile.js')
+```
+
+##### setLocal(key [, value])
+
+##### remove(key)
+Remove a config value
+
+```
+croakConfig.remove('my-project') // removes the whole project
+croakConfig.remove('my-project.gruntfile') // removes a specific key
+```
+
+##### value(key [, value, isLocalConfig])
+Alias accessor method for `set()` and `get()`
+
+```js
+croakConfig.value('my-project') // I'm getting a value
+croakConfig.value('my-project.gruntfile', '../Gruntfile.js') // I'm setting a value
+```
+
+##### exists([ key ])
+
+##### path()
+
+##### globalFile()
+
+##### localFile([ filePath ])
 
 ## FAQ
 
@@ -601,7 +672,7 @@ also keep in mind to follow the same design/code patterns that already exist
 - Grunt croak task to configure it from local Gruntfile
 - Support to use an installed node package instead of using a path for the Gruntfile
 
-## Author
+## Contributors
 
 - [Tomás Aparicio](https://github.com/h2non)
 
@@ -611,7 +682,7 @@ Copyright (c) 2013 Adesis Netlife S.L and contributors
 
 Released under the [MIT][5] license
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/AdesisNetlife/croak/trend.png)]
+![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/AdesisNetlife/croak/trend.png)
 
 [1]: http://gruntjs.com
 [2]: https://github.com/h2non/grunt-croak

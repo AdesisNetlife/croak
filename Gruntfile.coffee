@@ -41,7 +41,8 @@ module.exports = (grunt) ->
         reporter: 'spec'
       all:
         src: [
-          'test/**/*.ls'
+          'test/*.ls'
+          #'test/croakfile.ls'
         ]
 
     watch:

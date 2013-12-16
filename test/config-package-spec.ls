@@ -32,7 +32,7 @@ describe 'Config package', ->
         env[home-var] = home
         chdir cwd
 
-      it 'should resolve the package and the Gruntfile.js', ->
+      it 'should resolve and find the Gruntfile.js', ->
         expect config.config.sample['package'] 
           ..to.be.equal join dir, "node_modules/builder/Gruntfile.js"
 
@@ -53,7 +53,7 @@ describe 'Config package', ->
         env[home-var] = home
         chdir cwd
 
-      it 'should resolve the package and the Gruntfile.js', ->
+      it 'should resolve and find the Gruntfile.js', ->
         expect config.config.sample['package'] 
           ..to.be.equal join dir, 'global_modules', "node_modules/builder/Gruntfile.js"
 
@@ -72,7 +72,7 @@ describe 'Config package', ->
         env[home-var] = home
         chdir cwd
 
-      it 'should resolve the package and the Gruntfile.js', ->
+      it 'should resolve and find the Gruntfile.js', ->
         expect config.config.sample .to.be.an 'object'
         expect config.config.sample['package'] .to.be.null
 
@@ -91,6 +91,6 @@ describe 'Config package', ->
       env[home-var] = home
       chdir cwd
 
-    it 'should resolve the package and the Gruntfile.js', ->
+    it 'should resolve and find the Gruntfile.js', ->
       expect config.config.sample['package'] 
         ..to.be.equal join dir, "builder/Gruntfile.js"

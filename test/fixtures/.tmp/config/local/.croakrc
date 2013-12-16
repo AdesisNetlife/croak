@@ -1,0 +1,3 @@
+[local-project]
+register_tasks = false
+gruntfile = ${HOME}/grunt/local-project/Gruntfile.js
