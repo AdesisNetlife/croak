@@ -18,10 +18,6 @@ module.exports = config =
   global: null
   local: null
 
-  read: ->
-    return null unless it |> file.exists
-    it |> file.read |> ini.parse
-
   clean: ->
     @global = null
     @local = null
@@ -41,10 +37,10 @@ module.exports = config =
         config <<< { $path: filepath }
         config <<< { $dirname: filepath |> path.dirname }
 
-    if global = global-config-path |> @read
+    if global = global-config-path |> read-config-file
       @global = global if global |> has-data
       global-config-path |> add-filepath-to-config global, _ |> config-transform _
-    if local = local-config-path |> @read
+    if local = local-config-path |> read-config-file
       if local |> has-data
         @local = local
         local-config-path |> add-filepath-to-config local, _ |> config-transform _, 'local'
@@ -204,10 +200,16 @@ Object.define-property config, 'localPath', do
   get: -> local-path or (process.cwd! |> add-croakrc-file)
   set: -> local-path := it
 
+
 #
-# helpers
-# todo: refactor, isolate in module/s?
+# pure functions helpers methods
+# todo: isolate them in separate modules
 #
+
+read-config-file = ->
+  return null unless it |> file.exists
+  it |> file.read |> ini.parse
+
 apply-defaults = ->
   it |> _.extend (defaults |> _.clone), _
 

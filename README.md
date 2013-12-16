@@ -2,8 +2,6 @@
 
 > Grunt automation made easy for large projects. Save time and health with Croak
 
-### WORK IN PROCESS!!
-
 **Disclaimer**:
 Croak is ready to use in relaxed environments,
 but things can change in a near future, so features may be here today, gone tomorrow or viceversa
@@ -17,15 +15,16 @@ but things can change in a near future, so features may be here today, gone tomo
 Croak is just a simple, but featured wrapper for Grunt that aims to help you to manage
 and orchestrate Grunt tasks configuration (aka Gruntfile) in large and distributed projects,
 helping you to avoid redundancy, saving time and reducing dramatically changes impact
-during the project life-cycle
+during the project life-cycle and development workflow
 
 ### Features
 
-- Centralizes your project Grunt tasks build and automation configuration
+- Centralizes your project Grunt tasks configuration
 - Easily manage and orchestrates different configuration for multiple projects
-- Abstract and provides more control for the build and automation configuration
-- Extends or overwrites global Gruntfiles from local config
-- Uses global Gruntfiles based on path or node packages already installed
+- Abstract and provides more control for tasks configuration
+- Support for global located Gruntfiles
+- Support to link node gruntfile-like specific package
+- Extends or overwrites global Gruntfile from local configuration
 - Provides the same Grunt API and CLI (things do not gonna change too much)
 - Customizes Grunt execution options from a config file (future `.gruntrc`)
 - You do not need local node packages installed in order to run Grunt
@@ -37,13 +36,15 @@ It is recommended you install Croak as global package:
 $ npm install croak -g
 ```
 
-Then configure it:
+Then create the configuration file:
 ```
 $ croak init -g
 ```
 
-The process above will create a `.croakrc` file in your user home directory, like global shared config.
+The above command will create a `.croakrc` file in your user home directory, like global configuration.
 See the [configuration file](#configuration-file) section for more details
+
+Still confused? Please, take some minutes reading the docs below
 
 ## Table of Contents
 
@@ -112,7 +113,7 @@ considered an anti-pattern.
 
 ## How it works
 
-In a few words, Croak allows you to have a multiple `Gruntfile` in global locations and running them using a simple project identifier, also allowing you to define a pre-configured options to pass to Grunt in a simple configuration file
+In a few words, Croak allows you to have a multiple `Gruntfile` in global locations and running them using a simple project identifier (like a linker), also allowing you to define a pre-configured options to pass to Grunt in a simple configuration file
 
 Croak also allows your to extend or overwrite Gruntfile configurations. This feature is useful when you think that your developers are not bad people, so you can provide a way to customize tasks configuration
 
@@ -182,7 +183,7 @@ Croak implements a similar file discovery algorithm like the one Grunt uses to d
 
 | Name           | Type      | Default     | Description                                    |
 | -------------- | --------- | ----------- | ---------------------------------------------- |
-| $default       | `string`  | undefined   | Project to use by default when no project is defined. Useful to use in local configuration and avoid pass aditional flag via CLI |
+| $default       | `string`  | undefined   | Project to use by default when no project is defined. Useful to use in local configuration and avoiding to pass the `--project` flag via CLI |
 
 #### Per-project config
 
@@ -194,7 +195,9 @@ Croak implements a similar file discovery algorithm like the one Grunt uses to d
 | extend         | `boolean` | false       | Enable extend existent tasks from Croakfile |
 | overwrite      | `boolean` | false       | Enable overwrite existent tasks from Croakfile |
 | register_tasks | `boolean` | false       | Enable register/create new tasks from Croakfile |
+<!--
 | cwd            | `string`  | ${PWD}      | Working directory to pass to Grunfile. Default to ${PWD} or local `.croakrc` path. Don't use this option unless you know what you are doing |
+-->
 
 ##### Grunt-specific
 
@@ -222,7 +225,7 @@ You can use any of the config options also as command line flag. See the Grunt C
 A multi-project `.croakrc` configuration file
 
 ```ini
-$default = super-project
+$default = my-project
 
 [super-project]
 extend = true
@@ -265,8 +268,8 @@ like the `.croakrc` config file path or `Croakfile`
 | Variable       | Value |
 | -------------- | ------------------------------------------------- |
 | CROAKRC_PATH   | Absolute path to the `.croakrc` local file. If it not exists, ${PWD} will be used instead |
-| GRUNTFILE_PATH | Absolute path to the used `Gruntfile`. If it not exists, ${PWD} will be used instead |
 <!--
+| GRUNTFILE_PATH | Absolute path to the used `Gruntfile`. If it not exists, ${PWD} will be used instead |
 | CROAKFILE_PATH | Absolute path to the used `Croakfile`. If it not exists, ${PWD} will be used instead |
 -->
 
@@ -496,7 +499,7 @@ $ croak config [get|set|remove] <key> [value] [-g]
 You can use croak as node.js module and use it from you application
 
 > **Disclaimer**:
-> node.js API can change radically in a future.
+> Croak API can change radically in a future.
 > Retrocompatibility is not guaranteed for beta 0.x.x releases
 
 #### Installation
@@ -674,12 +677,13 @@ also keep in mind to follow the same design/code patterns that already exist
 - Support for relative paths on `.croakrc` based on its file location [DONE]
 - Switch from promptly to inquirer (more featured and pretty CLI, like yeoman)
 - More test cases scenarios and destructive/evil testing
-- More deep CLI test cases
-- CLI input values and paths validations
-- Support for extending/overriding Grunt configuration
-- Support for multiple Gruntfile in the same project?
-- Grunt croak task to configure it from local Gruntfile
-- Support to use an installed node package instead of using a path for the Gruntfile
+- Error CLI test cases
+- Better messages for the CLI and verbose mode
+- Support for extending/overriding Grunt configuration [DONE]
+- Support to use an installed node package instead of using a path for the Gruntfile [DONE]
+- Simplified and better documentation (create a wiki?)
+- Support for multiple Gruntfile in the same project, or distributed Grunt tasks?
+- Support for Gruntfile instead of Croakfile? Rationale: more easy to understand and avoid confusion
 
 ## Contributors
 

@@ -1,4 +1,4 @@
 
-**0.1.0 `4.12.2013`**
+**0.1.0 `16.12.2013`**
 
-- Initial beta version (work in process)
+- First public version

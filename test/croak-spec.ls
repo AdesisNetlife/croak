@@ -39,7 +39,7 @@ describe 'Croak', ->
       it 'should expose the run() method', ->
         expect croak.run .to.be.an 'function'
 
-      it 'should expose the init-grunt() method', ->
+      it 'should expose the initGrunt() method', ->
         expect croak.init-grunt .to.be.an 'function'
 
 
@@ -77,7 +77,7 @@ describe 'Croak', ->
         force: true
 
 
-  describe 'runGrunt()', (_) ->
+  describe 'initGrunt()', (_) ->
     spy = options = null
 
     before ->

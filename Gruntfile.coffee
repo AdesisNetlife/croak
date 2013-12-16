@@ -42,7 +42,6 @@ module.exports = (grunt) ->
       all:
         src: [
           'test/*.ls'
-          #'test/croakfile.ls'
         ]
 
     watch:
