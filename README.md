@@ -367,34 +367,43 @@ Like Grunt, Croak has its own specific configuration file
 
 `Currently under designing process...`
 
-```coffee
-module.exports = (croak) ->
+```js
+module.exports = function (croak) {
 
-  if croak.taskSupported 'uglify'
-    croak.registerTask 'js-minification', [ 'clean', 'uglify' ]
-
-  config: (croak, grunt) ->
-    croak.extend 'uglify', {
-      options:
-        sourceMaps: true
-      minify:
-        files:
-          src: ['**/*.js']
-          dest: '<%= croak.cwd %>/test'
+  croak.initConfig({
+    log: {
+      foo: {},
+      bar: 'hello croak'
+    },
+    read: {
+      file: __dirname + '/file.json'
+    },
+    croak_test: {
+      path: __dirname,
+      version: '<%= grunt.version %>'
     }
+  })
 
-    croak.set 'jshint', {
-      options:
-        node: true
-      sources:
-        files:
-          src: ['**/*.js']
-          dest: '<%= croak.cwd %>/test'
-    }
+  croak.registerMultiTask('log', 'Log stuff.', function() {
+    grunt.log.writeln(this.target + ': ' + this.data)
+  })
 
+  croak.registerMultiTask('read', 'Read file.', function() {
+    grunt.log.writeln(this.target + ': ' + this.data)
+  })
+
+  croak.registerMultiTask('croak_test', 'Croak test task', function() {
+    grunt.log.writeln(this.target + ': ' + this.data)
+  })
+
+  croak.registerTask('default', ['log'])
+
+}
 ```
 
 #### Croakfile API
+
+The Croakfile API inherits from Grunt API. The `config` and `task` API are the same like Grunt
 
 `TODO`
 
