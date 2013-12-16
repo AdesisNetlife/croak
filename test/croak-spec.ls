@@ -43,7 +43,7 @@ describe 'Croak', ->
         expect croak.init-grunt .to.be.an 'function'
 
 
-  describe 'run()', (_) ->
+  describe 'init()', (_) ->
     spy = project = options = null
 
     before ->

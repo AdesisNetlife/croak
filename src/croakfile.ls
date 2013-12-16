@@ -83,7 +83,24 @@ module.exports = croakfile =
       load-npm-tasks: task.load-npm-tasks
       load-tasks: task.load-tasks
 
+    <[ file log util ]>for-each ->
+      Object.define-property croak, it,
+        get: -> grunt[it]
+
 
 find-croakfile = (basepath = process.cwd!) ->
-  [ filepath ] = grunt.file.expand "#{basepath}/#{CROAKFILE}.{js,coffee}"
+  find-in-inner-directories = ->
+    [ filepath ] = grunt.file.expand "#{basepath}/*/*/#{CROAKFILE}.{js,coffee}"
+    filepath
+
+  find-in-higher-directories = ->
+    filepath = null
+    [1..5]reduce ->
+      unless filepath
+
+    filepath
+
+  unless filepath = find-in-inner-directories!
+    unless filepath = find-in-higher-directories!
+
   filepath
