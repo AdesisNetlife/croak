@@ -25,7 +25,7 @@ during the project life-cycle and development workflow
 - Support for global located Gruntfiles
 - Support to link node gruntfile-like specific package
 - Extends or overwrites global Gruntfile from local configuration
-- Provides the same Grunt API and CLI (things don't gonna change too much)
+- Provides the same Grunt API and very similar CLI (things don't gonna change too much)
 - Customizes Grunt execution options from a config file (future `.gruntrc`)
 - You do not need local node packages installed in order to run Grunt
 
@@ -159,8 +159,8 @@ Basically, an abstraction in software development tries to reduce notably the co
 underlying details and gives more control
 
 With Croak you can provide an ideal level of abstraction to developers without losing the control and
-aditionally, providing freedom to developers who needs customize or extend Grunt configuration allowing
-to adapt it to his needs
+aditionally, providing freedom to developers who wants to customize or extend Grunt configuration allowing
+adapt it to his needs
 
 ## Current stage
 
