@@ -4,7 +4,7 @@
 
 **Disclaimer**:
 Croak is ready to use in relaxed environments, but it is still under active development process
-and things can change in a near future. Take into account that features may be here today, gone tomorrow or viceversa
+and things can change in a near future. Take into account that features may be here today, gone tomorrow
 
 ## About
 
