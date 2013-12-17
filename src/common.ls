@@ -53,5 +53,5 @@ module.exports = class common
       if message?
         message = message.red if String::red?
         message |> @echo
-      code |> exit # recursive
+      code |> exit
 
