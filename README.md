@@ -422,7 +422,7 @@ module.exports = function (croak) {
     },
     read: {
       files: [
-        '<% croak.root %>/file.json'
+        '<%= croak.root %>/file.json'
         __dirname + '/another-file.json'
       ]
     }
@@ -546,7 +546,7 @@ $ croak config [get|set|remove] <key> [value] [-g]
 
 ### Programmatic API
 
-You can use Croak as node.js module and integrate it in your application
+You can use Croak as node.js module to integrate it in your application
 
 > **Disclaimer**:
 > Croak API can change radically in a near future.
@@ -586,36 +586,44 @@ Discover configuration files, then it will read, parse and load projects configu
 Load config and returns the default configured project, it it exists
 
 ##### get([ key ])
-Alias to [config#get](#get)
+Alias to [config#get](#config-get-key--1)
 
 ##### set(key [, value, isLocalConfig])
-Alias to [config#set](#set)
+Alias to [config#set](#config-set-key--1)
 
 ##### init([ options, projectObj ])
+This method will configure Croak with the passed options config object
+and aditionally you can pass the project config object
+(that you should get it previously via [croak.config.get()](#config-get--key-))
+
+After it, Croak will try to discover Croakfiles, and then configure and run Grunt
 
 ##### initGrunt([ options ])
+Configure Grunt with the passed options and run it
 
 #### Croak Config API
 
-The Croak config object is exposed via croak module
+The Croak config object is exposed via the `croak` module
 
 ```js
-var croakConfig = require('croak').config
+var config = require('croak').config
 ```
 
-##### load([ filePath ])
+##### config.load([ filePath ])
 Discover configuration files, then it will read, parse and load projects configuration
 
-##### write([ filePath ])
-Save exitent configuration in disk
+It will **throw an Error exception** if cannot read or parse configuration files
+
+##### save([ filePath ])
+Save existent loaded configuration in disk
 
 It will **throw an Error exception** if cannot write data
 
-##### raw()
+##### config.raw()
 Return an `object` with the both global and local properties with
 the config data as raw string (ini format)
 
-##### get([ key ])
+##### config.get([ key ])
 Retrieves an existent config value. It can return the whole or access to an specific fix,
 simply querying with property access dot notation
 
@@ -624,11 +632,11 @@ croakConfig.get('my-project') // { gruntfile: './path/to/Gruntfile.js' ... }
 croakConfig.get('my-project.gruntfile') // './path/to/Gruntfile.js'
 ```
 
-##### getDefault()
-Returns the default configured project. If it is not configured,
-it will return the first existent project, first looking in local config, and then in global
+##### config.getDefault()
+Returns the default configured project config object. If it is not configured,
+it will return the first existent project, first looking in local config, and fall back to global config
 
-##### set(key [, value, isLocalConfig])
+##### config.set(key [, value, isLocalConfig])
 Setter for config properties. You can set a new project,
 or a specific project config value with a primitive type
 
@@ -637,17 +645,17 @@ croakConfig.set('my-project', { gruntfile: '../Gruntile.js' })
 croakConfig.set('my-project.gruntfile', '../new/path/to/Gruntile.js')
 ```
 
-##### setLocal(key [, value])
+##### config.setLocal(key [, value])
 
-##### remove(key)
+##### config.remove(key)
 Remove a config value
 
-```
+```js
 croakConfig.remove('my-project') // removes the whole project
 croakConfig.remove('my-project.gruntfile') // removes a specific key
 ```
 
-##### value(key [, value, isLocalConfig])
+##### config.value(key [, value, isLocalConfig])
 Alias accessor method for `set()` and `get()`
 
 ```js
@@ -655,17 +663,42 @@ croakConfig.value('my-project') // I'm getting a value
 croakConfig.value('my-project.gruntfile', '../Gruntfile.js') // I'm setting a value
 ```
 
-##### globalFile()
+##### config.globalFile()
+Return the absolute path to the global configuration file in the system
 
-##### localFile([ filePath ])
+##### config.localFile([ filePath ])
+Return the absolute path to the local configuration file
 
-##### clean()
+Croak implements a simple algorithm like Grunt or NPM in order to discover the configuration
+file in the current and higher directories.
 
-##### hasData()
+Optionally you can explicit define a configuration path file to use passing the `filePath` argument
 
-##### exists([ key ])
+##### config.clean()
+Clean loaded config from cache. To apply it persistenly in disk, you must call [config#save()](#save-filepath-)
 
-##### path()
+##### config.hasData()
+Return `true` if the configuration was loaded and exists
+
+##### config.exists([ key ])
+Check if a given property key exists in the current config
+
+```js
+config.exists('project') // true
+config.exists('nonexistent.gruntfile') // false
+```
+
+##### config.path()
+Return an `object` with the both absolute paths to the global and local config files
+
+```js
+config.path()
+// { local: '/home/user/.croakrc', local: '/home/user/projects/awesome/.croakrc' }
+```
+
+##### config.dirname()
+The same as config#path(), but this one only return the path absolute path the directory
+where exists the config file
 
 
 ## FAQ
@@ -741,6 +774,7 @@ also keep in mind to follow the same design/code patterns that already exist
 - Support for relative paths on `.croakrc` based on its file location [DONE]
 - Switch from promptly to inquirer (more featured and pretty CLI, like yeoman)
 - More test cases scenarios and destructive/evil testing
+- Croak API improvements: add callbacks and event listeners for a better Grunt execution control
 - Error CLI test cases
 - Better messages for the CLI and verbose mode
 - Support for extending/overriding Grunt configuration [DONE]
