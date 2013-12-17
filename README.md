@@ -269,7 +269,7 @@ tasks = ../custom-tasks/
 npm = mytask
 ```
 
-You can use environment variables config values, using the `${VARIABLE_NAME}` notation
+You can use any existent environment variables in config values, using the `${VARIABLE_NAME}` notation
 
 ##### Note aboute cross-OS variables
 
