@@ -159,7 +159,8 @@ Basically, an abstraction in software development tries to reduce notably the co
 underlying details and gives more control
 
 With Croak you can provide an ideal level of abstraction to developers without losing the control and
-aditionally, providing a way freedom to developers who need specific configuration to his needs
+aditionally, providing freedom to developers who needs customize or extend Grunt configuration allowing
+to adapt it to his needs
 
 ## Current stage
 
