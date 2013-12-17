@@ -290,7 +290,7 @@ like the `.croakrc` config file path
 
 | Variable       | Value |
 | -------------- | ------------------------------------------------- |
-| CROAKRC_PATH   | Absolute path to the `.croakrc` local file. If it not exists, ${PWD} will be used instead |
+| CROAKRC_PATH   | Absolute path to the `.croakrc` local file. If it not exists, $PWD will be used instead |
 <!--
 | GRUNTFILE_PATH | Absolute path to the used `Gruntfile`. If it not exists, ${PWD} will be used instead |
 | CROAKFILE_PATH | Absolute path to the used `Croakfile`. If it not exists, ${PWD} will be used instead |
