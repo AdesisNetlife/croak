@@ -75,8 +75,8 @@ Still confused? Please, take some minutes reading the detailed documentation bel
 - [FAQ](#faq)
 - [Development](#development)
 - [Contributing](#contributing)
-- [To Do/Wish list](#to-do-with-list)
-- [Authors](#authors)
+- [To Do/Wish list](#to-dowish-list)
+- [Contributors](#Contributors)
 - [License](#license)
 
 <!--
@@ -731,7 +731,7 @@ $ grunt dev [--force]
 
 Croak is completely written in LiveScript language.
 Take a look to the language [documentation][3] if you are new with it.
-Please, follow the LiveScript language conventions and [coding style][4]
+Please, follow the LiveScript language conventions defined in the [coding style guide][4]
 
 You must add new test cases for any feature or refactor you do,
 also keep in mind to follow the same design/code patterns that already exist
