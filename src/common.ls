@@ -12,6 +12,12 @@ module.exports = class common
 
   @file = file
 
+  @extend = _.extend
+
+  @clone = _.clone
+
+  @clone-deep = _.clone-deep
+
   @env = (key) -> env[key] or null
 
   @is-win32 = process.platform is 'win32'
@@ -38,10 +44,6 @@ module.exports = class common
         filepath
 
   @gruntfile-exists = ~> (it |> @gruntile-path)?
-
-  @extend = _.extend
-
-  @clone = _.clone
 
   @echo = -> console.log ...
 
