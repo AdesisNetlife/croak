@@ -23,7 +23,7 @@ during the project life-cycle and development workflow
 - Easily manages and orchestrates different configuration for multiple projects
 - Abstracts and provides more control for tasks configuration
 - Support for global located Gruntfiles
-- Support to link node gruntfile-like specific package
+- Support to use node packages as Grunt configuration package
 - Extends or overwrites global Gruntfile from local configuration
 - Provides the same Grunt API and very similar CLI (things won’t change too much)
 - Customizes Grunt execution options from a config file (future `.gruntrc`)
