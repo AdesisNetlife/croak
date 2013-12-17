@@ -1,17 +1,18 @@
 require! {
-  path
+  './croak'
+  './common'.echo
   program: commander
-  croak: './croak'
-  echo: './common'.echo
 }
+
+version = "croak #{croak.version}\ngrunt #{croak.grunt-version}"
 
 exports.parse = (args) -> program.parse args
 
 program
-  .version "croak #{croak.version}\ngrunt #{croak.grunt-version}"
+  .version version
 
 program.on 'grunt', ->
-  croak.init-grunt!
+  croak.init-grunt ...
 
 program.on '--help', help = ->
   echo '''
@@ -35,6 +36,8 @@ program.on '--help', help = ->
 
 program.command 'help' .action help
 
+program.command 'version' .action -> version |> echo
+
 # load commands
-module <- <[ config run init add ]>forEach
+module <- <[ config run init add ]>for-each
 require "./commands/#{module}"
