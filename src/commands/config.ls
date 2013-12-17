@@ -34,7 +34,7 @@ program
 
       commands[it]apply commands, (Array::slice.call &)slice 1
 
-commands =
+const commands =
 
   list: (key, value, options) ->
     { croakrc, global } = options

@@ -2,7 +2,7 @@ require! promptly
 
 module.exports = (message, callback, list, type, options) ->
 
-  args = Array::slice.call &
+  const args = Array::slice.call &
 
   { type, fnArgs } = do ->
     temp = {}

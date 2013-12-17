@@ -4,7 +4,7 @@ require! {
   program: commander
 }
 
-version = "croak #{croak.version}\ngrunt #{croak.grunt-version}"
+const version = "croak #{croak.version}\ngrunt #{croak.grunt-version}"
 
 exports.parse = (args) -> program.parse args
 
