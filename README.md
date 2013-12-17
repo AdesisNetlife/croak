@@ -575,13 +575,13 @@ The `croak` module exposes the following members
 Current Croak module version
 
 ##### gruntVersion
-The current Grunt version (who is using Croak)
+The current Grunt version (which is using Croak)
 
 ##### grunt
 Expose the Grunt module object. See [Grunt API][8] for more information
 
 ##### config
-Exposes the Croak config module. [Click here](#croak-config-api) to see the config API
+Exposes the Croak [config](#croak-config-api) module API
 
 ##### load([ configPath ])
 Discover configuration files, then it will read, parse and load projects configuration
@@ -590,10 +590,10 @@ Discover configuration files, then it will read, parse and load projects configu
 Load config and returns the default configured project, it it exists
 
 ##### get([ key ])
-Alias to [config#get](#config-get-key--1)
+Alias to [config#get](#configget-key-)
 
 ##### set(key [, value, isLocalConfig])
-Alias to [config#set](#config-set-key--1)
+Alias to [config#set](#configsetkey--value-islocalconfig)
 
 ##### init([ options, projectObj ])
 This method will configure Croak with the passed options config object
@@ -618,7 +618,7 @@ Discover configuration files, then it will read, parse and load projects configu
 
 It will **throw an Error exception** if cannot read or parse configuration files
 
-##### save([ filePath ])
+##### config.save([ filePath ])
 Save existent loaded configuration in disk
 
 It will **throw an Error exception** if cannot write data
