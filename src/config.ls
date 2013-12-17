@@ -238,23 +238,29 @@ get-config-dirname-path = ->
 
 replace-vars = ->
   if typeof it is 'string'
-    it = it.replace /\$\{(.*)\}/g, (_, matched) ->
-      matched = matched?.toUpperCase!
+    it = it.replace /\$\{(.*)\}/g, (_, variable) ->
+      variable = variable?.to-upper-case!
 
-      replace-croak-vars = ->
-        switch it
-          when 'CROAKRC_PATH' then
-            it := get-config-dirname-path!
+      translate = ->
+        if util.is-win32
+          it = 'USERPROFILE' if it is 'HOME'
+          it = 'CD' if it is 'PWD'
+          it = 'HOMEDRIVE' if it is 'ROOT' or it is 'DRIVE'
+        else
+          it = '/' if it is 'HOMEDRIVE' or it is 'ROOT'
+          it = 'PWD' if it is 'CD'
         it
 
-      if util.is-win32
-        matched = 'USERPROFILE' if matched is 'HOME'
-        matched = 'CD' if matched is 'PWD'
-        matched = 'HOMEDRIVE' if matched is 'ROOT' or matched is 'DRIVE'
-      else
-        matched = '/' if matched is 'HOMEDRIVE' or matched is 'ROOT'
-        matched = 'PWD' if matched is 'CD'
-      util.env(matched?.toUpperCase!) or ''
+      replace = ->
+        it = it.to-lower-case!
+        switch it
+          when 'CROAKRC_PATH' then
+            it = get-config-dirname-path!
+          default
+            it = it |> util.env
+        it or ''
+
+      variable |> translate |> replace
   it
 
 translate-paths = ->
