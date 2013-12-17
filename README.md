@@ -97,7 +97,7 @@ or very similar for each different repository.
 The above project scenerio is really hard to maintain when you need to apply
 changes massively in your project, like automation, build or deploy configuration changes or addons.
 
-In order to supply this need, Croak borns, aiming to provide a build-in solution to easily centralize and orquestate Grunt
+In order to supply this need, Croak borns, aiming to provide a specific solution to easily centralize and orquestate Grunt
 configuration, taking control about it and allowing you to apply changes masively in your project
 
 Croak basically follows two main goals:
