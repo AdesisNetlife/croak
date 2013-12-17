@@ -243,22 +243,31 @@ replace-vars = ->
 
       translate = ->
         if util.is-win32
-          it = 'USERPROFILE' if it is 'HOME'
-          it = 'CD' if it is 'PWD'
-          it = 'HOMEDRIVE' if it is 'ROOT' or it is 'DRIVE'
+          switch it
+            when 'HOME'
+              it = 'USERPROFILE'
+            when 'PWD'
+              it = 'CD'
+            when 'ROOT', 'DRIVE'
+              it = 'HOMEDRIVE'
         else
-          it = '/' if it is 'HOMEDRIVE' or it is 'ROOT'
-          it = 'PWD' if it is 'CD'
+          switch it
+            when 'HOMEDRIVE', 'ROOT'
+              it = '/'
+            when 'CD'
+              it = 'PWD'
         it
 
       replace = ->
-        it = it.to-lower-case!
+        it = it?.to-lower-case! or ''
         switch it
-          when 'CROAKRC_PATH' then
+          when 'CROAKRC_PATH'
             it = get-config-dirname-path!
+          when '/'
+            it = '/'
           default
             it = it |> util.env
-        it or ''
+        it
 
       variable |> translate |> replace
   it
