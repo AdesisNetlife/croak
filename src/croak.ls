@@ -1,8 +1,9 @@
 require! {
   grunt
-  './config'
   _: lodash
-  version: '../package.json'.version
+  './config'
+  './croakfile'
+  '../package.json'.version
 }
 
 module.exports =
@@ -13,53 +14,74 @@ module.exports =
   config: config
   grunt: grunt
 
-  load: ->
-    it |> config.load
+  load: -> it |> config.load
 
-  init: (project, options) ->
+  load-default: ->
+    it |> @load unless config.has-data!
+    config.get-default-project!
+
+  get: -> it |> config.get
+
+  set: -> it |> config.set
+
+  init: (options, project) ->
     # extends options with project config
     options := (options |> _.extend {}, project, _) |> map-options
     # init grunt with project options
     options |> @init-grunt
 
-  run: ->
-    @init ...
+  run: -> @init ...
 
   init-grunt: (options = {}) ->
     # omit unsupported grunt options
     options := options |> omit-options
+    # load Croakfile, if exist
+    croakfile-dir = options |> croakfile.load _, (options.$dirname or options.cwd)
+    # expose croak paths as grunt config object
+    croak-config-object = options |> grunt-croak-object
+    # make croak available in grunt
+    grunt.croak = { options.base, options.tasks, options.npm } |> _.defaults croak-config-object, _
     # wrap grunt.initConfig method
-    grunt.init-config = init-config!
-    # extend croak API to provide it from Grunt
-    grunt.croak = { options.base, options.tasks, options.npm } |> _.defaults croak, _
+    grunt.init-config = croak-config-object |> init-config
     # remove croak first argument
     grunt.cli.tasks.splice 0, 1 if grunt.cli.tasks
     # force to override process.argv, it was taken
-    # by the Grunt module instance and has precedence
+    # by the Grunt module instance and it has precedence
+    # todo: use grunt.option() instead
     options |> _.extend grunt.cli.options, _
     # init grunt with inherited options
     options |> grunt.cli
 
 
-# expose this object croak as config
-croak =
-  root: config.path!local or process.cwd!
-  cwd: config.path!local or process.cwd!
+# expose Croak paths as Grunt config
+# and make it available for templating
+grunt-croak-object = (options) ->
+  cwd = process.cwd!
+
+  cwd: cwd
+  root: croakfile.dirname or config.dirname!local or cwd
+  config: config.dirname!local
+  base: options.base or cwd
+  gruntfile: options.gruntfile
+  npm: options.npm
+  tasks: options.tasks
+  options: options
   version: version
 
-set-grunt-croak-config = ->
+set-grunt-croak-config = (config) ->
   # add specific options avaliable from config
-  grunt.config.set 'croak', croak unless grunt.config.get 'croak'
+  config |> grunt.config.set 'croak', _ unless 'croak' |> grunt.config.get
 
-init-config = ->
+init-config = (croak-config-object) ->
   { init-config } = grunt
 
   (config) ->
-    init-config config
-    set-grunt-croak-config!
+    config |> init-config
+    croak-config-object |> set-grunt-croak-config
 
 omit-options = ->
   options = {}
+
   # supported grunt options
   grunt-args = <[
     no-color
@@ -81,8 +103,7 @@ omit-options = ->
   options
 
 map-options = ->
-  map =
-    'package': 'gruntfile'
+  map = 'package': 'gruntfile'
 
   for own origin, target of map
     when (origin := it[origin])? and not it[target]?

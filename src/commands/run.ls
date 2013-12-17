@@ -53,7 +53,7 @@ run = (task, options) ->
   unless gruntfile
     unless project
       'Project argument not specified, trying to resolve project from croak.config...' |> echo-debug
-      unless project := croak.config.project-resolve!
+      unless project := croak.config.get-default!
         '''
         Cannot resolve a default project, you must specify the project. Use:
         $ croak run task -p project
@@ -81,6 +81,4 @@ run = (task, options) ->
 
   options <<< { croakrc, gruntfile, base, debug, verbose }
 
-  croak.init project, options
-
-
+  project |> croak.init options, _

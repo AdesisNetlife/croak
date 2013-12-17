@@ -60,8 +60,8 @@ module.exports = config =
     config = {}
     <[ global local ]>forEach ~>
       data = config[it] = {}
-      data.path = @["#{it}File"]!
-      data.data = data.path |> file.read if data.path |> file.exists
+      data <<< path: @["#{it}File"]!
+      data <<< data: data.path |> file.read if data.path |> file.exists
     config
 
   get-default: ->
@@ -74,7 +74,7 @@ module.exports = config =
     else
       null
 
-  project-resolve: ->
+  get-default-project: ->
     @get-default ...
 
   update: (project, data, local = false) ->
@@ -152,6 +152,9 @@ module.exports = config =
   exists: ->
     it |> @config.has-own-property
 
+  has-data: ->
+    (@config |> Object.keys)length >= 1
+
   global-file: ->
     if config-path = it or util.env CONFVAR
       config-path := config-path |> replace-vars |> path.normalize
@@ -202,7 +205,7 @@ Object.define-property config, 'localPath', do
 
 
 #
-# pure functions helpers methods
+# pure functions helpers
 # todo: isolate them in separate modules
 #
 
@@ -237,7 +240,7 @@ replace-vars = ->
   if typeof it is 'string'
     it = it.replace /\$\{(.*)\}/g, (_, matched) ->
       matched = matched?.toUpperCase!
-      # TODO!!
+
       replace-croak-vars = ->
         switch it
           when 'CROAKRC_PATH' then
@@ -335,35 +338,50 @@ filter-unsupported-options = ->
 config-transform = (it, type = 'global') ->
   return it unless it |> _.is-plain-object
 
+  # process config object and adds croak internal config
+  # for a better decoupling when use it
+  set-object-properties = (obj, key, value) ->
+    value := value |> filter-unsupported-options
+    # add croak internal useful properties
+    value <<< { obj.$path } unless value.$path
+    value <<< { obj.$dirname } unless value.$dirname
+    value <<< $project: key unless value.$project
+    value <<< $type: type unless value.$type
+    obj <<< (key): value |> config-transform _, type |> apply-defaults
+
+  # save the original value (required for templating and variables)
+  set-primitive-property = (obj, key, value) ->
+    obj <<< "_#{key}": value
+    obj <<< (key): value |> process-config-value key, _
+
   for own key, value of it
     when key |> is-not-template-value
     then
       if value |> _.is-object
-        value := value |> filter-unsupported-options
-        # inherits Croak internal specific options, better for decoupling
-        value <<< { it.$path } unless value.$path
-        value <<< { it.$dirname } unless value.$dirname
-        value <<< $project: key unless value.$project
-        value <<< $type: type unless value.$type
-        it <<< (key): value |> config-transform _, type |> apply-defaults
+        it |> set-object-properties _, key, value
       else
-        # save the original value (required for templating and variables)
-        it <<< "_#{key}": value
-        it <<< (key): value |> process-config-value key, _
-
+        it |> set-primitive-property _, key, value
   it
 
 config-write-transform = ->
   data = {}
-
-  set-global-config = (data, key, value) ->
-    data <<< (key): value
 
   can-write = (config, key, value, orig-value) ->
     if "_#{key}" |> config.has-own-property
       # write if the option if it is same than the original or it is not null
       if value is orig-value or (value isnt false and config["_#{key}"]?)
         yes
+
+  set-global-config = (data, key, value) ->
+    data <<< (key): value
+
+  copy-project-config = (options) ->
+    for own key, value of options
+      when key |> is-not-template-value
+      then
+        orig-value = options["_#{key}"]
+        if value |> can-write options, key, _, orig-value
+          project <<< (key): orig-value if orig-value?
 
   for own project, options of it
     when options?
@@ -375,13 +393,8 @@ config-write-transform = ->
       # project specific config
       else if options |> _.is-object
         project = data[project] = {}
-        # copy project config options
-        for own key, value of options
-          when key |> is-not-template-value
-          then
-            orig-value = options["_#{key}"]
-            if value |> can-write options, key, _, orig-value
-              project <<< (key): orig-value if orig-value?
+        options |> copy-project-config
+
   data
 
 encode-config = ->

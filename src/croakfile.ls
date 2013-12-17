@@ -24,14 +24,15 @@ module.exports = croakfile =
       else
         filepath |> require
 
-  exists: ->
-    (it |> find-croakfile)?
-
   load: (options, basepath = process.cwd!) ->
     croak-fn = basepath |> @read
     options |> @croak-api |> croak-fn if croak-fn |> _.is-function
+    @dirname
 
-  # temporal implementation
+  exists: ->
+    (it |> find-croakfile)?
+
+  # beta implementation
   croak-api: (options) ->
     { extend, overwrite, register_tasks } = options
 
@@ -111,7 +112,7 @@ module.exports = croakfile =
 find-croakfile = (basepath = process.cwd!) ->
   filepath = null
 
-  find-in-inner-directories = (basepath) ->
+  find-in-sub-directories = (basepath) ->
     [ path ] = "#{basepath}/*/*/#{CROAKFILE}.{js,coffee}" |> grunt.file.expand
     path
 
@@ -125,7 +126,7 @@ find-croakfile = (basepath = process.cwd!) ->
     , basepath
     croakfile
 
-  unless filepath := basepath |> find-in-inner-directories
+  unless filepath := basepath |> find-in-sub-directories
     filepath := basepath |> find-in-higher-directories
 
   filepath
