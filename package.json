@@ -27,8 +27,7 @@
     "node": ">= 0.8.0"
   },
   "scripts": {
-    "test": "grunt test",
-    "publish": "grunt publish"
+    "test": "grunt test"
   },
   "dependencies": {
     "grunt": "~0.4.2",
