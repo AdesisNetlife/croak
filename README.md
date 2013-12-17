@@ -401,20 +401,21 @@ For more information, see the [grunt-croak][2] documentation
 
 Like Grunt, Croak has its own specific tasks configuration file.
 The Croakfile has the same API like Grunt and it can also be `js` or `coffee` source,
-which the module should export a function object
+which the module should export a `function`
 
 The idea behind the Croakfile is just to provide an isolated configuration file without conflicting with Gruntfile
-for specifically extend or overwrite Grunt tasks configuration from local config to global config.
+for specifically extend or overwrite Grunt tasks configuration from local config to global config
 
 If the Croak project configuration allows `extend` or `overwrite` Grunt config, you can use the Croakfile to
-customize and overwrite globally configured tasks to adapt it to your needs.
+customize and overwrite globally configured tasks to adapt it to your needs
 
 ```js
 module.exports = function (croak) {
 
   croak.log.ok('Version:', croak.version)
+  croak.log.ok('Grunt version:', croak.grunt.version)
 
-  croak.initConfig({
+  croak.extendConfig({
     log: {
       foo: {},
       bar: 'hello croak'
@@ -454,7 +455,7 @@ Alias to grunt.initConfig(), but just for a more semantic usage from Croakfiles
 ##### croak.task.exists()
 Check if a tasks was already registered and exists
 
-##### grunt
+##### croak.grunt
 Exposes the native Grunt API module object.
 If you use directly the Grunt API, for example, to register new tasks or remove config, Croak will not control if you can do it.
 Use it under your own reponsability
