@@ -1,6 +1,6 @@
 {
   "name": "croak",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Grunt automation made easy for large projects",
   "preferGlobal": true,
   "homepage": "http://github.com/adesisnetlife/croak",
