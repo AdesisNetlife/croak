@@ -258,8 +258,10 @@ stack = true
 extend = true
 overwrite = true
 register_tasks = true
+; resolves a installed package in the system (locally an globally installed)
+; then Croak will try to discover the Gruntfile inside the package
 package = my-project-builder
-;; grunt-specific
+; grunt-specific
 base = ${HOME}/projects/my-project/my-package/
 no_color = false
 no_write = false
