@@ -730,7 +730,7 @@ $ grunt dev [--force]
 ## Contributing
 
 Croak is completely written in LiveScript language.
-Take a look to the language [documentation][4] if you are new with it.
+Take a look to the language [documentation][3] if you are new with it.
 Please, follow the LiveScript language conventions and [coding style][4]
 
 You must add new test cases for any feature or refactor you do,
