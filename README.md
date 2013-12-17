@@ -304,18 +304,20 @@ This is really useful because, in much cases, you need to use absolute paths in 
 **Croak grunt object**
 
 The following properties will be available as Croak task in Grunt.
-You can use it as Grunt templating in tasks configuration. This is useful to use
-absolute paths if no do not use the `base` options.
+You can use it as Grunt templating in tasks configuration. If you don't use the `base` option, you should use one the
+following options to configure your tasks in order to use absolute paths
 
-- **cwd** `Absolute path to the current user working directory where Croak was called`
-- **root** `Absolute path to the existent Croakfile or .croakrc directory. If both files do not exists, cwd will be used`
-- **config** `Absolute path to the local .croakrc file directory. If it not exist, it will be null`
-- **base** `Grunt base path configured. If the base options do not exist, cwd will be used`
-- **base** `Absolute path to the current used Gruntfile`
-- **version** `Current Croak version`
-- **npm** `Grunt npm load packages` [optional]
-- **tasks** `Grunt tasks load path` [optional]
-- **options** `Croak current config options object` [optional]
+| Option         |  Description |
+| -------------- | ------------------------------------------------- |
+| **cwd**        | Absolute path to the current user working directory from where Croak was called  |
+| **root**       | Absolute path to the existent `Croakfile` or `.croakrc` directory. If both files do not exists, cwd will be used instead |
+| **config**     | Absolute path to the local .croakrc file directory. If it not exist, it will be null |
+| **base**       | Grunt base path configured. If the base options do not exist, cwd will be used |
+| **base**       | Absolute path to the current used Gruntfile |
+| **version**    | Current Croak version |
+| **npm**        | Grunt npm load packages |
+| **tasks**      | Grunt tasks load path |
+| **options**    | Croak current config options object |
 
 The above properties will be also available from `grunt.croak` object
 
@@ -394,12 +396,20 @@ For more information, see the [grunt-croak][2] documentation
 
 ### Croakfile
 
-Like Grunt, Croak has its own specific configuration file
+Like Grunt, Croak has its own specific tasks configuration file.
+The Croakfile has the same API like Grunt and it can also be `js` or `coffee` source,
+which the module should export a function object
 
-`Currently under designing process...`
+The idea behind the Croakfile is just to provide an isolated configuration file without conflicting with Gruntfile
+for specifically extend or overwrite Grunt tasks configuration from local config to global config.
+
+If the Croak project configuration allows `extend` or `overwrite` Grunt config, you can use the Croakfile to
+customize and overwrite globally configured tasks to adapt it to your needs.
 
 ```js
 module.exports = function (croak) {
+
+  croak.log.ok('Version:', croak.version)
 
   croak.initConfig({
     log: {
@@ -407,23 +417,19 @@ module.exports = function (croak) {
       bar: 'hello croak'
     },
     read: {
-      file: __dirname + '/file.json'
-    },
-    croak_test: {
-      path: __dirname,
-      version: '<%= grunt.version %>'
+      files: [
+        '<% croak.root %>/file.json'
+        __dirname + '/another-file.json'
+      ]
     }
   })
 
+  // you can also register new tasks if 'register_tasks' option is enabled
   croak.registerMultiTask('log', 'Log stuff.', function() {
     grunt.log.writeln(this.target + ': ' + this.data)
   })
 
   croak.registerMultiTask('read', 'Read file.', function() {
-    grunt.log.writeln(this.target + ': ' + this.data)
-  })
-
-  croak.registerMultiTask('croak_test', 'Croak test task', function() {
     grunt.log.writeln(this.target + ': ' + this.data)
   })
 
@@ -434,13 +440,25 @@ module.exports = function (croak) {
 
 #### Croakfile API
 
-The Croakfile API inherits from Grunt API. The `config` and `task` API are the same like Grunt
+The Croakfile API inherits from Grunt API.
+You can do the same like in a Gruntfile Please, see the [Grunt API][9] for more information
 
-`TODO`
+Aditionally, Croak provides the next useful and Grunt missing API
+
+##### croak.extendConfig(config)
+Alias to grunt.initConfig(), but just for a more semantic usage from Croakfiles
+
+##### croak.task.exists()
+Check if a tasks was already registered and exists
+
+##### grunt
+Exposes the native Grunt API module object.
+If you use directly the Grunt API, for example, to register new tasks or remove config, Croak will not control if you can do it.
+Use it under your own reponsability
 
 ### Command-line interface
 
-Croak provides a straightforward CLI that allows you to do almost everything (including all that you can do with)
+Croak provides a straightforward CLI that allows you to do almost everything (including all that you can do with Grunt CLI)
 
 ```
   Usage: croak [options] [command]
@@ -524,7 +542,7 @@ $ croak config [get|set|remove] <key> [value] [-g]
 
 ### Programmatic API
 
-You can use croak as node.js module and use it from you application
+You can use Croak as node.js module and integrate it in your application
 
 > **Disclaimer**:
 > Croak API can change radically in a near future.
