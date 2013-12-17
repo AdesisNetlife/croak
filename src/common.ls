@@ -48,7 +48,7 @@ module.exports = class common
   @exit = (code) ~>
     if code is 0 or not code
       code |> exit
-    # if exit code is not 0, returns a partial function
+    # if exit code is not 0, return a partial function
     (message) ~>
       if message?
         message = message.red if String::red?
