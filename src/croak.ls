@@ -62,7 +62,8 @@ grunt-croak-object = (options) ->
   root: croakfile.dirname or config.dirname!local or cwd
   config: config.dirname!local
   base: options.base or cwd
-  gruntfile: options.gruntfile
+  croakfile: croakfile.dirname or null
+  gruntfile: options.gruntfile or null
   npm: options.npm
   tasks: options.tasks
   options: options

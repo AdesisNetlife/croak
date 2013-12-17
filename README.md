@@ -193,7 +193,8 @@ to specify a custom global file location, instead of the current user home direc
 
 Local file can be located in any path, but it is recommended that you create it in your project or repository root folder
 
-Usually, a local file should have only one project configured. Any local configuration will overwrite a global configuration (for example, if you have the same project configured in both files)
+Usually, a local file should have only one project configured.
+Any local configuration has priority and will overwrite global configuration (for example, if you configure the same project in both files)
 
 Croak implements a similar file discovery algorithm like the one Grunt uses to discover the Gruntfile
 
@@ -313,8 +314,9 @@ following options to configure your tasks in order to use absolute paths
 | **cwd**        | Absolute path to the current user working directory from where Croak was called  |
 | **root**       | Absolute path to the existent `Croakfile` or `.croakrc` directory. If both files do not exists, cwd will be used instead |
 | **config**     | Absolute path to the local .croakrc file directory. If it not exist, it will be null |
-| **base**       | Grunt base path configured. If the base options do not exist, cwd will be used |
-| **base**       | Absolute path to the current used Gruntfile |
+| **base**       | Configured base path. If the base options do not exist, cwd will be used |
+| **gruntfile**  | Absolute path to the current used Gruntfile |
+| **croakfile**  | Absolute path to the current used Croakfile, if it exists |
 | **version**    | Current Croak version |
 | **npm**        | Grunt npm load packages |
 | **tasks**      | Grunt tasks load path |
@@ -362,7 +364,7 @@ module.exports = function (grunt) {
 
 #### Use Croak from an existent Gruntfile
 
-**Grunt task in progress**
+**The Croak Grunt task is still in progress**
 
 <!--
 If you already have `Gruntfile.js` in each local repository of your project and you do not want to switch
