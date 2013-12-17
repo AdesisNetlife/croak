@@ -284,7 +284,7 @@ The same case is applied for `${PWD}` and `%HOMEDRIVE%`, translating this last o
 ##### Built-in Croak variables
 
 Aditionally, Croak introduces support for an easy way to use relative paths from Croak-specific files locations,
-like the `.croakrc` config file path or `Croakfile`
+like the `.croakrc` config file path
 
 | Variable       | Value |
 | -------------- | ------------------------------------------------- |
