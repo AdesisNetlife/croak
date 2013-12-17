@@ -67,7 +67,7 @@ const commands =
     croakrc |> load-config
 
     try
-      croak.config.remove key
+      key |> croak.config.remove
       croak.config.write!
       "'#{key}' was removed successfully from config" |> echo
     catch { message }
@@ -97,7 +97,7 @@ const commands =
     { croakrc, global } = options
     croakrc |> load-config
 
-    if value := croak.config.set key, value, not global
+    if value := value |> croak.config.set key, _, not global
       try
         croak.config.write!
       catch { message }
@@ -109,6 +109,6 @@ const commands =
 
 load-config = ->
   try
-    croak.config.load it
+    it |> croak.config.load
   catch { message }
     "Cannot read .croakrc: #{message}" |> exit 1
