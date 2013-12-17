@@ -470,6 +470,9 @@ Croak provides a straightforward CLI that allows you to do almost everything (in
   Commands:
 
     help
+      Output the usage information
+    version
+      Output the version information
     init [options] [name]
       Create new projects in .croakrc
     config [options] <action> [key] [value]
@@ -484,21 +487,22 @@ Croak provides a straightforward CLI that allows you to do almost everything (in
     -h, --help     output usage information
     -V, --version  output the version number
 
-Usage examples:
+  Usage examples:
 
-  $ croak init [name]
-  $ croak add [name]
-  $ croak config [create|list|get|set|remove]
-  $ croak run task
-  $ croak grunt task
+    $ croak init [name]
+    $ croak add [name]
+    $ croak config [create|list|get|set|remove]
+    $ croak run task
+    $ croak grunt task
 
-Command specific help:
+  Command specific help:
 
-  $ croak <command> --help
+    $ croak <command> --help
 
-Grunt help:
+  Grunt help:
 
-  $ croak grunt --help
+    $ croak grunt --help
+
 ```
 
 #### Running Grunt tasks

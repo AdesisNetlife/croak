@@ -16,28 +16,30 @@ program.on 'grunt', ->
 
 program.on '--help', help = ->
   echo '''
-      Usage examples:
+    Usage examples:
 
-        $ croak init [name]
-        $ croak add [name]
-        $ croak config [create|list|get|set|remove]
-        $ croak run task
-        $ croak grunt task
+      $ croak init [name]
+      $ croak add [name]
+      $ croak config [create|list|get|set|remove]
+      $ croak run task
+      $ croak grunt task
 
-      Command specific help:
+    Command specific help:
 
-        $ croak <command> --help
+      $ croak <command> --help
 
-      Grunt help:
+    Grunt help:
 
-        $ croak grunt --help
-
+      $ croak grunt --help
+  .
   '''
 
 program.command 'help' .action help
+  ..description '\n  Output the usage information'
 
-program.command 'version' .action -> version |> echo
+program.command 'version' .action (-> version |> echo)
+  ..description '\n  Output the version information'
 
-# load commands
+# load CLI commands
 module <- <[ config run init add ]>for-each
 require "./commands/#{module}"
