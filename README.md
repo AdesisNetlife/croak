@@ -18,11 +18,10 @@ during the project life-cycle and development workflow
 
 ### Features
 
-- Centralizes your project Grunt tasks configuration
+- Allows you to centralize your Gruntfile in one place and use it from many places
 - Easily manages and orchestrates different configuration for multiple projects
 - Avoid redundant Grunt configuration over multiple repositories
 - Abstracts and provides more control for Grunt tasks configuration
-- Support for global located Gruntfile
 - Support to use and discover global node packages as Grunt configuration package
 - Extends or overwrites global Gruntfile from local configuration
 - Provides the same Grunt API and very similar CLI (things won’t change too much)
