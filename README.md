@@ -26,7 +26,7 @@ during the project life-cycle and development workflow
 - Extends or overwrites global Gruntfile from local configuration
 - Provides the same Grunt API and very similar CLI (things won’t change too much)
 - Customizes Grunt execution options from a config file (future `.gruntrc`)
-- You don’t need local node packages installed in order to run Grunt
+- You don’t need to have Grunt NPM task locally installed in order to run tasks
 
 ## Installation
 
