@@ -141,8 +141,8 @@ for development, testing or building stuff.
 
 Usually, this configuration tends to grow when your repository has a certain amount of different tasks and it also tends to be very similar or redundant in different repositories in your project
 
-Fir example you could need the same tasks in your project to run tests, generate documentation,
-statically analise the code, generate a coverage report or measure the code complexibility
+For example you could need the same tasks in your project to run tests, generate documentation,
+statically analyze the code, generate a coverage report or measure the code complexibility
 
 Continuous changes and improvements are a permanent feature in any software project, and Croak just helps with that
 
