@@ -6,7 +6,7 @@ require! {
   exit: './modules'.exit
 }
 
-{ env } = process
+{ env, platform } = process
 
 module.exports = class common
 
@@ -20,7 +20,11 @@ module.exports = class common
 
   @env = (key) -> env[key] or null
 
-  @is-win32 = process.platform is 'win32'
+  @is-win32 = platform is 'win32'
+
+  @is-darwin = platform is 'darwin'
+
+  @is-linux = platform is 'linux'
 
   @user-home = ~>
     path.normalize env[(if @is-win32 then 'USERPROFILE' else 'HOME')] or ''

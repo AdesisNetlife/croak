@@ -273,8 +273,8 @@ You can use any existing environment variables in config values, using the `${VA
 In order to use the same config values across diferent OS, Croak will transparently translate
 common environment variables to the specific running OS
 
-For example, if your use `${HOME}`, Croak will translate it into `%USERPROFILE%` under Windows.
-The same case is applied for `${PWD}` and `%HOMEDRIVE%`, translating this last one into `/` under Unix-like OS
+For example, if your use `${HOME}`, Croak will translate it into `%USERPROFILE%` under Windows and viceversa.
+The same case is applied for `${PWD}`, `%HOMEDRIVE%`, `${TMPDIR}`, translating this last one into `/` under Unix-like OS
 
 ##### Built-in Croak variables
 

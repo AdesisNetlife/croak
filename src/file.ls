@@ -11,20 +11,19 @@ module.exports = _.extend {}, grunt.file,
 
   exists: (filepath, filename = '') ->
     if filepath? and (filepath |> _.is-string)
-      fs.exists-sync (filename |> path.join filepath, _)
+      (filename |> path.join filepath, _) |> fs.exists-sync
     else
       no
 
-  is-directory: ->
-    fs.lstat-sync(it).isDirectory!
+  is-directory: -> fs.lstat-sync(it).isDirectory!
+
+  delete: -> it |> fs.unlink-sync
 
   read: ->
     if @exists it and not @is-directory it
       fs.read-file-sync it, if is-node8 then 'utf8' else encoding: 'utf8'
     else
       ''
-  delete: ->
-    it |> fs.unlink-sync
 
   write: (filepath, data) ->
     if filepath |> path.dirname |> @is-directory
@@ -39,6 +38,5 @@ module.exports = _.extend {}, grunt.file,
       it
     else
       @absolute-path ...
-
 
 is-node8 = not not (/^0\.8\./ is process.versions.node)

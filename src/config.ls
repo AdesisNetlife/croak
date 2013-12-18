@@ -250,12 +250,18 @@ replace-vars = ->
               it = 'CD'
             when 'ROOT', 'DRIVE'
               it = 'HOMEDRIVE'
+            when 'TMDIR'
+              it = 'TEMP'
         else
           switch it
+            when 'USERPROFILE'
+              it = 'HOME'
             when 'HOMEDRIVE', 'ROOT'
               it = '/'
             when 'CD'
               it = 'PWD'
+            when 'TMPDIR'
+              it = '/tmp' if util.is-linux
         it
 
       replace = ->
@@ -319,7 +325,6 @@ set-config = (obj, context) ->
 
   set-object: ->
     if it |> has-data
-      # extend or overwrite?
       obj <<< (context): it |> _.clone-deep |> config-transform
     else
       null

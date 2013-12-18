@@ -1,13 +1,8 @@
 {
   cwd
-  mkdirp
-  rm
   chdir
   expect
-  suppose
   version
-  exist
-  read
   exec
   home-var
   home
