@@ -130,7 +130,7 @@ Croak has basically two main goals:
 
 In a few words, Croak allows you to have a multiple `Gruntfile` in global locations and runs them using a simple project identifier (like a linker). It also allows you to define pre-configured options to pass to Grunt in a simple configuration file
 
-Moreover, Croak allows you to extend or overwrite Gruntfile configurations, so you can provide a way to customize tasks configuration from local configuration (see the Croakfile section)
+Moreover, Croak allows you to extend or overwrite Gruntfile configurations, so you can provide a way to customize tasks configuration from local configuration (see the [Croakfile](#croakfile) section)
 
 ### Example scenario
 
