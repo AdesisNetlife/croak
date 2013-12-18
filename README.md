@@ -48,7 +48,7 @@ Still confused? Please, take some minutes to read the detailed documentation bel
 ## Table of Contents
 
 - [Why we created Croak?](#why-we-created-croak)
-  - [When do I NOT need it?](#when-do-i-not-need-it-probably)
+  - [When do I NOT need it?](#when-do-i-not-probably-need-it-)
   - [When do I need it?](#when-do-i-need-it)
 - [How it works](#how-it-works)
   - [Example use case scenario](#example-use-case-scenario)
