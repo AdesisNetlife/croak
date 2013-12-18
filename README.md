@@ -3,8 +3,7 @@
 > Grunt made easy for large projects. Save time and health with Croak
 
 **Disclaimer**:
-Croak is ready-to-use in relaxed environments, but it is still under active development process
-and things can change in a near future. Take into account that features may be here today and gone tomorrow
+Croak is still an initial version, but it's ready-to-use in relaxed environments
 
 ## About
 
