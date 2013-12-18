@@ -237,45 +237,44 @@ get-config-dirname-path = ->
   config.dirname!local or config.dirname!global or process.cwd!
 
 replace-vars = ->
+
+  translate = ->
+    if util.is-win32
+      switch it
+        when 'HOME'
+          it = 'USERPROFILE'
+        when 'PWD'
+          it = 'CD'
+        when 'ROOT', 'DRIVE'
+          it = 'HOMEDRIVE'
+        when 'TMDIR'
+          it = 'TEMP'
+    else
+      switch it
+        when 'USERPROFILE'
+          it = 'HOME'
+        when 'HOMEDRIVE', 'ROOT'
+          it = '/'
+        when 'CD'
+          it = 'PWD'
+        when 'TMPDIR'
+          it = '/tmp' if util.is-linux
+    it
+
+  replace = ->
+    it = it?.to-lower-case! or ''
+    switch it
+      when 'CROAKRC_PATH'
+        it = get-config-dirname-path!
+      when '/'
+        it = '/'
+      default
+        it = it |> util.env
+    it
+
   if typeof it is 'string'
     it = it.replace /\$\{(.*)\}/g, (_, variable) ->
-      variable = variable?.to-upper-case!
-
-      translate = ->
-        if util.is-win32
-          switch it
-            when 'HOME'
-              it = 'USERPROFILE'
-            when 'PWD'
-              it = 'CD'
-            when 'ROOT', 'DRIVE'
-              it = 'HOMEDRIVE'
-            when 'TMDIR'
-              it = 'TEMP'
-        else
-          switch it
-            when 'USERPROFILE'
-              it = 'HOME'
-            when 'HOMEDRIVE', 'ROOT'
-              it = '/'
-            when 'CD'
-              it = 'PWD'
-            when 'TMPDIR'
-              it = '/tmp' if util.is-linux
-        it
-
-      replace = ->
-        it = it?.to-lower-case! or ''
-        switch it
-          when 'CROAKRC_PATH'
-            it = get-config-dirname-path!
-          when '/'
-            it = '/'
-          default
-            it = it |> util.env
-        it
-
-      variable |> translate |> replace
+      variable.to-upper-case! |> translate |> replace
   it
 
 translate-paths = ->
