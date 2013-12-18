@@ -58,7 +58,7 @@ module.exports = config =
 
   raw: ->
     config = {}
-    <[ global local ]>forEach ~>
+    <[ global local ]>for-each ~>
       data = config[it] = {}
       data <<< path: @["#{it}File"]!
       data <<< data: data.path |> file.read if data.path |> file.exists

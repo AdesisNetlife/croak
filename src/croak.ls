@@ -16,13 +16,13 @@ module.exports =
 
   load: -> it |> config.load
 
-  load-default: ->
-    it |> @load unless config.has-data!
-    config.get-default-project!
-
   get: -> it |> config.get
 
   set: -> it |> config.set
+
+  load-default: ->
+    it |> @load unless config.has-data!
+    config.get-default-project!
 
   init: (options, project) ->
     # extends options with project config

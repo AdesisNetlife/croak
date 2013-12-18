@@ -4,7 +4,7 @@ require! {
 }
 { echo, exit, file } = require '../common'
 
-# this is an alias to the init command
+# alias to the init command
 program
   .command 'add [name]'
     ..description '\n  Add new projects in .croakrc'

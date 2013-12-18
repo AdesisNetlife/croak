@@ -8,27 +8,27 @@ module.exports = (message, callback, list, type, options) ->
     temp = {}
     fnArgs = []
 
-    args.forEach (value, i) ->
-      switch get-type value
+    args.for-each (value, i) ->
+      switch value |> get-type
         when 'string'
           if i is 0
-            temp.message = value
+            temp <<< message: value
           else
-            temp.type = value
-        when 'function' then temp.callback = value
-        when 'array' then temp.list = value
-        when 'object' then temp.options = value
+            temp <<< type: value
+        when 'function' then temp <<< callback: value
+        when 'array' then temp <<< list: value
+        when 'object' then temp <<< options: value
 
     temp.type ?= 'prompt'
-    for own param, value of temp when param isnt 'type'
-      value |> fnArgs.push
+    for own param, value of temp
+      when param isnt 'type'
+      then value |> fnArgs.push
 
-    { type: temp.type, fnArgs: fnArgs }
+    type: temp.type, fnArgs: fnArgs
 
-  promptly[type].apply null, fnArgs
+  fnArgs |> promptly[type]apply null, _
 
 get-type = ->
   type = typeof it
-  if type is 'object'
-    type = 'array' if it |> Array.isArray
+  type = 'array' if it |> Array.isArray if type is 'object'
   type

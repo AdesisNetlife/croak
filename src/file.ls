@@ -9,15 +9,15 @@ module.exports = _.extend {}, grunt.file,
 
   is-absolute: grunt.file.is-path-absolute
 
+  is-directory: -> fs.lstat-sync(it).isDirectory!
+
+  delete: -> it |> fs.unlink-sync
+
   exists: (filepath, filename = '') ->
     if filepath? and (filepath |> _.is-string)
       (filename |> path.join filepath, _) |> fs.exists-sync
     else
       no
-
-  is-directory: -> fs.lstat-sync(it).isDirectory!
-
-  delete: -> it |> fs.unlink-sync
 
   read: ->
     if @exists it and not @is-directory it

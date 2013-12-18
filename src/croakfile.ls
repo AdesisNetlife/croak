@@ -13,6 +13,8 @@ module.exports = croakfile =
   path: null
   dirname: null
 
+  exists: -> (it |> find-croakfile)?
+
   read: ->
     filepath = it |> find-croakfile
     if filepath
@@ -28,9 +30,6 @@ module.exports = croakfile =
     croak-fn = basepath |> @read
     options |> @croak-api |> croak-fn if croak-fn |> _.is-function
     @dirname
-
-  exists: ->
-    (it |> find-croakfile)?
 
   # beta implementation
   croak-api: (options) ->
