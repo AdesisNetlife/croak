@@ -274,7 +274,7 @@ In order to use the same config values across diferent OS, Croak will transparen
 common environment variables to the specific running OS
 
 For example, if your use `${HOME}`, Croak will translate it into `%USERPROFILE%` under Windows and viceversa.
-The same case is applied for `${PWD}`, `%HOMEDRIVE%`, `${TMPDIR}`, translating this last one into `/` under Unix-like OS
+The same case is applied for `${PWD}`, `${TMPDIR}`, `%HOMEDRIVE%`, translating this last one into `/` under Unix-like OS
 
 ##### Built-in Croak variables
 
