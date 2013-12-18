@@ -440,7 +440,7 @@ module.exports = function (croak) {
 #### Croakfile API
 
 The Croakfile API inherits from Grunt API.
-You can do the same thing in a Gruntfile. Please, see the [Grunt API][9] for more information
+You can do the same thing in a Gruntfile. Please, see the [Gruntfile documentation][13] for more information
 
 Additionally, Croak provides the next useful and Grunt missing API
 
@@ -807,3 +807,4 @@ Released under the [MIT][5] license
 [10]: https://gemnasium.com/AdesisNetlife/croak.png
 [11]: http://badge.fury.io/js/croak
 [12]: http://roadchange.com/AdesisNetlife/croak
+[13]: http://gruntjs.com/sample-gruntfile
