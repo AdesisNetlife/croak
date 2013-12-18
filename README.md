@@ -87,7 +87,7 @@ Still confused? Please, take some minutes to read the detailed documentation bel
 
 Croak arises from the need to create a specific solution to abstract all the automation configuration stuff. It allows you to delegate responsibilities properly in your project to the developers, without losing the desired level of control and centralization.
 
-Because a design principle, node (and consequently Grunt) packages and its dependencies are locally installed, and that is fantastic. However, this is not always the best choice for some scenarios.
+Because a design principle, node.js (and consequently Grunt) packages and its dependencies are locally installed, and that is fantastic. However, this is not always the best choice for some scenarios.
 As you probably already know, dependencies globalization in node.js can be considered an anti-pattern, but globalization can be an ideal choice if you are in a big and distributed project.
 
 When a project have a considerable number of repositories, by inertia you probably tend to
