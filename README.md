@@ -768,6 +768,7 @@ also keep in mind to follow the same design/code patterns that already exist
 
 ## To Do/Wish list
 
+- Create an example use case project
 - Switch from promptly to inquirer (more featured and pretty CLI, like yeoman)
 - More test cases scenarios and destructive/evil testing
 - Croak API improvements: add callbacks and event listeners for a better Grunt execution control
