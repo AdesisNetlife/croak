@@ -82,7 +82,7 @@ describe 'Config', ->
 
         it 'should get the project object', ->
           expect config.get 'project'
-            ..to.have.property 'gruntfile'
+            ..to.have.property '_gruntfile'
             ..that.is.a 'string'
 
         it 'should get a config property', ->

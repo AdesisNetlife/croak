@@ -96,7 +96,7 @@ module.exports = config =
         else
           null
       else
-        project |> get-config-tmpl-values
+        project |> _.clone-deep
     else
       null
 
@@ -262,14 +262,13 @@ replace-vars = ->
     it
 
   replace = ->
-    it = it?.to-lower-case! or ''
     switch it
       when 'CROAKRC_PATH'
         it = get-config-dirname-path!
       when '/'
         it = '/'
       default
-        it = it |> util.env
+        it = (it |> util.env) or ''
     it
 
   if typeof it is 'string'
