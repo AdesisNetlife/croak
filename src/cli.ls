@@ -1,4 +1,5 @@
 require! {
+  colors
   './croak'
   './common'.echo
   program: commander

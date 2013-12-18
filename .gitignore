@@ -6,3 +6,4 @@ test/fixtures/temp
 lib/*.js
 lib/*/*.js
 test/fixtures/.tmp
+
