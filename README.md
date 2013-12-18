@@ -53,7 +53,7 @@ Still confused? Please, take some minutes to read the detailed documentation bel
   - [When do I need it?](#when-do-i-need-it)
 - [How it works](#how-it-works)
   - [Example use case scenario](#example-use-case-scenario)
-  - [Abstraction can be dangerous?](#abstraction-can-be-dangerous)
+  - [Can abstraction be dangerous?](#can-abstraction-be-dangerous)
 - [Current stage](#current-stage)
   - [Grunt support](#grunt-support)
 - [Using Croak](#using-croak)
