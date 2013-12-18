@@ -1,6 +1,6 @@
 # Croak [![Build Status](https://secure.travis-ci.org/AdesisNetlife/croak.png?branch=master)][9] [![Dependency Status](https://gemnasium.com/AdesisNetlife/croak.png)][10] [![NPM version](https://badge.fury.io/js/croak.png)][11] [![Roadchange](https://roadchange.com/AdesisNetlife/croak/badge.png)][12]
 
-> Grunt made easy for large projects. Save time and health with Croak
+> Grunt made easy for large projects. It's like One Ring to rule them all, but for Grunt
 
 **Disclaimer**:
 Croak is still an initial version, but it's ready-to-use in relaxed environments
@@ -20,9 +20,10 @@ during the project life-cycle and development workflow
 
 - Centralizes your project Grunt tasks configuration
 - Easily manages and orchestrates different configuration for multiple projects
-- Abstracts and provides more control for tasks configuration
-- Support for global located Gruntfiles
-- Support to use node packages as Grunt configuration package
+- Avoid redundant Grunt configuration over multiple repositories
+- Abstracts and provides more control for Grunt tasks configuration
+- Support for global located Gruntfile
+- Support to use and discover global node packages as Grunt configuration package
 - Extends or overwrites global Gruntfile from local configuration
 - Provides the same Grunt API and very similar CLI (things won’t change too much)
 - Customizes Grunt execution options from a config file (future `.gruntrc`)
