@@ -157,6 +157,8 @@ With Croak you can provide an ideal level of abstraction to developers without l
 additionally, give them freedom if they want to customize or extend Grunt configuration allowing them to
 adapt it to their needs
 
+If you want to make less impact to the developers, take a look to the [Croak Grunt faker][14]
+
 ## Current stage
 
 Croak is an initial ready-to-use version, though it’s under active development process and important changes can be done in a near future version
@@ -456,7 +458,10 @@ Use it under your own reponsibility
 
 ### Command-line interface
 
-Croak provides a straightforward CLI that allows you to do almost everything (including all that you can do with Grunt CLI)
+Croak provides a straightforward CLI that allows you to do almost everything (including all that you can do with Grunt CLI).
+
+Aditionally, if you are convervatory and you want to use Croak keeping the same native Grunt CLI interface,
+take a look to the [Croak Grunt faker][14]
 
 ```
   Usage: croak [options] [command]
@@ -808,3 +813,5 @@ Released under the [MIT][5] license
 [11]: http://badge.fury.io/js/croak
 [12]: http://roadchange.com/AdesisNetlife/croak
 [13]: http://gruntjs.com/sample-gruntfile
+[14]: https://github.com/h2non/croak-grunt-faker
+
