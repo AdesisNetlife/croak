@@ -103,7 +103,7 @@ Croak has basically two main goals:
 - Reduces the Grunt configuration changes impact during your project life-cycle
 - Gives configuration control and provides abstraction to developers, without hurting their feelings
 
-### When do I NOT (probably) need it ?
+### When do I NOT (probably) need it?
 
 - When you have only one or two repositories in your project
 - When you have an ultra specific grunt config on each project repository

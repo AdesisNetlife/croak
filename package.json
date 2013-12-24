@@ -29,6 +29,14 @@
   "scripts": {
     "test": "grunt test"
   },
+  "keywords": [
+    "grunt",
+    "build",
+    "jake",
+    "automation",
+    "large",
+    "gruntfile"
+  ],
   "dependencies": {
     "grunt": "~0.4.2",
     "commander": "~2.1.0",
