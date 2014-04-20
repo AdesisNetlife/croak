@@ -1,4 +1,4 @@
-# Croak [![Build Status](https://secure.travis-ci.org/AdesisNetlife/croak.svg?branch=master)][9] [![Dependency Status](https://gemnasium.com/AdesisNetlife/croak.svg)][10] [![NPM version](https://badge.fury.io/js/croak.png)][11] [![Roadchange](https://roadchange.com/AdesisNetlife/croak/badge.svg)][12]
+# Croak [![Build Status](https://secure.travis-ci.org/AdesisNetlife/croak.svg?branch=master)][9] [![Dependency Status](https://gemnasium.com/AdesisNetlife/croak.svg)][10] [![NPM version](https://badge.fury.io/js/croak.svg)][11] [![Roadchange](https://roadchange.com/AdesisNetlife/croak/badge.svg)][12]
 
 > Grunt made easy for large projects. It's like One Ring to rule them all, but for Grunt
 
