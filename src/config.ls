@@ -8,7 +8,7 @@ require! {
 { CONFVAR, FILENAME } = require './constants'
 { file }:util = require './common'
 
-const global-options = <[$default]>
+const global-options = ['$default']
 local-path = null
 
 module.exports = config =
