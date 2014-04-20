@@ -1,6 +1,7 @@
 require! {
   grunt
   _: lodash
+  './cli'
   './config'
   './croakfile'
   '../package.json'.version
@@ -11,6 +12,7 @@ module.exports =
   version: version
   grunt-version: grunt.version
 
+  cli: cli
   config: config
   grunt: grunt
 
