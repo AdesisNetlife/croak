@@ -71,8 +71,7 @@ describe 'Croakfile', ->
     describe 'no options', (_) ->
 
       before ->
-        options = {}
-        croakfile.load options
+        croakfile.load {}
 
       it 'should have the "write" task config', ->
         expect grunt.config 'write' .to.be.an 'object'
@@ -83,8 +82,7 @@ describe 'Croakfile', ->
     describe 'extend', (_) ->
 
       before ->
-        options = extend: true
-        croakfile.load options
+        croakfile.load extend: true
 
       it 'should have the "write" task config', ->
         expect grunt.config 'write' .to.be.an 'object'
@@ -101,8 +99,7 @@ describe 'Croakfile', ->
         grunt.config 'read', undefined
 
       before ->
-        options = overwrite: true
-        croakfile.load options
+        croakfile.load options overwrite: true
 
       it 'should have the "write" task config', ->
         expect grunt.config 'write' .to.be.an 'object'
