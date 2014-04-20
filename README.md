@@ -1,4 +1,4 @@
-# Croak [![Build Status](https://secure.travis-ci.org/AdesisNetlife/croak.png?branch=master)][9] [![Dependency Status](https://gemnasium.com/AdesisNetlife/croak.png)][10] [![NPM version](https://badge.fury.io/js/croak.png)][11] [![Roadchange](https://roadchange.com/AdesisNetlife/croak/badge.png)][12]
+# Croak [![Build Status](https://secure.travis-ci.org/AdesisNetlife/croak.svg?branch=master)][9] [![Dependency Status](https://gemnasium.com/AdesisNetlife/croak.svg)][10] [![NPM version](https://badge.fury.io/js/croak.png)][11] [![Roadchange](https://roadchange.com/AdesisNetlife/croak/badge.svg)][12]
 
 > Grunt made easy for large projects. It's like One Ring to rule them all, but for Grunt
 
@@ -809,7 +809,7 @@ Released under the [MIT][5] license
 [7]: http://nodejs.org
 [8]: http://gruntjs.com/api/grunt
 [9]: http://travis-ci.org/AdesisNetlife/croak
-[10]: https://gemnasium.com/AdesisNetlife/croak.png
+[10]: https://gemnasium.com/AdesisNetlife/croak
 [11]: http://badge.fury.io/js/croak
 [12]: http://roadchange.com/AdesisNetlife/croak
 [13]: http://gruntjs.com/sample-gruntfile
