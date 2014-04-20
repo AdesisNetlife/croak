@@ -30,7 +30,11 @@
     "jake",
     "automation",
     "large",
-    "gruntfile"
+    "gruntfile",
+    "distributed",
+    "make",
+    "jake",
+    "task"
   ],
   "dependencies": {
     "grunt": "~0.4.2",

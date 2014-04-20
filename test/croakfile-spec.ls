@@ -91,7 +91,7 @@ describe 'Croakfile', ->
         expect grunt.config 'read' .to.be.an 'object'
 
       it 'should not exist the "croak_test" task', ->
-        expect (-> grunt.task.rename-task 'croak_test', 'croak_test') .to.throw TypeError
+        expect (-> grunt.task.rename-task 'croak_test', 'croak_test') .to.not.throw!
 
     describe 'overwrite', (_) ->
 
@@ -99,7 +99,7 @@ describe 'Croakfile', ->
         grunt.config 'read', undefined
 
       before ->
-        croakfile.load options overwrite: true
+        croakfile.load overwrite: true
 
       it 'should have the "write" task config', ->
         expect grunt.config 'write' .to.be.an 'object'
@@ -108,7 +108,7 @@ describe 'Croakfile', ->
         expect grunt.config 'read' .to.be.an 'object'
 
       it 'should not exist the "croak_test" task', ->
-        expect (-> grunt.task.rename-task 'croak_test', 'croak_test') .to.throw TypeError
+        expect (-> grunt.task.rename-task 'croak_test', 'croak_test') .to.not.throw!
 
     describe 'register_tasks', (_) ->
 
@@ -116,8 +116,7 @@ describe 'Croakfile', ->
         grunt.config 'read', undefined
 
       before ->
-        options = register_tasks: true
-        croakfile.load options
+        croakfile.load register_tasks: true
 
       it 'should have the "write" task config', ->
         expect grunt.config 'write' .to.be.an 'object'
@@ -127,7 +126,6 @@ describe 'Croakfile', ->
 
       it 'should exist the "croak_test" task', ->
         expect (-> grunt.task.rename-task 'croak_test', 'croak_test') .to.not.throw!
-
 
   describe 'discovery', (_) ->
     dir = "#{__dirname}/fixtures/croakfile/js/dir/subdir/"
@@ -147,4 +145,3 @@ describe 'Croakfile', ->
 
     it 'should have the "read" task config', ->
       expect grunt.config 'read' .to.be.an 'object'
-
